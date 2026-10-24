@@ -16,10 +16,7 @@
 
 ### 在线使用 / GitHub Pages
 
-部署后的网站地址示例：**https://culaccino-li.github.io/causal-inference-course/**  
-*注意：这是预期地址，只有创建仓库并启用 GitHub Pages 后才会生效。仓库名或账号不同，URL也不同。*
-
-打开 [`index.html`](index.html) 进入课程主页；单独课程文件存放于 [`lessons/`](lessons/)。也可以直接下载整个项目，在本地以Chrome或Edge打开 `index.html`。
+网站地址：**https://culaccino-li.github.io/causal-inference-course/**  
 
 ### 课程目录
 
@@ -42,10 +39,10 @@
 
 ### 版本管理
 
-- **仓库名固定**：`causal-inference-course`；不要在每次更新时重命名仓库。
+- **仓库名固定**：`causal-inference-course`。
 - **Git标签 / Release**：`vMAJOR.MINOR.PATCH`，例如 `v2.0.1`。
 - **发布日期**：`YYYY-MM-DD`，记录于 [`version.json`](version.json) 和 [`CHANGELOG.md`](CHANGELOG.md)。
-- **建议规则**：`PATCH`修复链接、排版与错误；`MINOR`增加功能或扩充单讲；`MAJOR`重构课程架构或不兼容的导航。
+- **规则**：`PATCH`修复链接、排版与错误；`MINOR`增加功能或扩充单讲；`MAJOR`重构课程架构或不兼容的导航。
 - 历史版本通过 Git tags / Releases 保留，不在仓库根目录堆放 `index_old.html` 等备份文件。
 
 详见 [`DEPLOYMENT_GUIDE.md`](DEPLOYMENT_GUIDE.md) 和 [`CHANGELOG.md`](CHANGELOG.md)。
