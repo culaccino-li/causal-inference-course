@@ -47,6 +47,9 @@
 
 详见 [`DEPLOYMENT_GUIDE.md`](DEPLOYMENT_GUIDE.md) 和 [`CHANGELOG.md`](CHANGELOG.md)。
 
+### 友情链接
+- https://sites.google.com/view/causal-inference-zerotoall/bookscourses
+
 ## English Introduction
 
 This repository hosts an **interactive, presentation-oriented course in causal inference for political and social science research**. It contains 12 core lessons and 2 experimental-methods modules (14 modules in total, with approximately 695 presentation screens).
