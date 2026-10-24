@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>第04讲｜匹配与倾向得分 · 因果推断互动课程</title><style>
+:root{--paper:#F6F4EF;--white:#FFFEFB;--ink:#23312F;--green:#285B52;--muted:#65726D;--line:#DDDCD4;--earth:#A87340;--so:#F0F1EA}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--paper);color:var(--ink);font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC","Microsoft Yahei",sans-serif;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}a{color:var(--green)}strong{font-weight:700}h1,h2,h3,p{margin-top:0}h2{font:500 clamp(29px,3vw,37px)/1.25 Georgia,"Songti SC","Noto Serif CJK SC",serif;letter-spacing:-.025em;margin:6px 0 25px}h3{font-size:20px;margin-bottom:11px;line-height:1.3}p{margin-bottom:15px}.site{display:flex;height:100dvh;min-height:500px;overflow:hidden;flex-direction:column}.top{height:59px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:0 clamp(24px,4.5vw,75px);flex-shrink:0;background:var(--white)}.logo{font-family:Georgia,"Songti SC",serif;letter-spacing:.07em;font-size:16px}.logo b{font-weight:700}.topright{display:flex;align-items:center;gap:22px}.small{font-size:12px;color:var(--muted)}.mode{border:1px solid var(--line);color:var(--green);background:transparent;padding:5px 13px;border-radius:3px;font-size:13px}.mode:hover{background:#EFF3ED}.viewport{flex:1;min-height:0;position:relative;overflow:hidden}.slide{position:absolute;inset:0;display:none;padding:clamp(20px,3vh,33px) clamp(34px,5vw,72px) 20px;overflow-y:auto;overscroll-behavior:contain}.slide.active{display:flex;flex-direction:column;animation:fadeIn .22s ease both}.slide-body{flex:1;min-height:0}.slide-foot{color:var(--muted);font-size:12px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}.eyebrow{font-size:12px;letter-spacing:.15em;color:var(--green);font-weight:700}.bottom{height:73px;flex-shrink:0;border-top:1px solid var(--line);background:var(--white);display:grid;grid-template-columns:154px 1fr 154px;align-items:center;gap:15px;padding:9px clamp(34px,5vw,72px)}.navbutton{height:44px;border:1px solid #B4C5B8;background:var(--white);color:var(--green);font-size:15px;border-radius:3px}.navbutton.primary{background:var(--green);color:white;border-color:var(--green)}.navbutton:disabled{opacity:.3;cursor:not-allowed}.status{text-align:center;font-size:14px;line-height:1.3;color:var(--muted)}.status b{color:var(--green)}.ticks{height:7px;display:flex;gap:4px;justify-content:center;margin-top:10px}.ticks span{height:4px;flex:1;max-width:14px;background:#D6DED6;border-radius:2px}.ticks span.done{background:#9FB7A7}.ticks span.active{background:var(--green)}.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,4vw,55px);align-items:center;height:100%}.split > div{min-width:0}.slide-body:has(> .split){display:flex;flex-direction:column}.slide-body:has(> .split)> .split{height:auto;flex:1;min-height:0}.readable{max-width:560px;font-size:20px;line-height:1.7}.readable p{margin-bottom:18px}.two,.three{display:grid;gap:17px;align-items:stretch}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.card{background:var(--white);border:1px solid var(--line);padding:23px 25px;border-radius:3px}.card p{font-size:17px;line-height:1.75;margin-bottom:0}.card .hint{font-size:14px;color:var(--muted);margin-top:10px}.formula{font:22px/1.5 Georgia,"Times New Roman",serif;color:var(--green);text-align:center;background:#EBF1EA;padding:14px 17px;margin:18px 0;border-radius:3px}.formula.small{font-size:19px;margin:15px 0}.formula.left{text-align:left}.formula.giant{font-size:40px;padding:36px}.note{color:var(--muted);font-size:15px;line-height:1.7}.callout{border-left:3px solid var(--green);background:#EEF1EB;padding:17px 22px;margin-top:19px;font-size:17px}.hint{color:var(--muted);font-size:15px;line-height:1.6}.source{font-size:14px;color:var(--muted);margin-top:15px}.diagram{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:14px}.diagram svg{width:100%;height:auto;display:block;max-height:min(43vh,335px)}.chart{width:100%;height:auto;display:block;max-height:36vh;background:#fff;border:1px solid var(--line);border-radius:3px}.split.interactive-area{align-items:stretch;gap:20px}.controlsbox{border:1px solid var(--line);background:var(--white);padding:22px;display:flex;flex-direction:column;gap:13px;justify-content:center}.controlsbox label{display:block;color:#4A5950;font-size:16px}.controlsbox label output{float:right;color:var(--green);font-weight:700}.controlsbox input[type=range]{display:block;width:100%;accent-color:var(--green);margin:10px 0 0}.controlsbox select{display:block;background:#fff;width:100%;border:1px solid #B8C6BC;color:var(--ink);font-size:16px;padding:9px;margin-top:10px}.stat{background:var(--so);padding:15px;border:1px solid var(--line);border-radius:2px}.stat small{display:block;color:var(--muted);font-size:13px;line-height:1.5}.stat strong{display:block;font:600 27px/1.25 Georgia,serif;color:var(--green);margin-top:5px;font-variant-numeric:tabular-nums}.stat.mini strong{font-size:23px}.metric-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric-row.stacked{grid-template-columns:1fr;margin-bottom:12px}.legend{display:flex;justify-content:center;align-items:center;gap:17px;font-size:13px;color:var(--muted);margin:10px 0}.swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:3px}.swatch.green{background:var(--green)}.swatch.earth{background:var(--earth)}.swatch.gray{background:#E8EAE3}.swatch.line{background:#99A69D}.cover-top{height:100%;display:flex;align-items:center;gap:60px}.cover-number{font:300 clamp(140px,20vw,270px)/1 Georgia,serif;color:#D4DDD3}.cover-copy{flex:1}.serif{font-family:Georgia,"Songti SC",serif}.serif.big{font-size:clamp(37px,5vw,66px);line-height:1.35}.rule{height:1px;background:#B4C8B6;margin:30px 0}.cover-copy p{margin:18px 0 0;color:var(--green)}.cover-copy span{font-size:15px;color:var(--muted)}.three-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:27px 0}.three-steps>div{background:var(--white);border:1px solid var(--line);padding:23px}.three-steps span{font:20px Georgia,serif;color:var(--earth);display:block;margin-bottom:10px}.three-steps strong{display:block;font-size:20px}.three-steps p{color:var(--muted);font-size:17px;margin:0}.proof{background:var(--white);border:1px solid var(--line);padding:28px;text-align:center;margin:0 auto 17px;max-width:890px}.proof-line{font:27px Georgia,serif;color:var(--ink)}.proof-line.emph{color:var(--green);font-weight:600}.proof-arrow{color:var(--earth);margin:15px 0;font-size:17px}.centered{text-align:center;margin:10px auto 30px}.subtitle{color:var(--muted);font-size:18px}.paper-intro{max-width:880px;background:var(--white);border:1px solid var(--line);padding:29px 34px}.journal{letter-spacing:.18em;font-size:13px;color:var(--green);font-weight:700;margin-bottom:17px}.paper-title{font-family:Georgia,"Songti SC",serif;font-size:29px;font-weight:500}.paper-tabs{display:flex;gap:5px;border-bottom:1px solid var(--line);margin:0 0 20px;padding-bottom:9px;flex-wrap:wrap}.paper-tab{background:transparent;border:1px solid transparent;border-radius:2px;padding:7px 12px;color:var(--muted);font-size:14px}.paper-tab.active{background:#E5EDE5;border-color:#C6D5C9;color:var(--green);font-weight:700}.paper-tab:hover{color:var(--green)}.slide[data-key="paper"] .split{height:auto;min-height:0;align-items:start}.slide[data-key="paper"] .diagram svg{max-height:260px}.slide[data-key="paper"] .controlsbox{padding:13px}.slide[data-key="paper"] .chart{max-height:260px}.flow-line{display:grid;grid-template-columns:1fr 20px 1fr 20px 1fr 20px 1fr;align-items:center;gap:6px;margin-top:30px}.flow-line>div{border:1px solid var(--line);background:var(--white);padding:17px;min-height:170px}.flow-line b{font-size:24px;color:var(--earth);text-align:center}.flow-line small{display:block;color:var(--earth)}.flow-line strong{display:block;font-size:20px;margin:7px 0}.flow-line p{font-size:15px;color:var(--muted);margin:0}.checkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.checkgrid>div{background:var(--white);border:1px solid var(--line);padding:17px 19px}.checkgrid span{font:19px Georgia,serif;color:var(--earth);display:block}.checkgrid strong{font-size:18px}.checkgrid p{font-size:15px;color:var(--muted);margin:5px 0 0}.code-area{border:1px solid var(--line);background:#FFFEFB;max-width:980px}.code-top{background:#EDF0EA;padding:8px 16px;font-size:14px;color:var(--green);display:flex;justify-content:space-between}.copy{border:1px solid #9CB8A5;background:var(--white);color:var(--green);font-size:13px;padding:3px 10px}.code-area pre{margin:0;overflow:auto;max-height:min(49vh,390px);padding:16px 22px;font:15px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#243C31;white-space:pre}.quiz-card{max-width:900px}.quiz-options{display:grid;gap:13px}.quiz-opt{display:flex;align-items:center;gap:18px;background:var(--white);padding:15px 18px;border:1px solid var(--line);text-align:left;font-size:18px;border-radius:3px;color:var(--ink)}.quiz-opt span{color:var(--green);font-weight:700;border-right:1px solid var(--line);padding-right:18px}.quiz-opt.correct{border-color:#285B52;background:#E9F0E9}.quiz-opt.wrong{border-color:#B15F56;background:#F6EBE7}.quiz-feedback{font-size:18px;color:var(--green);padding:18px 0}.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.course-grid>div{border:1px solid var(--line);background:var(--white);padding:12px;display:flex;gap:14px;align-items:center;font-size:15px}.course-grid>div.active{background:#E6EFE8;border-color:#A9C3B0}.course-grid small{color:var(--earth);font-family:Georgia,serif;font-size:20px}.takeaways{max-width:1000px}.takeaways p{border-bottom:1px solid var(--line);padding:17px 0;font:25px/1.55 Georgia,"Songti SC",serif;display:flex;align-items:flex-start;gap:22px}.takeaways p span{color:var(--earth)}.is-reading .site{height:auto;overflow:visible}.is-reading .viewport{overflow:visible}.is-reading .slide{position:relative;display:flex!important;min-height:580px;border-bottom:1px solid var(--line);overflow:visible}.is-reading .bottom{display:none}.is-reading .slide:not(.active){animation:none}.is-reading .top{position:sticky;top:0;z-index:10}.is-reading .slide-body{min-height:0}.is-reading .chart{max-height:400px}
+@keyframes fadeIn{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-height:760px){.top{height:48px}.bottom{height:62px}.slide{padding-top:15px;padding-bottom:12px}.slide h2{font-size:30px;margin:4px 0 15px}.readable{font-size:18px;line-height:1.55}.readable p{margin-bottom:11px}.card{padding:15px 19px}.card p{font-size:16px;line-height:1.55}.formula{margin:10px 0;padding:8px 12px;font-size:20px}.note{font-size:14px}.callout{padding:11px 15px;margin-top:12px;font-size:15px}.chart{max-height:38vh}.diagram svg{max-height:37vh}.controlsbox{padding:13px;gap:9px}.controlsbox label{font-size:14px}.stat{padding:10px}.stat strong{font-size:23px}.cover-number{font-size:170px}.proof{padding:17px}.proof-line{font-size:24px}.proof-arrow{margin:9px 0}.three-steps{margin:18px 0}.three-steps>div{padding:15px}.paper-tabs{margin-bottom:8px}.paper-tab{padding:4px 8px;font-size:13px}.slide[data-key="paper"] .diagram svg{max-height:205px}.slide[data-key="paper"] .chart{max-height:240px}.slide[data-key="paper"] .controlsbox{gap:6px;padding:9px}.slide[data-key="paper"] .readable{font-size:17px}.slide[data-key="paper"] .readable p{margin-bottom:7px}.flow-line{margin-top:10px}.flow-line>div{min-height:132px;padding:11px}.flow-line strong{font-size:17px}.checkgrid>div{padding:10px 14px}.takeaways p{font-size:20px;padding:12px 0}.course-grid{gap:8px}.course-grid>div{padding:7px;font-size:14px}}
+@media(max-width:800px){.split,.two,.three{grid-template-columns:1fr}.slide{overflow:auto;padding:18px}.site{height:100dvh}.bottom{padding:8px 12px;grid-template-columns:90px 1fr 90px}.status{font-size:12px}.top{padding:0 15px}.cover-top{gap:12px}.cover-number{font-size:96px}.serif.big{font-size:31px}.readable{font-size:17px}.chart{max-height:250px}.flow-line{display:flex;overflow-x:auto}.flow-line>div{min-width:160px}.course-grid{grid-template-columns:repeat(2,1fr)}.checkgrid{grid-template-columns:repeat(2,1fr)}.paper-tabs{overflow-x:auto;flex-wrap:nowrap}.paper-tab{white-space:nowrap}.code-area pre{max-height:36vh}.slide h2{font-size:27px}.controlsbox{gap:10px}.metric-row{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.slide.active{animation:none}}
+</style><script>window.__courseReplaceStateSafe__=function(){try{return history.replaceState.apply(history,arguments)}catch(e){return null}};</script></head><body><main class="site"><header class="top"><div class="logo">CAUSAL STUDIES　/　<b>研究方法课程</b></div><div class="topright"><span class="small">LESSON 04 / 12</span><button id="reading" class="mode">阅读模式</button></div></header><div class="viewport"><section class="slide" data-slide="0" data-key="" aria-label="匹配与倾向得分">
+      <div class="eyebrow">04 / CAUSAL STUDIES</div><h2>匹配与倾向得分</h2>
+      <div class="slide-body">
+<div class="cover-top"><div class="cover-number">04</div><div class="cover-copy"><div class="serif big">当两组原本就不同，<br>怎样构造更可信的比较？</div><p>Subclassification · Matching · Propensity Scores · Weighting</p><div class="rule"></div><span>课程主线：反事实 → 可比性 → 识别假设 → 估计与诊断</span></div></div>
+</div>
+      <div class="slide-foot">教材主线：《因果推断》第五章，第175–240页。配合经典方法论文与可操作的教学模拟。</div>
+    </section>
+<section class="slide" data-slide="1" data-key="" aria-label="匹配不是“找一个相似的人”那么简单">
+      <div class="eyebrow">01 / THE PROBLEM</div><h2>匹配不是“找一个相似的人”那么简单</h2>
+      <div class="slide-body">
+<div class="split">
+ <div class="readable"><p>假设参加职业培训的人，平均工资高于未参加者。</p><p>差异至少包含两部分：<strong>培训的效应</strong>，以及<strong>参加培训前就存在的群体差异</strong>。</p><div class="formula">观察到的差异 = ATT + 选择偏差</div><p>匹配和加权尝试从观察性数据中重新建立<strong>处理前的可比性</strong>。</p></div>
+ <div class="diagram"><svg viewBox="0 0 480 300" aria-label="处理组与控制组的条件差异">
+ <line x1="30" y1="252" x2="450" y2="252" stroke="#9da9a1" stroke-width="1"/>
+ <g font-size="15" fill="#5d6a62"><text x="106" y="279">未培训</text><text x="298" y="279">接受培训</text></g>
+ <rect x="103" y="107" width="95" height="145" fill="#D2DDD4"/><rect x="292" y="61" width="95" height="191" fill="#285B52"/><text x="151" y="93" text-anchor="middle" font-size="19" fill="#23312F">¥ 5,000</text><text x="340" y="47" text-anchor="middle" font-size="19" fill="#23312F">¥ 6,500</text>
+ <path d="M200 160 H290" stroke="#A87340" stroke-width="2" stroke-dasharray="4 5"/><text x="244" y="151" text-anchor="middle" font-size="13" fill="#A87340">不能直接视为因果效应</text></svg></div>
+</div></div>
+      
+    </section>
+<section class="slide" data-slide="2" data-key="" aria-label="先问：哪些变量必须在处理前调整？">
+      <div class="eyebrow">01 / FROM THE DAG</div><h2>先问：哪些变量必须在处理前调整？</h2>
+      <div class="slide-body">
+<div class="split"><div class="diagram"><svg viewBox="0 0 510 290" aria-label="共同原因X连接D与Y">
+<defs><marker id="ar1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#718b7f"/></marker></defs>
+<path d="M242 88 L141 197 M271 88 L374 197" fill="none" stroke="#A87340" stroke-width="3" marker-end="url(#ar1)"/><path d="M163 217 L355 217" stroke="#285B52" stroke-width="3" marker-end="url(#ar1)"/>
+<g font-size="20" text-anchor="middle" fill="#23312F"><circle cx="255" cy="60" r="37" fill="#F0EBE1" stroke="#BEAA8E"/><text x="255" y="66">X</text><circle cx="128" cy="217" r="37" fill="#E2EDE6" stroke="#79998B"/><text x="128" y="223">D</text><circle cx="388" cy="217" r="37" fill="#F0EBE1" stroke="#BEAA8E"/><text x="388" y="223">Y</text></g><g fill="#65726D" font-size="14" text-anchor="middle"><text x="255" y="115">处理前特征</text><text x="128" y="274">培训</text><text x="388" y="274">收入</text></g></svg></div>
+<div class="readable"><p>年龄、受教育程度与既往工资，可能同时影响培训机会与未来收入。</p><div class="formula left">D ← X → Y</div><p>只要这条后门路径仍开放，直接比较就可能有偏差。</p><div class="callout">匹配变量优先是有充分因果理由的<strong>处理前共同原因</strong>。不要机械纳入中介、对撞因子与处理后结果。</div></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="3" data-key="" aria-label="两条识别假设：CIA 与共同支撑">
+      <div class="eyebrow">02 / IDENTIFICATION</div><h2>两条识别假设：CIA 与共同支撑</h2>
+      <div class="slide-body">
+<div class="two">
+<article class="card "><h3>条件独立性 CIA</h3><div class="formula small">(Y¹, Y⁰) ⫫ D | X</div><p>在控制处理前协变量 X 后，处理分配与潜在结果独立。</p><p class="hint">这不是由匹配成功自动证明的。</p></article><article class="card "><h3>共同支撑 / Positivity</h3><div class="formula small">0 &lt; Pr(D=1 | X) &lt; 1</div><p>相同 X 的人既有可能接受处理，也有可能不接受处理。</p><p class="hint">没有可比对象的地方，不能只靠算法补出反事实。</p></article></div><div class="callout">只有<strong>识别假设成立</strong>，平衡后的比较才可作因果解释；“已经平衡”只是一项诊断结果。</div></div>
+      
+    </section>
+<section class="slide" data-slide="4" data-key="" aria-label="先确定目标：ATE 还是 ATT？">
+      <div class="eyebrow">02 / WHAT IS IDENTIFIED</div><h2>先确定目标：ATE 还是 ATT？</h2>
+      <div class="slide-body">
+<div class="two"><article class="card "><h3>ATE · 所有人平均效应</h3><div class="formula">E[Y¹ − Y⁰]</div><p>如果所有人都接受处理，与所有人都不接受相比，平均差多少？</p></article><article class="card "><h3>ATT · 已处理者平均效应</h3><div class="formula">E[Y¹ − Y⁰ | D=1]</div><p>真正接受培训的那些人，从培训中获得多少？</p></article></div>
+<p>匹配处理组到对照组最常自然对应 <strong>ATT</strong>。若丢掉匹配不到的处理组个体，估计对象可能改变。</p></div>
+      
+    </section>
+<section class="slide" data-slide="5" data-key="" aria-label="条件均值之差何以代表潜在结果之差？">
+      <div class="eyebrow">02 / IDENTIFICATION LOGIC</div><h2>条件均值之差何以代表潜在结果之差？</h2>
+      <div class="slide-body">
+<div class="proof">
+<div class="proof-line">E[Y¹ − Y⁰ | X]</div>
+<div class="proof-arrow">CIA + 一致性 →</div>
+<div class="proof-line emph">E[Y | D=1, X] − E[Y | D=0, X]</div>
+<div class="proof-arrow">在相应目标人群上加权平均 →</div>
+<div class="proof-line">ATE 或 ATT</div>
+</div><p class="note">这里的关键不是某个匹配算法，而是把不可观测潜在结果转化为可观测条件期望所需的假设。</p></div>
+      
+    </section>
+<section class="slide" data-slide="6" data-key="" aria-label="子分类：先分层，再做层内比较">
+      <div class="eyebrow">03 / SUBCLASSIFICATION</div><h2>子分类：先分层，再做层内比较</h2>
+      <div class="slide-body">
+<div class="readable"><p>第五章以泰坦尼克号幸存率为例：如果女性、儿童更容易存活，而头等舱乘客的性别与年龄分布不同，那么直接比较客舱等级的幸存率可能混入构成差异。</p></div>
+<div class="three-steps"><div><span>01</span><strong>按 X 分层</strong><p>性别 × 年龄</p></div><div><span>02</span><strong>层内比较</strong><p>处理组 − 控制组</p></div><div><span>03</span><strong>重新加权</strong><p>使用目标人群的层权重</p></div></div>
+<div class="callout">分层不创造随机性：在每层内部，仍必须判断是否存在其他混杂。</div></div>
+      
+    </section>
+<section class="slide" data-slide="7" data-key="" aria-label="同样的层内效应，不同的组间构成">
+      <div class="eyebrow">03 / INTERACTIVE SUBCLASSIFICATION</div><h2>同样的层内效应，不同的组间构成</h2>
+      <div class="slide-body">
+<div class="split interactive-area"><div class="controlsbox"><label>处理组中高基线概率人群占比 <output id="subShareO">75%</output><input id="subShare" type="range" min="15" max="85" value="75" step="5"></label><label>目标总体中高概率人群占比 <output id="subTargetO">50%</output><input id="subTarget" type="range" min="20" max="80" value="50" step="5"></label><p class="hint">示意分层（而非泰坦尼克号真实数据）：高基线组 70%，低基线组 30%，两层真实处理效应均为 +10百分点。</p></div>
+<div><div class="metric-row stacked"><div class="stat"><small>未经调整的差异</small><strong id="subRaw">—</strong></div><div class="stat"><small>分层加权后的 ATE</small><strong id="subAdj">—</strong></div></div><svg id="subChart" class="chart" viewBox="0 0 560 220" aria-label="不同层权重导致观察差异变化"></svg></div></div><div class="note">改变的只是组间构成；没有改变各层内部的处理效果。这说明为什么总体均值差会误导。</div></div>
+      
+    </section>
+<section class="slide" data-slide="8" data-key="matchsteps" aria-label="近邻匹配：为每位处理者找可比的对照者">
+      <div class="eyebrow">04 / NEAREST NEIGHBORS</div><h2>近邻匹配：为每位处理者找可比的对照者</h2>
+      <div class="slide-body">
+<div class="split"><div class="readable"><p>对每个接受培训者，寻找处理前特征最相近的未培训者。之后比较两人的结果。</p><div class="formula left">ATT ≈ 平均(Yᵢ − Y<sub>j(i)</sub>)</div><p>“相近”必须有明确距离规则，且不能忽视匹配质量。</p><p>若找不到足够接近的对象，<strong>宁可报告无法匹配</strong>，也不要强行配对。</p></div><div class="diagram"><svg id="matchIntro" viewBox="0 0 500 275" aria-label="近邻匹配逐步连线"><line x1="35" y1="230" x2="470" y2="230" stroke="#9ca99d"/><text x="230" y="263" text-anchor="middle" fill="#65726D" font-size="15">处理前年龄 / 可比特征</text><g id="matchDots"></g><g id="matchLines"></g></svg></div></div><div class="note">按“下一步”观看配对线逐渐出现；概念说明不拆成逐字动画。</div></div>
+      
+    </section>
+<section class="slide" data-slide="9" data-key="" aria-label="距离不是越近越好：还要看匹配后剩下谁">
+      <div class="eyebrow">04 / INTERACTIVE MATCHING</div><h2>距离不是越近越好：还要看匹配后剩下谁</h2>
+      <div class="slide-body">
+<div class="split interactive-area"><div class="controlsbox"><label>匹配卡尺 caliper（标准化距离） <output id="mCalO">0.60</output><input id="mCal" type="range" min="0.15" max="1.80" step="0.05" value="0.60"></label><label>优先匹配哪种协变量？ <select id="mMetric"><option value="balanced">年龄 + 既往收入</option><option value="age">仅年龄</option><option value="income">仅既往收入</option></select></label><div class="stat mini"><small>成功匹配的处理组比例</small><strong id="matchRate">—</strong></div><div class="stat mini"><small>匹配后既往收入 SMD</small><strong id="matchSMD">—</strong></div></div><div><svg id="matchScatter" class="chart" viewBox="0 0 590 310" aria-label="处理者和对照者的匹配连线"></svg><div class="legend"><i class="swatch green"></i> 处理组 <i class="swatch earth"></i> 对照组 <i class="swatch line"></i> 匹配连线</div></div></div><p class="note">所有点和结果均为固定种子的教学模拟；算法是“允许重复使用对照个体”的一对一最近邻匹配，并不等于真实数据的估计。</p></div>
+      
+    </section>
+<section class="slide" data-slide="10" data-key="" aria-label="匹配之后，必须检查协变量平衡">
+      <div class="eyebrow">04 / BALANCE DIAGNOSTICS</div><h2>匹配之后，必须检查协变量平衡</h2>
+      <div class="slide-body">
+<div class="split"><div class="readable"><div class="formula left">SMD = ( X̄₁ − X̄₀ ) / s<sub>pooled</sub></div><p>标准化均值差（SMD）衡量处理组和对照组在处理前特征上的差异。</p><p>常见经验标准是 <strong>|SMD| &lt; 0.1</strong>，但这只是诊断规则，不是因果证明。</p><div class="callout">不要看匹配后的协变量显著性检验 p 值来取代平衡诊断；还应关注分布、方差比、重叠与样本损失。</div></div><div><svg id="lovePlot" class="chart" viewBox="0 0 560 300" aria-label="协变量平衡比较图"></svg><p class="note">演示点位由上页同一组模拟数据与选择的匹配度量实时计算。</p></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="11" data-key="" aria-label="如何衡量“相似”？三种常用距离">
+      <div class="eyebrow">04 / BEYOND EXACT MATCHING</div><h2>如何衡量“相似”？三种常用距离</h2>
+      <div class="slide-body">
+<div class="three"><article class="card "><h3>欧氏距离</h3><div class="formula small">√Σ(Xᵢ − Xⱼ)²</div><p>简单，但量纲不同会主导结果。</p></article><article class="card "><h3>马氏距离</h3><div class="formula small">√(ΔXᵀΣ⁻¹ΔX)</div><p>考虑变量尺度与相关性。</p></article><article class="card "><h3>倾向得分距离</h3><div class="formula small">|e(Xᵢ) − e(Xⱼ)|</div><p>将多维 X 汇总为一个处理概率。</p></article></div><div class="callout">无论用哪种距离，都要先判断<strong>变量是不是应该被调整</strong>，再评价共同支撑和平衡。</div></div>
+      
+    </section>
+<section class="slide" data-slide="12" data-key="" aria-label="倾向得分不是“结果预测概率”">
+      <div class="eyebrow">05 / THE PROPENSITY SCORE</div><h2>倾向得分不是“结果预测概率”</h2>
+      <div class="slide-body">
+<div class="centered"><div class="formula giant">e(X) = Pr(D = 1 | X)</div><p class="subtitle">给定处理前特征 X，一个个体接受处理的条件概率。</p></div><div class="two"><article class="card "><h3>输入</h3><p>年龄、受教育年限、处理前就业和收入等 X。</p></article><article class="card "><h3>输出</h3><p>0—1 之间的数，代表估计的“被处理可能性”。</p></article></div><p class="note">常见估计方法是 logit / probit；但一个预测良好的倾向模型，不必然带来良好的协变量平衡。</p></div>
+      
+    </section>
+<section class="slide" data-slide="13" data-key="" aria-label="倾向得分为什么能够“降维”？">
+      <div class="eyebrow">05 / BALANCING THEOREM</div><h2>倾向得分为什么能够“降维”？</h2>
+      <div class="slide-body">
+<div class="proof"><div class="proof-line">D ⫫ X | e(X)</div><div class="proof-arrow">在 CIA 与适当共同支撑条件下 →</div><div class="proof-line emph">(Y¹, Y⁰) ⫫ D | e(X)</div></div><div class="two"><article class="card "><h3>统计含义</h3><p>原本需要匹配很多维度的 X；在倾向得分相近的单位间比较，能够利用平衡性质。</p></article><article class="card "><h3>重要限制</h3><p>这是建立在正确的识别假设和足够拟合/平衡基础上的结果；它无法解决重要的未观测混杂。</p></article></div></div>
+      
+    </section>
+<section class="slide" data-slide="14" data-key="" aria-label="谁能匹配，谁几乎没有反事实？">
+      <div class="eyebrow">05 / OVERLAP LAB</div><h2>谁能匹配，谁几乎没有反事实？</h2>
+      <div class="slide-body">
+<div class="split interactive-area"><div class="controlsbox"><label>处理分配对协变量的依赖强度 <output id="psStrengthO">2.2</output><input id="psStrength" type="range" min="0.3" max="5.0" value="2.2" step="0.1"></label><label>极端倾向得分截尾界值 <output id="psTrimO">0.10</output><input id="psTrim" type="range" min="0.00" max="0.30" value="0.10" step="0.02"></label><div class="stat mini"><small>位于截尾区间内的样本</small><strong id="psRemain">—</strong></div><div class="stat mini"><small>被剔除比例</small><strong id="psDropped">—</strong></div></div><div><svg id="psHist" class="chart" viewBox="0 0 590 310" aria-label="处理组与对照组倾向得分直方图"></svg><div class="legend"><i class="swatch green"></i> 处理组 <i class="swatch earth"></i> 对照组 <i class="swatch gray"></i> 截尾区域</div></div></div><div class="note">截尾有助于避免严重外推与极端权重，但也可能改变估计对象；不能把截尾样本的效应自动称为原总体ATE。</div></div>
+      
+    </section>
+<section class="slide" data-slide="15" data-key="" aria-label="共同支撑不足是一项识别问题，不是软件问题">
+      <div class="eyebrow">05 / THE OVERLAP PROBLEM</div><h2>共同支撑不足是一项识别问题，不是软件问题</h2>
+      <div class="slide-body">
+<div class="split"><div class="readable"><p>如果 e(X) 接近 1，一个处理组个体几乎找不到同样特征的控制组个体。</p><p>近邻匹配可能要把他与很不像的人配对；IPW 可能赋予少数控制组极高权重。</p><div class="callout">正确处理：展示重叠图、解释排除范围、诊断权重，并重新说明目标人群。</div></div><div class="diagram"><svg viewBox="0 0 480 280"><path d="M44 220 H438" stroke="#AAB8AD"/><path d="M45 219 C110 210 136 95 190 75 C245 52 280 177 435 220" fill="none" stroke="#A87340" stroke-width="5"/><path d="M45 220 C195 211 225 168 285 67 C332 22 374 121 435 219" fill="none" stroke="#285B52" stroke-width="5"/><path d="M227 22 V222" stroke="#8A958B" stroke-dasharray="6 5"/><text x="240" y="255" text-anchor="middle" fill="#647169">倾向得分 e(X)</text><text x="75" y="41" fill="#A87340">对照</text><text x="328" y="41" fill="#285B52">处理</text></svg></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="16" data-key="" aria-label="从匹配转向加权：IPW 的直觉">
+      <div class="eyebrow">06 / INVERSE PROBABILITY WEIGHTS</div><h2>从匹配转向加权：IPW 的直觉</h2>
+      <div class="slide-body">
+<div class="two"><article class="card "><h3>处理组的 ATE 权重</h3><div class="formula">wᵢ = 1 / e(Xᵢ)</div><p>原本较少受到处理的类型，在处理组中得到较大权重。</p></article><article class="card "><h3>对照组的 ATE 权重</h3><div class="formula">wᵢ = 1 / [1 − e(Xᵢ)]</div><p>原本较少保持未处理的类型，在对照组中得到较大权重。</p></article></div><div class="callout">IPW 试图构造协变量分布更可比的加权总体，但<strong>极端倾向得分可能造成巨大权重</strong>。</div></div>
+      
+    </section>
+<section class="slide" data-slide="17" data-key="" aria-label="把一个极端权重放大看看">
+      <div class="eyebrow">06 / WEIGHTING LAB</div><h2>把一个极端权重放大看看</h2>
+      <div class="slide-body">
+<div class="split interactive-area"><div class="controlsbox"><label>某处理者的倾向得分 e(X) <output id="wPO">0.80</output><input id="wP" type="range" min="0.02" max="0.98" step="0.01" value="0.80"></label><div class="stat"><small>若该人接受处理：ATE权重</small><strong id="wTreat">—</strong></div><div class="stat"><small>若该人未接受处理：ATE权重</small><strong id="wCtrl">—</strong></div><p class="hint">拖动到 e(X)≈0 或 e(X)≈1，观察反事实稀少时权重如何放大。</p></div><div><svg id="weightViz" class="chart" viewBox="0 0 590 280" aria-label="倾向得分和逆概率权重变化"></svg><p class="note">正式研究应报告权重分布、极端值、有效样本量（ESS）及稳定性分析。</p></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="18" data-key="" aria-label="ATE、ATT、ATO 加权的目标不同">
+      <div class="eyebrow">06 / TARGET POPULATIONS</div><h2>ATE、ATT、ATO 加权的目标不同</h2>
+      <div class="slide-body">
+<div class="three"><article class="card "><h3>ATE</h3><div class="formula small">D/e，(1−D)/(1−e)</div><p>面向总体平均处理效应。</p></article><article class="card "><h3>ATT</h3><div class="formula small">D，(1−D)e/(1−e)</div><p>让对照组更像已处理者。</p></article><article class="card "><h3>ATO / Overlap</h3><div class="formula small">D(1−e)，(1−D)e</div><p>聚焦两种处理都有较大可能性的重叠人群。</p></article></div><p>比较方法之前，先确认研究政策真正关心的是<strong>谁</strong>的效应。</p><div class="note">不同目标参数不可因数值接近就视为同一个；Overlap weighting 不自动估计原总体ATE。</div></div>
+      
+    </section>
+<section class="slide" data-slide="19" data-key="" aria-label="CEM：先明确“差异允许多大”，再匹配">
+      <div class="eyebrow">07 / COARSENED EXACT MATCHING</div><h2>CEM：先明确“差异允许多大”，再匹配</h2>
+      <div class="slide-body">
+<div class="split"><div class="readable"><p>精确匹配要求每个协变量完全相同，实际研究中常因维度过多而无法匹配。</p><p>粗化精确匹配（CEM）先把连续变量划分为有意义的区间，再要求处理组与对照组落入<strong>同一个多维分层</strong>。</p><div class="formula left">粗化 X → 共同分层 → 删除无匹配分层 → 加权分析</div></div><div class="diagram"><svg viewBox="0 0 470 290"><g fill="none" stroke="#D0D8CE" stroke-width="1"><path d="M55 40V250M140 40V250M225 40V250M310 40V250M395 40V250M55 40H395M55 110H395M55 180H395M55 250H395"/></g><g fill="#285B52"><circle cx="100" cy="78" r="11"/><circle cx="186" cy="143" r="11"/><circle cx="286" cy="207" r="11"/><circle cx="346" cy="78" r="11"/></g><g fill="#A87340"><rect x="114" y="87" width="18" height="18"/><rect x="172" y="125" width="18" height="18"/><rect x="273" y="190" width="18" height="18"/><rect x="346" y="210" width="18" height="18"/></g><text x="240" y="278" text-anchor="middle" fill="#65726D" font-size="14">同一格有两组 → 可以比较</text></svg></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="20" data-key="" aria-label="粗化过细：很多人没有配对对象">
+      <div class="eyebrow">07 / CEM INTERACTIVE</div><h2>粗化过细：很多人没有配对对象</h2>
+      <div class="slide-body">
+<div class="split interactive-area"><div class="controlsbox"><label>年龄分箱宽度（岁） <output id="cemAgeO">6</output><input id="cemAge" type="range" min="4" max="20" value="6" step="2"></label><label>既往收入分箱宽度（千元） <output id="cemEarnO">6</output><input id="cemEarn" type="range" min="4" max="24" value="6" step="2"></label><div class="stat mini"><small>保留的处理组比例</small><strong id="cemKeep">—</strong></div><div class="stat mini"><small>有共同支持的分层</small><strong id="cemStrata">—</strong></div></div><div><svg id="cemGrid" class="chart" viewBox="0 0 590 310" aria-label="CEM分层与重叠状况"></svg><div class="legend"><i class="swatch green"></i> 处理组 <i class="swatch earth"></i> 对照组</div></div></div><div class="note">分层越细，匹配质量可能更高，但样本损失也可能更严重；CEM 的结果依赖粗化规则。</div></div>
+      
+    </section>
+<section class="slide" data-slide="21" data-key="" aria-label="匹配的三个边界">
+      <div class="eyebrow">08 / WHAT MATCHING CANNOT DO</div><h2>匹配的三个边界</h2>
+      <div class="slide-body">
+<div class="three"><article class="card "><h3>不能消除未测混杂</h3><p>被观察到的 X 再平衡，也无法证明所有相关原因都已经纳入。</p></article><article class="card "><h3>不能凭空产生可比对象</h3><p>有些处理个体没有共同支撑，应报告其被剔除以及目标参数的变化。</p></article><article class="card "><h3>不能用拟合优度替代平衡</h3><p>处理预测很准的 logit 模型，未必是用于因果估计的好模型。</p></article></div><div class="callout">匹配像“研究设计中的预处理”：诊断重叠、平衡与样本保留，再使用合适的估计与不确定性评估。</div></div>
+      
+    </section>
+<section class="slide" data-slide="22" data-key="" aria-label="NSW职业培训：实验基准为什么重要？">
+      <div class="eyebrow">09 / CLASSIC EMPIRICAL BENCHMARK</div><h2>NSW职业培训：实验基准为什么重要？</h2>
+      <div class="slide-body">
+<div class="split"><div class="readable"><p>LaLonde 的研究使用国家支持就业计划（NSW）的实验样本，把随机实验结果与观察性对照组得到的估计比较。</p><p>本教材第五章再次使用 NSW 及 CPS / PSID 非实验对照样本，讨论为什么不恰当的对照组会带来巨大偏差，以及匹配、倾向得分能否改善比较。</p><div class="formula left">实验基准 ATE ≈ $1,794</div><p class="note">数值是教材第218页附近展示的职业培训实验样本计算值（美元），不是下面CEM政治方法论文的实证估计。</p></div><div class="diagram"><svg viewBox="0 0 480 280"><rect x="35" y="72" width="135" height="110" rx="3" fill="#E8EEE8" stroke="#9CAE9F"/><rect x="298" y="72" width="145" height="110" rx="3" fill="#F1ECE4" stroke="#BEAA8E"/><path d="M171 125H298" stroke="#677D72" stroke-width="2.5"/><text x="103" y="118" text-anchor="middle" font-size="18" fill="#285B52">随机实验</text><text x="103" y="143" text-anchor="middle" font-size="13" fill="#65726D">处理组 / 对照组</text><text x="371" y="118" text-anchor="middle" font-size="18" fill="#8D673C">非实验对照</text><text x="371" y="143" text-anchor="middle" font-size="13" fill="#65726D">CPS / PSID</text><text x="237" y="109" text-anchor="middle" font-size="13" fill="#66776E">对照</text><text x="240" y="212" text-anchor="middle" font-size="15" fill="#23312F">比较不同研究设计的结果</text></svg></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="23" data-key="" aria-label="一项经典研究，也有不同的解释边界">
+      <div class="eyebrow">09 / RESEARCH EVIDENCE</div><h2>一项经典研究，也有不同的解释边界</h2>
+      <div class="slide-body">
+<div class="two"><article class="card "><h3>Dehejia & Wahba (1999) · JASA</h3><p>在NSW训练计划的观察性对照组比较中，论文报告：采用合理的倾向得分分层与匹配，可以得到接近实验基准的估计。</p><p class="hint">这是特定样本与设定下的经验结果，不是“倾向得分总能解决内生性”的定理。</p></article><article class="card "><h3>教材提醒</h3><p>当处理组与非实验对照组的协变量分布严重不重叠时，简单回归和粗糙匹配可能失败。</p><p class="hint">注意PSID/CPS对照组构成、处理前的收入轨迹与共同支撑。</p></article></div><div class="source">论文：<a href="https://www.nber.org/papers/w6586" target="_blank" rel="noopener">Dehejia & Wahba (1999), JASA ↗</a>　|　教材第5章 NSW 案例</div></div>
+      
+    </section>
+<section class="slide" data-slide="24" data-key="" aria-label="Political Analysis：CEM如何改变匹配逻辑？">
+      <div class="eyebrow">10 / PAPER LAB</div><h2>Political Analysis：CEM如何改变匹配逻辑？</h2>
+      <div class="slide-body">
+<div class="paper-intro"><div class="journal">POLITICAL ANALYSIS · 20(1) · 2012</div><h3 class="paper-title">Causal Inference without Balance Checking: Coarsened Exact Matching</h3><p>Stefano M. Iacus · Gary King · Giuseppe Porro</p><p>文章提出并系统讨论CEM及其“单调不平衡界”思想，强调<strong>研究者在匹配前设定可接受的协变量粗化程度</strong>，以更直接地约束不平衡。</p><div class="source"><a href="https://doi.org/10.1093/pan/mpr013" target="_blank" rel="noopener">期刊论文 ↗</a>　<a href="https://gking.harvard.edu/publication/causal-inference-without-balance-checking-coarsened-exact-matching/" target="_blank" rel="noopener">作者页面 ↗</a>　<a href="https://doi.org/10.7910/DVN/NMMYYW" target="_blank" rel="noopener">复现资料 ↗</a></div></div>
+<div class="callout">这是一篇<strong>政治学方法顶刊的研究方法论文</strong>，而不是声称某个具体政策有多大影响的实证政策评估。</div></div>
+      
+    </section>
+<section class="slide" data-slide="25" data-key="paper" aria-label="论文发现：何谓“先界定不平衡”？">
+      <div class="eyebrow">10 / ARTICLE DISSECTION</div><h2>论文发现：何谓“先界定不平衡”？</h2>
+      <div class="slide-body"><div class="paper-tabs" role="tablist" aria-label="政治学论文六标签"><button type="button" class="paper-tab active" data-paper-tab="0" role="tab" aria-selected="true">论文贡献</button><button type="button" class="paper-tab " data-paper-tab="1" role="tab" aria-selected="false">识别流程</button><button type="button" class="paper-tab " data-paper-tab="2" role="tab" aria-selected="false">教学DAG</button><button type="button" class="paper-tab " data-paper-tab="3" role="tab" aria-selected="false">识别假设</button><button type="button" class="paper-tab " data-paper-tab="4" role="tab" aria-selected="false">公式与权重</button><button type="button" class="paper-tab " data-paper-tab="5" role="tab" aria-selected="false">交互实验</button></div>
+<div class="two"><article class="card"><h3>传统近邻匹配的路径</h3><p>先定义距离 → 执行匹配 → 检查实际平衡 → 如果仍差，反复调算法。</p></article><article class="card"><h3>CEM 的路径</h3><p>先规定粗化区间 → 直接按区间精确匹配 → 已决定了可接受的粗化层面。</p></article></div>
+<div class="callout">论文的关键贡献是讨论CEM与MIB类匹配方法的理论性质及实现工具；<strong>不能把粗化变量上的匹配理解为所有原始变量完全平衡。</strong></div></div>
+      
+    </section>
+<section class="slide" data-slide="26" data-key="paper" aria-label="研究设计逻辑：从规则到分析样本">
+      <div class="eyebrow">10 / ARTICLE DISSECTION</div><h2>研究设计逻辑：从规则到分析样本</h2>
+      <div class="slide-body"><div class="paper-tabs" role="tablist" aria-label="政治学论文六标签"><button type="button" class="paper-tab " data-paper-tab="0" role="tab" aria-selected="false">论文贡献</button><button type="button" class="paper-tab active" data-paper-tab="1" role="tab" aria-selected="true">识别流程</button><button type="button" class="paper-tab " data-paper-tab="2" role="tab" aria-selected="false">教学DAG</button><button type="button" class="paper-tab " data-paper-tab="3" role="tab" aria-selected="false">识别假设</button><button type="button" class="paper-tab " data-paper-tab="4" role="tab" aria-selected="false">公式与权重</button><button type="button" class="paper-tab " data-paper-tab="5" role="tab" aria-selected="false">交互实验</button></div>
+<div class="flow-line"><div><small>第一步</small><strong>先选协变量</strong><p>根据DAG选择处理前混杂因素</p></div><b>→</b><div><small>第二步</small><strong>确定粗化阈值</strong><p>政策意义或实质差异</p></div><b>→</b><div><small>第三步</small><strong>筛选共同分层</strong><p>仅保留两组都存在的单元格</p></div><b>→</b><div><small>第四步</small><strong>匹配后分析</strong><p>按目标参数做估计与推断</p></div></div><div class="callout">CEM是设计和样本预处理方法，不是一个新的随机化机制。</div></div>
+      
+    </section>
+<section class="slide" data-slide="27" data-key="paper" aria-label="教学 DAG：CEM针对哪一条路径？">
+      <div class="eyebrow">10 / ARTICLE DISSECTION</div><h2>教学 DAG：CEM针对哪一条路径？</h2>
+      <div class="slide-body"><div class="paper-tabs" role="tablist" aria-label="政治学论文六标签"><button type="button" class="paper-tab " data-paper-tab="0" role="tab" aria-selected="false">论文贡献</button><button type="button" class="paper-tab " data-paper-tab="1" role="tab" aria-selected="false">识别流程</button><button type="button" class="paper-tab active" data-paper-tab="2" role="tab" aria-selected="true">教学DAG</button><button type="button" class="paper-tab " data-paper-tab="3" role="tab" aria-selected="false">识别假设</button><button type="button" class="paper-tab " data-paper-tab="4" role="tab" aria-selected="false">公式与权重</button><button type="button" class="paper-tab " data-paper-tab="5" role="tab" aria-selected="false">交互实验</button></div>
+<div class="split"><div class="diagram"><svg viewBox="0 0 500 275"><defs><marker id="arD" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#758C7D"/></marker></defs><path d="M246 83L139 179 M267 83L385 179" stroke="#A87340" stroke-width="3" fill="none" marker-end="url(#arD)"/><path d="M161 199H360" stroke="#285B52" stroke-width="3" marker-end="url(#arD)"/><g fill="#23312F" font-size="20" text-anchor="middle"><circle cx="255" cy="60" r="37" fill="#F4EDE1" stroke="#BBA484"/><text x="255" y="66">X</text><circle cx="125" cy="199" r="35" fill="#E8F0E9" stroke="#85A090"/><text x="125" y="205">D</text><circle cx="391" cy="199" r="35" fill="#E8F0E9" stroke="#85A090"/><text x="391" y="205">Y</text></g><text x="255" y="114" text-anchor="middle" fill="#65726D" font-size="14">协变量：年龄、历史工资…</text></svg></div><div class="readable"><p>原始路径：D ← X → Y（混杂）。</p><p>CEM试图在粗化后的X层内寻找可比单位，从而减少通过X产生的混杂。</p><div class="callout">示意图由课程绘制，<strong>不是论文作者的原图</strong>。未知的 U → D、U → Y 仍可能存在。</div></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="28" data-key="paper" aria-label="识别假设：CEM无法自动满足哪些条件？">
+      <div class="eyebrow">10 / ARTICLE DISSECTION</div><h2>识别假设：CEM无法自动满足哪些条件？</h2>
+      <div class="slide-body"><div class="paper-tabs" role="tablist" aria-label="政治学论文六标签"><button type="button" class="paper-tab " data-paper-tab="0" role="tab" aria-selected="false">论文贡献</button><button type="button" class="paper-tab " data-paper-tab="1" role="tab" aria-selected="false">识别流程</button><button type="button" class="paper-tab " data-paper-tab="2" role="tab" aria-selected="false">教学DAG</button><button type="button" class="paper-tab active" data-paper-tab="3" role="tab" aria-selected="true">识别假设</button><button type="button" class="paper-tab " data-paper-tab="4" role="tab" aria-selected="false">公式与权重</button><button type="button" class="paper-tab " data-paper-tab="5" role="tab" aria-selected="false">交互实验</button></div>
+<div class="three"><article class="card "><h3>条件独立性</h3><p>粗化层内仍需说明不存在重要的未观测混杂；粗化本身也可能留下残余不平衡。</p></article><article class="card "><h3>共同支撑</h3><p>落入仅有处理组或仅有对照组的分层将无法用于直接匹配比较。</p></article><article class="card "><h3>SUTVA与时间顺序</h3><p>处理需要定义明确；只能合理使用处理前协变量，不应控制处理后的变量。</p></article></div><div class="callout">更好的协变量平衡，并不能替代任何一条因果识别假设。</div></div>
+      
+    </section>
+<section class="slide" data-slide="29" data-key="paper" aria-label="估计对象与CEM权重">
+      <div class="eyebrow">10 / ARTICLE DISSECTION</div><h2>估计对象与CEM权重</h2>
+      <div class="slide-body"><div class="paper-tabs" role="tablist" aria-label="政治学论文六标签"><button type="button" class="paper-tab " data-paper-tab="0" role="tab" aria-selected="false">论文贡献</button><button type="button" class="paper-tab " data-paper-tab="1" role="tab" aria-selected="false">识别流程</button><button type="button" class="paper-tab " data-paper-tab="2" role="tab" aria-selected="false">教学DAG</button><button type="button" class="paper-tab " data-paper-tab="3" role="tab" aria-selected="false">识别假设</button><button type="button" class="paper-tab active" data-paper-tab="4" role="tab" aria-selected="true">公式与权重</button><button type="button" class="paper-tab " data-paper-tab="5" role="tab" aria-selected="false">交互实验</button></div>
+<div class="two"><article class="card "><h3>先辨认目标总体</h3><p>ATT 的目标是所有符合研究定义的已处理者。删除未匹配的处理者后，通常只能直接识别“被保留处理者”的效应，需要说明外推条件。</p></article><article class="card "><h3>分层再加权</h3><p>CEM在匹配分层内重新比较两组，并按所选目标参数分配权重，以免因为每层处理/对照比例不同而让组构成失衡。</p></article></div><div class="formula">ATT<sub>matched</sub> = Σ<sub>s</sub> [N<sub>1s</sub> / N<sub>1,matched</sub>] · (Ȳ<sub>1s</sub> − Ȳ<sub>0s</sub>)</div><p class="note">这是在共同分层内、按保留处理组构成汇总差值的简化ATT估计形式，仍依赖识别假设。</p></div>
+      
+    </section>
+<section class="slide" data-slide="30" data-key="paper" aria-label="交互实验：粗化后哪些处理者仍可比较？">
+      <div class="eyebrow">10 / ARTICLE DISSECTION</div><h2>交互实验：粗化后哪些处理者仍可比较？</h2>
+      <div class="slide-body"><div class="paper-tabs" role="tablist" aria-label="政治学论文六标签"><button type="button" class="paper-tab " data-paper-tab="0" role="tab" aria-selected="false">论文贡献</button><button type="button" class="paper-tab " data-paper-tab="1" role="tab" aria-selected="false">识别流程</button><button type="button" class="paper-tab " data-paper-tab="2" role="tab" aria-selected="false">教学DAG</button><button type="button" class="paper-tab " data-paper-tab="3" role="tab" aria-selected="false">识别假设</button><button type="button" class="paper-tab " data-paper-tab="4" role="tab" aria-selected="false">公式与权重</button><button type="button" class="paper-tab active" data-paper-tab="5" role="tab" aria-selected="true">交互实验</button></div>
+<div class="split interactive-area"><div class="controlsbox"><label>年龄粗化 <output id="paperCemAgeO">6</output><input id="paperCemAge" type="range" min="4" max="20" step="2" value="6"></label><label>收入粗化 <output id="paperCemEarnO">6</output><input id="paperCemEarn" type="range" min="4" max="24" step="2" value="6"></label><div class="stat"><small>保留处理组比例</small><strong id="paperCemKeep">—</strong></div><p class="hint">模拟只演示CEM规则如何影响重叠，不使用该论文的原始复现数据。</p></div><div><svg id="paperCemChart" viewBox="0 0 590 310" class="chart"></svg></div></div><div class="source">真实论文：<a href="https://doi.org/10.1093/pan/mpr013" target="_blank" rel="noopener">Political Analysis (2012) ↗</a>　教学参数：可交互示意值</div></div>
+      
+    </section>
+<section class="slide" data-slide="31" data-key="" aria-label="2024年的方法提醒：更关注重叠与极端权重">
+      <div class="eyebrow">11 / STATE OF THE ART</div><h2>2024年的方法提醒：更关注重叠与极端权重</h2>
+      <div class="slide-body">
+<div class="two"><article class="card "><h3>Overlap weighting</h3><p>更强调处理概率居中的个体，有时能够改善权重稳定性，并把效应目标明确转向“重叠人群”。</p><p class="source">2024：<a href="https://pubmed.ncbi.nlm.nih.gov/39180471/" target="_blank" rel="noopener">Overlap weighting 方法综述 ↗</a></p></article><article class="card "><h3>Target trial emulation</h3><p>在做倾向得分前先确定纳入标准、处理定义和时间起点，防止“匹配得很漂亮却比较错了问题”。</p><p class="source">2024：<a href="https://doi.org/10.1136/bmjopen-2024-086595" target="_blank" rel="noopener">方法系统综述 ↗</a></p></article></div><div class="callout">更新的技术不是取消CIA，而是更加重视：<strong>目标参数、可比性、时间设计、透明诊断</strong>。</div></div>
+      
+    </section>
+<section class="slide" data-slide="32" data-key="" aria-label="新进展：不止“估计一个倾向得分”">
+      <div class="eyebrow">11 / METHODS IN 2025–2026</div><h2>新进展：不止“估计一个倾向得分”</h2>
+      <div class="slide-body">
+<div class="two"><article class="card "><h3>2026：直接优化协变量平衡</h3><p>2026年<em>Statistics in Medicine</em>的模拟研究比较 IPW、CBPS、energy balancing 与 kernel optimal matching，指出有限样本表现取决于处理比例、重叠条件与具体实现。</p><div class="source"><a href="https://doi.org/10.1002/sim.70672" target="_blank" rel="noopener">2026年比较研究 ↗</a></div></article><article class="card "><h3>2025：不要混淆 ATO 和 ATE</h3><p><em>Journal of Clinical Epidemiology</em>的方法评论强调：Overlap weighting估计的是<strong>重叠人群的平均效应</strong>，不能仅因为ATE权重不稳定，就换成ATO后宣称解决了原问题。</p><div class="source"><a href="https://doi.org/10.1016/j.jclinepi.2025.111942" target="_blank" rel="noopener">2025年方法评论 ↗</a></div></article></div><div class="callout">趋势是从“匹配算法选哪一个”转向“目标效应是什么、协变量是否真正平衡、哪些人有可靠比较”。</div></div>
+      
+    </section>
+<section class="slide" data-slide="33" data-key="" aria-label="完整匹配研究应该报告什么？">
+      <div class="eyebrow">11 / RESEARCH PRACTICE</div><h2>完整匹配研究应该报告什么？</h2>
+      <div class="slide-body">
+<div class="checkgrid"><div><span>01</span><strong>DAG和变量时间顺序</strong><p>展示为何纳入这些处理前协变量。</p></div><div><span>02</span><strong>目标参数</strong><p>ATE、ATT还是ATO？若截尾后是否改变？</p></div><div><span>03</span><strong>共同支撑</strong><p>报告倾向分布、剔除比例、匹配失败者特征。</p></div><div><span>04</span><strong>协变量平衡</strong><p>SMD、分布重叠、极端权重。</p></div><div><span>05</span><strong>估计与标准误</strong><p>考虑匹配依赖性、权重及重复使用对照者。</p></div><div><span>06</span><strong>敏感性分析</strong><p>检验未测混杂或设计选择可能带来的影响。</p></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="34" data-key="" aria-label="Stata：从拟合倾向得分到匹配后平衡">
+      <div class="eyebrow">12 / STATA WORKFLOW</div><h2>Stata：从拟合倾向得分到匹配后平衡</h2>
+      <div class="slide-body"><div class="code-area"><div class="code-top">STATA · 自包含教学数据 <button class="copy" data-copy="stataCode">复制代码</button></div><pre><code id="stataCode">* 第04讲：教学模拟数据（非论文原始数据）
+clear all
+set seed 2404
+set obs 600
+gen age = 18 + floor(40*runiform())
+gen prior = 2 + 0.16*age + 4*rnormal()
+gen p = invlogit(-1 + 0.04*age + 0.12*prior)
+gen d = runiform() &lt; p
+gen y = 5 + 0.5*prior + 0.04*age + 2*d + rnormal()
+
+* 最近邻倾向得分匹配：ATT
+teffects psmatch (y) (d age prior), atet
+tebalance summarize
+
+* 逆概率权重：ATE
+teffects ipw (y) (d age prior), ate
+* 检查共同支撑、权重、处理前协变量平衡
+</code></pre></div><p class="note">该代码可直接生成模拟样本并运行匹配/IPW。实际论文应根据设计调整协变量，区分ATE/ATT，并正确报告推断。</p></div>
+      
+    </section>
+<section class="slide" data-slide="35" data-key="" aria-label="R：MatchIt + cobalt诊断平衡">
+      <div class="eyebrow">12 / R WORKFLOW</div><h2>R：MatchIt + cobalt诊断平衡</h2>
+      <div class="slide-body"><div class="code-area"><div class="code-top">R · 自包含教学数据 <button class="copy" data-copy="rCode">复制代码</button></div><pre><code id="rCode"># 第04讲：教学模拟数据（非论文原始数据）
+set.seed(2404)
+n &lt;- 600
+age &lt;- sample(18:57, n, TRUE)
+prior &lt;- 2 + .16*age + 4*rnorm(n)
+p &lt;- plogis(-1 + .04*age + .12*prior)
+d &lt;- rbinom(n, 1, p)
+y &lt;- 5 + .5*prior + .04*age + 2*d + rnorm(n)
+dat &lt;- data.frame(age, prior, d, y)
+
+# install.packages(c(&#x27;MatchIt&#x27;,&#x27;cobalt&#x27;))
+library(MatchIt)
+library(cobalt)
+m &lt;- matchit(d ~ age + prior, data=dat,
+             method=&#x27;nearest&#x27;, estimand=&#x27;ATT&#x27;)
+summary(m, standardize=TRUE)
+love.plot(m, threshold=.1, abs=TRUE)
+md &lt;- match_data(m)
+weighted.mean(md$y[md$d==1], md$weights[md$d==1]) -
+  weighted.mean(md$y[md$d==0], md$weights[md$d==0])
+# 上式仅为估计值演示；完整推断需选匹配适配的方差估计。</code></pre></div><p class="note">执行前需要安装 MatchIt / cobalt。这里仅展示一个可复现的分析框架，不能把简单加权均值差及默认标准误直接当作普遍有效推断。</p></div>
+      
+    </section>
+<section class="slide" data-slide="36" data-key="" aria-label="CIA要求什么？">
+      <div class="eyebrow">13 / QUICK CHECK · 01 OF 06</div><h2>CIA要求什么？</h2>
+      <div class="slide-body">
+<div class="quiz-card" data-q="0"><div class="quiz-options"><button class="quiz-opt" data-opt="0" type="button"><span>A</span>给定X，潜在结果与处理分配独立</button><button class="quiz-opt" data-opt="1" type="button"><span>B</span>倾向模型预测AUC必须超过0.9</button><button class="quiz-opt" data-opt="2" type="button"><span>C</span>处理组与对照组样本量相等</button></div><div class="quiz-feedback" aria-live="polite">请选择一个答案。</div></div></div>
+      
+    </section>
+<section class="slide" data-slide="37" data-key="" aria-label="没有共同支撑时，最合理的行动是什么？">
+      <div class="eyebrow">13 / QUICK CHECK · 02 OF 06</div><h2>没有共同支撑时，最合理的行动是什么？</h2>
+      <div class="slide-body">
+<div class="quiz-card" data-q="1"><div class="quiz-options"><button class="quiz-opt" data-opt="0" type="button"><span>A</span>强制匹配最接近的任意个体</button><button class="quiz-opt" data-opt="1" type="button"><span>B</span>报告不可比较区域，并明确估计对象变化</button><button class="quiz-opt" data-opt="2" type="button"><span>C</span>只增加控制变量数量</button></div><div class="quiz-feedback" aria-live="polite">请选择一个答案。</div></div></div>
+      
+    </section>
+<section class="slide" data-slide="38" data-key="" aria-label="匹配中SMD主要用于什么？">
+      <div class="eyebrow">13 / QUICK CHECK · 03 OF 06</div><h2>匹配中SMD主要用于什么？</h2>
+      <div class="slide-body">
+<div class="quiz-card" data-q="2"><div class="quiz-options"><button class="quiz-opt" data-opt="0" type="button"><span>A</span>保证未观测混杂不存在</button><button class="quiz-opt" data-opt="1" type="button"><span>B</span>衡量可观测协变量的平衡程度</button><button class="quiz-opt" data-opt="2" type="button"><span>C</span>估计个人因果效应</button></div><div class="quiz-feedback" aria-live="polite">请选择一个答案。</div></div></div>
+      
+    </section>
+<section class="slide" data-slide="39" data-key="" aria-label="处理组按倾向得分最近邻匹配，通常面向哪个参数？">
+      <div class="eyebrow">13 / QUICK CHECK · 04 OF 06</div><h2>处理组按倾向得分最近邻匹配，通常面向哪个参数？</h2>
+      <div class="slide-body">
+<div class="quiz-card" data-q="3"><div class="quiz-options"><button class="quiz-opt" data-opt="0" type="button"><span>A</span>ATT</button><button class="quiz-opt" data-opt="1" type="button"><span>B</span>所有人ATE，必然</button><button class="quiz-opt" data-opt="2" type="button"><span>C</span>时间固定效应</button></div><div class="quiz-feedback" aria-live="polite">请选择一个答案。</div></div></div>
+      
+    </section>
+<section class="slide" data-slide="40" data-key="" aria-label="e(X)接近1的未处理个体，其ATE IPW权重如何？">
+      <div class="eyebrow">13 / QUICK CHECK · 05 OF 06</div><h2>e(X)接近1的未处理个体，其ATE IPW权重如何？</h2>
+      <div class="slide-body">
+<div class="quiz-card" data-q="4"><div class="quiz-options"><button class="quiz-opt" data-opt="0" type="button"><span>A</span>趋近于1</button><button class="quiz-opt" data-opt="1" type="button"><span>B</span>趋向非常大</button><button class="quiz-opt" data-opt="2" type="button"><span>C</span>恒为0</button></div><div class="quiz-feedback" aria-live="polite">请选择一个答案。</div></div></div>
+      
+    </section>
+<section class="slide" data-slide="41" data-key="" aria-label="CEM的核心设计动作是什么？">
+      <div class="eyebrow">13 / QUICK CHECK · 06 OF 06</div><h2>CEM的核心设计动作是什么？</h2>
+      <div class="slide-body">
+<div class="quiz-card" data-q="5"><div class="quiz-options"><button class="quiz-opt" data-opt="0" type="button"><span>A</span>直接用结果Y选择配对</button><button class="quiz-opt" data-opt="1" type="button"><span>B</span>事先粗化协变量，再在共同分层匹配</button><button class="quiz-opt" data-opt="2" type="button"><span>C</span>把所有变量都控制进回归</button></div><div class="quiz-feedback" aria-live="polite">请选择一个答案。</div></div></div>
+      
+    </section>
+<section class="slide" data-slide="42" data-key="" aria-label="从第五章走向第05讲面板数据">
+      <div class="eyebrow">14 / FURTHER READING</div><h2>从第五章走向第05讲面板数据</h2>
+      <div class="slide-body">
+<div class="two"><article class="card "><h3>本讲的学术来源</h3><p>教材：《因果推断》第五章（子分类、匹配、倾向得分），约第175–240页。</p><p>Dehejia & Wahba（1999），<em>JASA</em> 94(448):1053–1062。</p><p>Iacus, King & Porro（2012），<em>Political Analysis</em> 20(1):1–24。</p></article><article class="card "><h3>接下来的逻辑</h3><p><strong>第05讲：面板数据与固定效应</strong></p><p>如果我们不仅观察不同的人，还能观察<strong>同一个人或地区在不同时点的变化</strong>，能否利用个体内部信息改善识别？</p><p>固定效应能控制时间不变的异质性，但仍有时变混杂问题。</p></article></div></div>
+      
+    </section>
+<section class="slide" data-slide="43" data-key="" aria-label="完整12讲目录">
+      <div class="eyebrow">COURSE ATLAS / 12 LESSONS</div><h2>完整12讲目录</h2>
+      <div class="slide-body"><div class="course-grid"><div class=""><small>01</small><strong>因果推断导论</strong></div><div class=""><small>02</small><strong>DAG与因果结构</strong></div><div class=""><small>03</small><strong>回归与因果识别</strong></div><div class="active"><small>04</small><strong>匹配与倾向得分</strong></div><div class=""><small>05</small><strong>面板数据与固定效应</strong></div><div class=""><small>06</small><strong>双重差分 DID</strong></div><div class=""><small>07</small><strong>断点回归 RDD</strong></div><div class=""><small>08</small><strong>工具变量 IV</strong></div><div class=""><small>09</small><strong>合成控制 SCM</strong></div><div class=""><small>10</small><strong>现代面板因果推断</strong></div><div class=""><small>11</small><strong>因果机器学习</strong></div><div class=""><small>12</small><strong>研究设计与复现</strong></div></div></div>
+      
+    </section>
+<section class="slide" data-slide="44" data-key="" aria-label="这讲要记住的三句话">
+      <div class="eyebrow">CLOSING / LESSON 04</div><h2>这讲要记住的三句话</h2>
+      <div class="slide-body">
+<div class="takeaways"><p><span>01</span> 匹配和加权构造的是<strong>可观察特征上的可比性</strong>，不自动解决未观测混杂。</p><p><span>02</span> 任何方法都必须先明确<strong>目标人群与共同支撑</strong>。</p><p><span>03</span> 好的匹配研究报告的不是“匹配成功”四个字，而是<strong>设计、平衡、样本变化与识别边界</strong>。</p></div></div>
+      
+    </section></div><footer class="bottom"><button id="prev" class="navbutton">← 上一步</button><div class="status"><b id="currentIndex">01</b> / <span id="allIndex"></span>　<span id="currentTitle"></span><div id="ticks" class="ticks"></div></div><button id="next" class="navbutton primary">下一步 →</button></footer></main><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), slides=[...document.querySelectorAll('.slide')];let i=0,phase=0;
+const stepMax=(id)=>id===8?4:1; // one conceptual reveal on near-neighbor introduction
+const byid=id=>document.querySelector('[data-slide="'+id+'"]');
+function goto(k,p=0){i=Math.max(0,Math.min(slides.length-1,k));phase=p; slides.forEach((s,j)=>{s.classList.toggle('active',j===i);s.setAttribute('aria-hidden',String(j!==i))});let cur=slides[i];$('currentIndex').textContent=String(i+1).padStart(2,'0');$('allIndex').textContent=String(slides.length).padStart(2,'0');$('currentTitle').textContent=cur.querySelector('h2').textContent;$('prev').disabled=i===0&&phase===0;$('next').disabled=i===slides.length-1&&phase===stepMax(i)-1;$('ticks').innerHTML=slides.map((_,j)=>'<span class="'+(j===i?'active':j<i?'done':'')+'"></span>').join('');cur.scrollTop=0;if(i===8)drawMatchIntro(); if(window.location.hash!=='#slide-'+(i+1))window.__courseReplaceStateSafe__(null,'','#slide-'+(i+1));}
+function move(n){if(n>0&&phase+1<stepMax(i)){goto(i,phase+1);return}if(n<0&&phase>0){goto(i,phase-1);return}goto(i+n,n<0?stepMax(i-1)-1:0)}
+$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('reading').onclick=()=>{document.body.classList.toggle('is-reading');$('reading').textContent=document.body.classList.contains('is-reading')?'演示模式':'阅读模式';};
+document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return; if(e.target.closest('input,textarea,select,button,pre,[role="tablist"]'))return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();move(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();move(-1)}});
+let startX=0,startY=0;document.querySelector('.viewport').addEventListener('touchstart',e=>{if(e.target.closest('input,button,select,pre,svg'))return;startX=e.touches[0].clientX;startY=e.touches[0].clientY},{passive:true});document.querySelector('.viewport').addEventListener('touchend',e=>{if(!startX)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>100&&Math.abs(dx)>Math.abs(dy)*1.6)move(dx<0?1:-1);startX=0},{passive:true});
+function format(v,d=1){return (Math.round(v*Math.pow(10,d))/Math.pow(10,d)).toFixed(d)}
+function svgLine(x1,y1,x2,y2,c='#90A497',width=2,op=1){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${width}" opacity="${op}"/>`}
+function svgText(x,y,s,c='#64736A',size=14,anchor='start'){return `<text x="${x}" y="${y}" fill="${c}" font-size="${size}" text-anchor="${anchor}">${s}</text>`}
+// Subclassification toy example: treated and controls have complementary high-type shares
+function updateSub(){const a=+$('subShare').value/100,w=+$('subTarget').value/100;const ctrlHigh=1-a, y1H=.80,y1L=.40,y0H=.70,y0L=.30;let yt=a*y1H+(1-a)*y1L,yc=ctrlHigh*y0H+(1-ctrlHigh)*y0L;let raw=(yt-yc)*100,adj=(w*(y1H-y0H)+(1-w)*(y1L-y0L))*100;$('subShareO').textContent=Math.round(a*100)+'%';$('subTargetO').textContent=Math.round(w*100)+'%';$('subRaw').textContent=format(raw)+' pp';$('subAdj').textContent=format(adj)+' pp';const bars=[{name:'观察差异',v:raw,c:'#A87340'},{name:'分层加权ATE',v:adj,c:'#285B52'}];const mid=280,scale=3.4;let out=svgLine(70,177,530,177,'#BBC8BD');bars.forEach((b,j)=>{let y=37+j*75,v=b.v,x=v>=0?mid:mid+v*scale;out+=`<rect x="${x}" y="${y}" width="${Math.max(2,Math.abs(v*scale))}" height="33" fill="${b.c}"/>`+svgText(20,y+22,b.name,'#405148',15)+svgText(mid+v*scale+8,y+22,format(v)+' pp',b.c,15)});out+=svgLine(mid,13,mid,186,'#8C9B90',1.4)+svgText(mid,210,'0','#64736A',13,'middle');$('subChart').innerHTML=out;}
+['subShare','subTarget'].forEach(id=>$(id).addEventListener('input',updateSub));updateSub();
+// Deterministic synthetic pool: shared across matching, balance and CEM
+function rng(seed=42){let t=seed>>>0;return()=>{t+=0x6D2B79F5;let x=t; x=Math.imul(x^(x>>>15),x|1);x^=x+Math.imul(x^(x>>>7),x|61);return((x^(x>>>14))>>>0)/4294967296}};const rand=rng(4419);let pool=[];for(let z=0;z<80;z++){let d=z<36?1:0;let age=18+Math.floor(rand()*34)+(d?5:0);let earn=2+rand()*23+(d?5:0);pool.push({d,age,earn,id:z})};const treated=pool.filter(x=>x.d===1),controls=pool.filter(x=>x.d===0);
+function drawMatchIntro(){const x=a=>60+(a-18)/40*380;let dots='';for(let n=0;n<6;n++){let p=x(23+n*5),q=x(22+n*5.2);dots+=`<circle cx="${p}" cy="74" r="9" fill="#285B52"/><rect x="${q-8}" y="170" width="16" height="16" fill="#A87340"/>`; }$('matchDots').innerHTML=dots+svgText(18,80,'处理组','#285B52',14)+svgText(18,181,'对照组','#A87340',14);let lines='';if(phase>=1){let n=phase===1?2:phase===2?4:6;for(let z=0;z<n;z++){lines+=svgLine(x(23+z*5),85,x(22+z*5.2),169,'#96A99C',2,0.75);}}$('matchLines').innerHTML=lines;}
+function calcMatches(){let cal=+$('mCal').value,metric=$('mMetric').value,matches=[];for(const t of treated){let best=null,dist=Infinity;for(const c of controls){let da=Math.abs(t.age-c.age)/10,de=Math.abs(t.earn-c.earn)/8;let d=metric==='age'?da:metric==='income'?de:Math.sqrt(da*da+de*de);if(d<dist){dist=d;best=c}}if(dist<=cal)matches.push([t,best,dist]);}return matches;}
+function mean(a,f){return a.length?a.reduce((v,x)=>v+f(x),0)/a.length:0}
+function smd(a,b,k){if(!a.length||!b.length)return NaN;let m1=mean(a,x=>x[k]),m0=mean(b,x=>x[k]);const v1=mean(a,x=>(x[k]-m1)**2),v0=mean(b,x=>(x[k]-m0)**2);return(m1-m0)/Math.sqrt((v1+v0)/2||1)}
+function updateMatch(){const mt=calcMatches(),selT=mt.map(x=>x[0]),selC=mt.map(x=>x[1]);$('mCalO').textContent=format(+$('mCal').value,2);$('matchRate').textContent=Math.round(100*mt.length/treated.length)+'%';let s=smd(selT,selC,'earn');$('matchSMD').textContent=Number.isFinite(s)?format(s,2):'—';const x=a=>40+(a-17)/48*515,y=a=>280-(a/40)*245;let out='';for(let a=0;a<5;a++){let xx=40+a*125;out+=svgLine(xx,20,xx,280,'#E6EBE5',1)}for(let a=0;a<4;a++){let yy=25+a*85;out+=svgLine(40,yy,560,yy,'#E6EBE5',1)}for(const [t,c] of mt){out+=svgLine(x(t.age),y(t.earn),x(c.age),y(c.earn),'#8EA498',1.4,0.48)}for(const c of controls)out+=`<rect x="${x(c.age)-3.5}" y="${y(c.earn)-3.5}" width="7" height="7" fill="#A87340" opacity=".72"/>`;for(const t of treated)out+=`<circle cx="${x(t.age)}" cy="${y(t.earn)}" r="4" fill="#285B52" opacity=".92"/>`;out+=svgText(300,305,'年龄（岁）','#65726D',13,'middle')+svgText(43,15,'既往收入（千元）','#65726D',12);$('matchScatter').innerHTML=out;let plot=svgLine(150,30,150,268,'#B2C6B7',2);plot+=svgText(150,21,'0','#65726D',12,'middle')+svgLine(180,30,180,268,'#D3AE86',1.5)+svgText(180,21,'0.1','#A87340',12,'middle');const initial=[Math.abs(smd(treated,controls,'age')),Math.abs(smd(treated,controls,'earn'))];const after=[Math.abs(smd(selT,selC,'age')),Math.abs(smd(selT,selC,'earn'))];['年龄','既往收入'].forEach((name,j)=>{let yy=100+j*105;plot+=svgText(14,yy+5,name,'#65726D',15);plot+=svgLine(150,yy,Math.min(545,150+initial[j]*300),yy,'#D5DAD2',6);plot+=`<circle cx="${Math.min(545,150+initial[j]*300)}" cy="${yy}" r="8" fill="#A87340"/><circle cx="${Number.isFinite(after[j])?Math.min(545,150+after[j]*300):150}" cy="${yy+22}" r="8" fill="#285B52"/>`;});plot+=svgText(350,290,'赭石：匹配前　绿色：匹配后','#65726D',13,'middle');$('lovePlot').innerHTML=plot;}
+['mCal','mMetric'].forEach(id=>$(id).addEventListener('input',updateMatch));updateMatch();
+// Coherent prop score simulation from X and a propensity model
+const randps=rng(45501),unit=Array.from({length:400},(_,j)=>({x:(randps()*2-1)*1.8,r:randps()}));function psData(){const a=+$('psStrength').value;return unit.map(u=>({...u,e:1/(1+Math.exp(-a*u.x)),d:u.r<1/(1+Math.exp(-a*u.x))?1:0}))}
+function updatePs(){let d=psData(),c=+$('psTrim').value,a=+$('psStrength').value;const retained=d.filter(z=>z.e>=c&&z.e<=1-c),bins=16;let ct0=Array(bins).fill(0),ct1=Array(bins).fill(0);d.forEach(z=>(z.d?ct1:ct0)[Math.min(bins-1,Math.floor(z.e*bins))]++);const max=Math.max(...ct0,...ct1,1),w=480/bins;let o=svgLine(45,270,540,270,'#85958A',1.4);o+=svgText(292,300,'倾向得分 e(X)','#65726D',14,'middle');for(let b=0;b<bins;b++){let x=49+b*w;let h0=ct0[b]/max*195,h1=ct1[b]/max*195;o+=`<rect x="${x}" y="${270-h0}" width="${w/2-1}" height="${h0}" fill="#A87340" opacity=".7"/><rect x="${x+w/2}" y="${270-h1}" width="${w/2-1}" height="${h1}" fill="#285B52" opacity=".8"/>`;}let xx1=49+c*480,xx2=49+(1-c)*480;if(c>0)o+=`<rect x="49" y="30" width="${c*480}" height="240" fill="#D9DCD6" opacity=".65"/><rect x="${xx2}" y="30" width="${c*480}" height="240" fill="#D9DCD6" opacity=".65"/>`+svgLine(xx1,25,xx1,275,'#7F8E84',1)+svgLine(xx2,25,xx2,275,'#7F8E84',1);$('psHist').innerHTML=o;$('psStrengthO').textContent=format(a);$('psTrimO').textContent=format(c,2);$('psRemain').textContent=Math.round(100*retained.length/d.length)+'%';$('psDropped').textContent=d.length-retained.length+' 人';}
+['psStrength','psTrim'].forEach(id=>$(id).addEventListener('input',updatePs));updatePs();
+// IPW lab
+function updateW(){let p=+$('wP').value,a=1/p,b=1/(1-p);$('wPO').textContent=format(p,2);$('wTreat').textContent=format(a,2);$('wCtrl').textContent=format(b,2);let max=Math.max(a,b,1);const s=420/max;let o=svgLine(105,245,540,245,'#A9B7AB');o+=`<rect x="105" y="55" width="${a*s}" height="52" fill="#285B52"/><rect x="105" y="151" width="${b*s}" height="52" fill="#A87340"/>`;o+=svgText(15,88,'处理者', '#65726D',15)+svgText(15,185,'对照者','#65726D',15)+svgText(Math.min(530,110+a*s),88,format(a,2),'#285B52',17)+svgText(Math.min(530,110+b*s),185,format(b,2),'#A87340',17);$('weightViz').innerHTML=o}
+$('wP').addEventListener('input',updateW);updateW();
+// CEM: explicit grid strata keyed by discretizations
+function computeCem(a,b){const key=z=>Math.floor((z.age-18)/a)+'|'+Math.floor(z.earn/b);let cells=new Map();for(const q of pool){let k=key(q);if(!cells.has(k))cells.set(k,{t:0,c:0});cells.get(k)[q.d?'t':'c']++}let common=[...cells.entries()].filter(([k,v])=>v.t&&v.c),keys=new Set(common.map(x=>x[0]));return {cells,common,keep:treated.filter(q=>keys.has(key(q))).length};}
+function cemSvg(id,a,b){let t=computeCem(a,b),o='',nx=Math.ceil(52/a),ny=Math.ceil(45/b),cellW=480/nx,cellH=240/ny;for(let xx=0;xx<nx;xx++)for(let yy=0;yy<ny;yy++){let k=xx+'|'+yy,v=t.cells.get(k),good=v&&v.t&&v.c;o+=`<rect x="${50+xx*cellW}" y="${20+(ny-yy-1)*cellH}" width="${cellW}" height="${cellH}" fill="${good?'#E7EFE8':'#F6F7F3'}" stroke="#D7DED4" stroke-width="1"/>`};for(const q of pool){let cx=50+(q.age-18)/a*cellW,cy=20+240-(q.earn/b)*cellH;cx=Math.max(54,Math.min(525,cx));cy=Math.max(23,Math.min(257,cy));o+=q.d?`<circle cx="${cx}" cy="${cy}" r="3.8" fill="#285B52" opacity=".88"/>`:`<rect x="${cx-3.2}" y="${cy-3.2}" width="6.4" height="6.4" fill="#A87340" opacity=".8"/>`}o+=svgText(297,294,'年龄 × 既往收入 的粗化分层','#65726D',13,'middle');$(id).innerHTML=o;return t}
+function updateCem(){let a=+$('cemAge').value,b=+$('cemEarn').value;$('cemAgeO').textContent=a;$('cemEarnO').textContent=b;let t=cemSvg('cemGrid',a,b);$('cemKeep').textContent=Math.round(100*t.keep/treated.length)+'%';$('cemStrata').textContent=t.common.length+' 个'}
+['cemAge','cemEarn'].forEach(id=>$(id).addEventListener('input',updateCem));updateCem();
+function updatePCem(){let a=+$('paperCemAge').value,b=+$('paperCemEarn').value;$('paperCemAgeO').textContent=a;$('paperCemEarnO').textContent=b;let r=cemSvg('paperCemChart',a,b);$('paperCemKeep').textContent=Math.round(r.keep/treated.length*100)+'%'}
+['paperCemAge','paperCemEarn'].forEach(id=>$(id).addEventListener('input',updatePCem));updatePCem();
+// Paper tabs navigation
+const caseIndices=slides.map((s,j)=>s.dataset.key==='paper'?j:null).filter(v=>v!==null);
+document.querySelectorAll('[data-paper-tab]').forEach(b=>b.addEventListener('click',()=>goto(caseIndices[+b.dataset.paperTab])));
+// Quiz on each slide, single automatic numbering via slide header
+const quizKeys=[{ok:0,why:'CIA是一个关于潜在结果和处理分配的识别假设。'},{ok:1,why:'算法不能凭空生成真实对照，应该报告比较区域和目标参数变化。'},{ok:1,why:'SMD诊断可观测协变量平衡，不意味着未测变量已平衡。'},{ok:0,why:'为每位已处理者匹配对照，通常自然对应ATT。'},{ok:1,why:'未处理者ATE权重1/(1−e)，e趋近于1时权重变大。'},{ok:1,why:'CEM先粗化再寻找共同分层。'}];
+document.querySelectorAll('.quiz-card').forEach(card=>{const q=quizKeys[+card.dataset.q];card.querySelectorAll('.quiz-opt').forEach(button=>button.addEventListener('click',()=>{const j=+button.dataset.opt;card.querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('correct','wrong'));button.classList.add(j===q.ok?'correct':'wrong');card.querySelector('.quiz-feedback').textContent=(j===q.ok?'✓ 正确。':'✗ 再想想。')+q.why}))});
+// copy self-contained code, scoped to actual click
+for(const b of document.querySelectorAll('[data-copy]'))b.addEventListener('click',async()=>{let s=$(b.dataset.copy).textContent;try{await navigator.clipboard.writeText(s);b.textContent='已复制'}catch(e){b.textContent='请选中代码复制'}setTimeout(()=>b.textContent='复制代码',1300)});
+const hash=/^#slide-(\d+)$/.exec(location.hash),initial=hash?Number(hash[1])-1:0;goto(initial);
+
+/* Embedded course-portal navigation bridge: original teaching logic unchanged. */
+(function(){
+  const PORTAL_LESSON='04';
+  function sendState(){
+    const active=document.querySelector('.slide.active');
+    const all=Array.from(document.querySelectorAll('.slide'));
+    let selected=active?all.indexOf(active):0;
+    if(selected<0)selected=0;
+    const heading=active&&active.querySelector('h1,h2');
+    if(window.parent!==window)window.parent.postMessage({kind:'causal-course-state',lesson:PORTAL_LESSON,index:selected,title:heading?heading.textContent.trim():''},'*');
+  }
+  window.addEventListener('message',e=>{
+    if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-jump'||e.data.lesson!==PORTAL_LESSON)return;
+    let index=Number(e.data.index||0),step=Number(e.data.step||0);
+    if(!Number.isFinite(index)||!Number.isFinite(step))return;
+    try {goto(Math.max(0,Math.floor(index)),Math.max(0,Math.floor(step)));}catch(err){console.error('Lesson jump error',err)}
+    setTimeout(sendState,30);
+  });
+  let pending=0;
+  const observer=new MutationObserver(()=>{if(pending)return;pending=requestAnimationFrame(()=>{pending=0;sendState()})});
+  const host=document.querySelector('.viewport')||document.body;
+  observer.observe(host,{subtree:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('load',()=>setTimeout(sendState,90));
+  setTimeout(sendState,140);
+})();
+
+})();
+</script>
+<style>
+@media(max-width:600px){
+ header.top{padding:0 9px!important;gap:6px!important}
+ header.top .logo{font-size:11px!important;letter-spacing:0!important;white-space:nowrap!important}
+ header.top .topright{display:flex!important;gap:4px!important;flex-shrink:0}
+ header.top .topright .small{display:none!important}
+ header.top .topright .mode{white-space:nowrap!important;font-size:11px!important;padding:5px 6px!important}
+}
+</style>
+<!-- INTEGRATED PORTAL CONTROLS: connect embedded player and course shell -->
+<script>
+(function(){
+ if(window.parent===window) return;
+ const lessonId='04';
+ function send(action){ try{window.parent.postMessage({kind:'causal-course-action',lesson:lessonId,action:action},'*')}catch(e){} }
+ // Child fullscreen used to hide the parent home control. Delegate instead.
+ window.toggleFullscreen=function(){send('fullscreen')};
+ window.addEventListener('message',function(e){
+  if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-display'||e.data.lesson!==lessonId)return;
+  document.querySelectorAll('button[onclick="toggleFullscreen()"],button[onclick="toggleFullscreen();"]').forEach(function(b){
+   b.textContent=e.data.expanded?'退出全屏':'全屏';
+   b.setAttribute('aria-pressed',e.data.expanded?'true':'false');
+  });
+ });
+ window.addEventListener('keydown',function(e){if(e.key==='Escape')send('escape')});
+})();
+</script>
+
+</body></html>

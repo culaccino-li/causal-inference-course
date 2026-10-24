@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>第03讲 · 回归与因果识别｜因果研究方法</title>
+<style>
+:root{--paper:#F6F4EF;--white:#FFFEFB;--ink:#23312F;--muted:#65726D;--line:#DDDCD4;--green:#285B52;--ochre:#A87340;--soft:#F0F1EC;--red:#A15C51;--blue:#527487;--lightgreen:#E7EEE6}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.85 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}a{color:var(--green);text-decoration-thickness:1px;text-underline-offset:3px}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,a:focus-visible,[role=tab]:focus-visible{outline:2px solid var(--green);outline-offset:3px}.shell{display:grid;grid-template-columns:236px minmax(0,1fr)}.progress{position:fixed;z-index:100;left:0;top:0;background:var(--green);height:2px;width:0}.side{height:100vh;position:sticky;top:0;background:var(--white);border-right:1px solid var(--line);padding:38px 20px 22px;overflow:auto}.side-kicker,.eyebrow,.section-label,.kicker,.smallcap{font-size:10px;letter-spacing:.15em;color:var(--green);font-weight:700}.brand{font-family:Georgia,"Songti SC",serif;font-size:20px;line-height:1.4;margin:16px 0 0}.brand small{display:block;font:11px Georgia,serif;letter-spacing:.06em;color:var(--muted);margin-top:4px}.side-heading{margin:48px 8px 16px;color:var(--muted)}.side nav a{display:block;font-size:12px;padding:9px 10px;border-left:2px solid transparent;color:#56675E;line-height:1.5;text-decoration:none}.side nav a:hover,.side nav a.active{color:var(--green);background:#EDF0EA;border-color:var(--green)}.side-foot{margin-top:45px;border-top:1px solid var(--line);padding:20px 8px 0;font-size:12px;color:var(--muted)}.main{width:100%;max-width:1150px;min-width:0;margin:0 auto;padding:34px clamp(28px,5.2vw,79px) 110px}.hero{padding:55px 0 67px;border-bottom:1px solid var(--line)}h1,h2,.hero-lead{font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif;font-weight:500}h1{font-size:clamp(46px,5.3vw,71px);letter-spacing:-.05em;line-height:1.26;margin:22px 0 29px}h1 em{font-style:normal;color:var(--green)}.hero-lead{font-size:clamp(20px,2.2vw,27px);line-height:1.65;margin:0 0 12px}.hero-copy{max-width:720px;color:#58665D;margin:0 0 27px}.hero-meta{font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}.hero-meta span+span{border-left:1px solid var(--line);padding-left:14px}.section{padding-top:76px;scroll-margin-top:27px}.section+.section{border-top:1px solid var(--line);margin-top:77px}.section h2{font-size:clamp(29px,3.2vw,39px);line-height:1.43;letter-spacing:-.035em;margin:9px 0 18px}.section h3{font:550 21px/1.5 Georgia,"Songti SC",serif;margin:0 0 10px}.section h4{font:550 17px/1.6 Georgia,"Songti SC",serif;margin:0 0 10px}.prose{max-width:790px;color:#47584F;margin:0 0 22px}.leadnote{background:var(--soft);padding:16px 21px;border-left:2px solid var(--green);font-size:14px;line-height:1.85;margin:24px 0;color:#425449}.reading-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:30px 0}.reading-grid>div{padding:22px 16px 18px 0}.reading-grid>div+div{border-left:1px solid var(--line);padding-left:18px}.reading-grid b{font:500 22px Georgia,serif}.reading-grid small{display:block;color:var(--muted);font-size:12px;margin-top:5px}.equation{font:22px/1.6 Georgia,"Times New Roman",serif;text-align:center;background:#F0F2EC;padding:23px 14px;margin:22px 0;color:#29443A;overflow-x:auto}.eq-small{font:17px/1.8 Georgia,"Times New Roman",serif}.three-steps{border-top:1px solid var(--line)}.three-steps article{display:grid;grid-template-columns:45px 1fr;gap:15px;border-bottom:1px solid var(--line);padding:23px 0}.number{font:24px Georgia,serif;color:var(--ochre)}.three-steps strong{font-size:16px}.three-steps p{font-size:14px;color:var(--muted);margin:4px 0 0}.studio,.paper-case,.code-box{background:var(--white);border:1px solid var(--line)}.studio-head{padding:23px 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;align-items:center}.studio-head h3{margin:2px 0;font-size:22px}.mutedlabel{font-size:11px;color:var(--muted)}.studio-body{padding:23px 28px}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:21px;margin:4px 0 24px}.control label,.paper-control label{display:block;color:#52665A;font-size:12px;line-height:1.6;margin-bottom:9px}.control label strong,.paper-control label strong{color:var(--green);float:right;font-size:13px}input[type=range]{width:100%;height:5px;accent-color:var(--green);cursor:pointer}.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stats>div{padding:14px 12px}.stats>div+div{border-left:1px solid var(--line)}.stats span{display:block;font-size:11px;color:var(--muted)}.stats strong{display:block;color:var(--green);font:30px Georgia,serif;margin-top:5px;line-height:1.35}.viz{width:100%;height:auto;display:block;background:#FBFBF8;border:1px solid #E6E8DF}.vizwrap{margin:22px 0 12px}.caption{font-size:12px;color:var(--muted);line-height:1.75;margin:8px 0 0}.sim-conclusion{background:var(--soft);font-size:14px;line-height:1.85;padding:16px 20px;border-left:2px solid var(--green);margin-top:20px}.legend{display:flex;flex-wrap:wrap;gap:15px;font-size:11px;color:var(--muted);margin:11px 0}.swatch{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}.toggleline{display:flex;gap:9px;align-items:center;margin:15px 0;font-size:13px;color:#44564B}.toggleline input{accent-color:var(--green);width:17px;height:17px}.view-switch{display:flex;gap:0;border-bottom:1px solid var(--line);margin-top:14px}.view-switch button{font-size:13px;border:0;border-bottom:2px solid transparent;padding:11px 16px;background:none;color:#68776C}.view-switch button.on{border-color:var(--green);color:var(--green);font-weight:700}.split{display:grid;grid-template-columns:1.18fr 1fr;gap:22px}.mini-results{font-size:13px;color:#536457}.mini-results b{color:var(--green)}.bad-modes{display:flex;overflow-x:auto;border-bottom:1px solid var(--line)}.bad-modes button{flex:1 0 auto;border:0;border-bottom:3px solid transparent;padding:13px 14px;background:none;color:#67776A;font-size:13px}.bad-modes button.active{color:var(--green);border-color:var(--green);font-weight:700;background:#F4F6F0}.bad-visual{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;align-items:start}.bad-description{font-size:13px;line-height:1.9;color:#4F6155}.bad-description p{margin:0 0 9px}.bad-estimate{border-top:1px solid var(--line);padding-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.bad-estimate strong{display:block;font:26px Georgia,serif;color:var(--green)}.bad-estimate span{font-size:11px;color:var(--muted)}.nodecircle{fill:#F0F2EC;stroke:#7F9A86;stroke-width:2}.nodetext{font:600 17px Georgia,serif;fill:#253B30;text-anchor:middle;dominant-baseline:middle}.nodelabel{font:11px -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;fill:#66766E;text-anchor:middle}.arrowcausal{stroke:var(--green);stroke-width:2.6;fill:none;marker-end:url(#arrowMain)}.arrowconf{stroke:var(--ochre);stroke-width:2.6;fill:none;marker-end:url(#arrowBias)}.fwl-note{border-top:1px solid var(--line);padding:13px 27px;font-size:12px;color:#67786B}.checklist{border-top:1px solid var(--line)}.checklist article{display:grid;grid-template-columns:115px 1fr;gap:24px;padding:21px 0;border-bottom:1px solid var(--line)}.checklist strong{font-size:15px;color:var(--green)}.checklist p{font-size:14px;color:#59685C;margin:0}.paper-heading{padding:25px 29px 16px}.paper-caps{color:var(--green);font-size:10px;letter-spacing:.15em}.paper-heading h3{margin:12px 0 5px;font-size:23px;line-height:1.5}.paper-heading p{margin:0;color:var(--muted);font-size:13px}.paper-tabs{display:flex;overflow-x:auto;scrollbar-width:thin;border-bottom:1px solid var(--line);margin:0 25px;gap:9px}.case-tab{flex:1 0 auto;min-width:86px;border:0;border-bottom:3px solid transparent;background:transparent;color:#69786D;white-space:nowrap;padding:13px 13px;font-size:12px}.case-tab[aria-selected=true]{color:var(--green);border-color:var(--green);font-weight:700}.case-tab:hover{background:#F2F3ED}.case-pages{padding:27px 29px 23px;min-height:355px}.case-page[hidden]{display:none!important}.case-page h4{margin:0 0 13px;font-size:21px}.case-page p{font-size:14px;line-height:1.9;color:#506054}.paper-quote{background:var(--soft);border-left:2px solid var(--green);padding:14px 18px;font-size:13px;margin:18px 0;color:#42544B}.case-columns{display:grid;grid-template-columns:1fr 1fr;gap:17px}.paper-figure{max-width:100%;height:auto;display:block;background:#FAFAF6;border:1px solid var(--line)}.assumptions{display:grid;gap:12px}.assumptions article{border-top:1px solid var(--line);padding-top:10px}.assumptions strong{font-size:14px;color:var(--green)}.assumptions p{margin:3px 0 2px;font-size:13px}.paper-control{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}.paper-stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);margin:19px 0}.paper-stats>div{padding:10px}.paper-stats>div+div{border-left:1px solid var(--line)}.paper-stats span{display:block;font-size:10px;color:var(--muted)}.paper-stats b{font:26px Georgia,serif;color:var(--green)}.case-bottom{padding:12px 28px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px}.plain-button{border:0;border-bottom:1px solid var(--green);background:none;color:var(--green);padding:3px 0;font-size:12px}.foot-sources{padding:11px 29px 16px;background:#FAFAF6;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.foot-sources a{white-space:nowrap}.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.model-grid>div{border-top:1px solid var(--line);padding-top:14px}.model-grid b{color:var(--green);font-size:14px}.model-grid p{font-size:13px;color:var(--muted);margin:3px 0}.code-tabs{display:flex;gap:9px;margin:22px 0 12px}.code-tabs button{border:1px solid var(--line);background:transparent;color:#5F7565;padding:7px 19px;font-size:12px}.code-tabs button.active{background:var(--soft);color:var(--green);border-color:#AABEA9}.code-top{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}.code-top button{border:0;border-bottom:1px solid var(--green);color:var(--green);background:transparent;font-size:12px}.code-box pre{margin:0;overflow:auto;padding:21px 24px;font:12px/1.85 Consolas,"SFMono-Regular",monospace;white-space:pre;color:#344F42}.frontier article{display:grid;grid-template-columns:58px minmax(0,1fr);gap:19px;border-top:1px solid var(--line);padding:23px 0}.frontier article>span{font:20px Georgia,serif;color:var(--ochre)}.frontier h3{font-size:19px;margin:0 0 7px}.frontier p{font-size:13px;color:var(--muted);margin:0 0 7px}.frontier a{font-size:12px}.quiz{display:grid;gap:15px}.quiz-card{background:var(--white);border:1px solid var(--line);padding:21px 25px}.quiz-card h3{font-size:17px;margin:0 0 12px}.quiz-choice{display:block;width:100%;padding:10px 13px;text-align:left;background:none;border:1px solid var(--line);margin:6px 0;font-size:13px;color:#4C6255}.quiz-choice:hover{border-color:#8FA993}.quiz-choice.selected{background:#E9F0E8;border-color:var(--green)}.quiz-choice.wrong{background:#F5EDE8;border-color:var(--ochre)}.quiz-feedback{font-size:12px;line-height:1.75;color:#54685B;min-height:8px;margin-top:8px}.refs p{font-size:12px;border-bottom:1px solid var(--line);padding:11px 0;color:#536659;margin:0}.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-top:1px solid var(--line)}.course-grid div{padding:12px 8px;border-bottom:1px solid var(--line);font-size:12px;color:#5D6D61}.course-grid span{color:var(--ochre);font:16px Georgia,serif;margin-right:19px}.course-grid .current{background:#E7EEE6;color:var(--green);font-weight:700}footer{margin:47px 0 0;font-size:11px;color:#889489}svg text{user-select:none} @media(max-width:850px){.shell{display:block}.side{height:auto;position:static;padding:13px 20px;border:0;border-bottom:1px solid var(--line)}.side .side-heading,.side nav,.side-foot{display:none}.brand{margin:4px 0;font-size:18px}.main{padding:18px 19px 80px}.hero{padding:30px 0 49px}h1{font-size:clamp(43px,10vw,60px)}.section{padding-top:54px}.section+.section{margin-top:55px}.controls,.reading-grid{grid-template-columns:1fr}.reading-grid>div{border-bottom:1px solid var(--line);border-left:none!important;padding:13px 0!important}.reading-grid>div:last-child{border-bottom:0}.split,.bad-visual,.case-columns,.model-grid{grid-template-columns:1fr}.studio-head,.studio-body{padding:17px}.studio-head h3{font-size:19px}.bad-modes button{font-size:12px}.stats strong{font-size:22px}.stats>div{padding:10px 7px}.stats span{font-size:10px}.checklist article{grid-template-columns:1fr;gap:5px}.paper-heading{padding:19px}.paper-heading h3{font-size:20px}.paper-tabs{margin:0 12px}.case-pages{padding:20px 17px}.paper-control{grid-template-columns:1fr}.paper-stats b{font-size:22px}.course-grid{grid-template-columns:1fr}.frontier article{grid-template-columns:38px 1fr;gap:12px}.hero-meta{font-size:11px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style><style>
+/* ===========================================================
+   Editorial Research System 1.3 — Progressive Lesson Player
+   Keeps the complete source lesson and all interactives intact.
+   =========================================================== */
+html,body{height:100%;overflow:hidden;scroll-behavior:auto}
+body .progress{display:none}
+.shell{height:100dvh;overflow:hidden}
+.side{z-index:6;height:100dvh}
+.main{margin:0;max-width:none;width:100%;height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:0 clamp(20px,4.6vw,76px);gap:0}
+.deck-slide{display:none!important;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:clamp(26px,4vh,46px) max(2px,calc((100% - 1000px)/2)) 28px;scroll-margin:0;}
+.deck-slide.is-current{display:block!important;animation:deckIn .27s ease both}
+.deck-slide .section-label{margin-bottom:10px}
+.deck-slide.section{border-top:0!important;margin-top:0!important;padding-top:clamp(26px,4vh,46px)}
+.deck-slide.hero{padding-top:clamp(35px,7vh,90px);border-bottom:0}
+.deck-slide h2{margin-top:7px;margin-bottom:16px;font-size:clamp(27px,3.1vw,37px)}
+.deck-slide .studio{margin-top:12px}
+.deck-slide [data-deck-hidden="true"]{display:none!important}
+.deck-revealed{animation:deckItemIn .33s ease-out both}
+.deck-chapterinfo{font-size:11px;letter-spacing:.04em;color:var(--muted);margin:0 0 16px;display:flex;align-items:center;gap:10px;min-height:23px}
+.deck-chapterinfo em{font-style:normal;color:var(--green);font-weight:650}
+.deck-chapterinfo .deck-line{width:26px;height:1px;background:#9aac9e}
+.deck-bar{display:grid;grid-template-columns:144px minmax(0,1fr) 144px;align-items:center;column-gap:16px;background:var(--paper);border-top:1px solid var(--line);padding:14px max(0px,calc((100% - 1000px)/2));flex:0 0 auto;min-height:92px;z-index:8}
+.deck-nav{border:1px solid #B9C6BA;padding:9px 11px;background:var(--white);border-radius:3px;font-size:13px;color:var(--green);min-height:41px;transition:background .18s}
+.deck-nav:hover:not(:disabled){background:#E8EEE6}
+.deck-nav:disabled{opacity:.32;cursor:default}
+.deck-nav.deck-next{background:var(--green);border-color:var(--green);color:#fff}
+.deck-nav.deck-next:hover:not(:disabled){background:#1B4A41}
+.deck-middle{text-align:center;min-width:0}
+.deck-middle .deck-status{font-size:12px;color:#4E6358;line-height:1.4;font-variant-numeric:tabular-nums}
+.deck-status strong{color:var(--green);font-weight:650}
+.deck-ticks{display:flex;gap:5px;justify-content:center;margin:11px auto 0;max-width:410px}
+.deck-tick{height:4px;width:28px;border:0;padding:0;background:#D7DFD5;border-radius:2px;transition:background .18s;cursor:pointer}
+.deck-tick.is-active{background:var(--green)}
+.deck-tick.is-done{background:#9BB2A5}
+.deck-tick:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.deck-tools{position:absolute;top:15px;right:clamp(20px,4.6vw,76px);z-index:5;display:flex;align-items:center;gap:12px}
+.deck-mode{background:transparent;color:#5D6B62;border:1px solid var(--line);font-size:11px;padding:5px 11px;letter-spacing:.03em}
+.deck-mode:hover{border-color:var(--green);color:var(--green)}
+.deck-help{font-size:11px;color:var(--muted)}
+.deck-build-figure{max-width:760px;margin:20px 0;background:#FBFBF8;border:1px solid var(--line);padding:16px 20px 11px}
+.deck-build-figure svg{display:block;width:100%;height:auto}
+.deck-build-figure p{color:var(--muted);font-size:13px;line-height:1.8;margin:8px 0 4px}
+.deck-build-figure [data-ovb-x]{transition:opacity .45s ease,transform .45s ease;transform-origin:center}
+.deck-build-figure.phase-zero [data-ovb-x]{opacity:0;transform:translateY(-13px)}
+.deck-build-figure.phase-one [data-ovb-x]{opacity:1;transform:translateY(0)}
+.deck-slide .paper-case{margin-bottom:10px}
+.deck-slide .quiz-card{max-width:860px}
+.deck-slide .code-box{margin-top:16px}
+body.is-presenting .shell{display:block}
+body.is-presenting .side{display:none}
+body.is-presenting .main{padding:0 clamp(24px,7vw,125px)}
+body.is-presenting .deck-tools{right:clamp(24px,7vw,125px)}
+body.is-presenting .deck-slide{padding-left:max(4px,calc((100% - 1100px)/2));padding-right:max(4px,calc((100% - 1100px)/2))}
+body.is-presenting .deck-bar{padding-left:max(4px,calc((100% - 1100px)/2));padding-right:max(4px,calc((100% - 1100px)/2))}
+@keyframes deckIn{from{opacity:.4;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+@keyframes deckItemIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:850px){.shell{display:block}.side{display:none}.main{height:100dvh;padding:0 18px}.deck-slide,.deck-slide.section{padding:32px 0 30px}.deck-slide h1{font-size:clamp(35px,7.6vw,56px)}.deck-bar{grid-template-columns:102px minmax(0,1fr) 102px;gap:7px;padding:9px 0;min-height:79px}.deck-nav{font-size:11px;padding:6px 3px;min-height:38px}.deck-middle .deck-status{font-size:10px}.deck-ticks{gap:3px;margin-top:8px}.deck-tick{width:15px}.deck-tools{right:18px;top:6px;gap:6px}.deck-mode{font-size:10px;padding:3px 7px}.deck-help{display:none}.deck-slide .studio-body{padding:17px}.deck-slide .paper-case{margin-top:10px}.deck-slide .case-pages{padding:18px 15px}.deck-slide .paper-heading{padding:18px 15px}.deck-slide .controls{grid-template-columns:1fr}.deck-slide .paper-control{grid-template-columns:1fr}.deck-slide .checklist article{grid-template-columns:1fr;gap:2px}.deck-slide .reading-grid{grid-template-columns:1fr}.deck-slide .reading-grid>div+div{border-left:0;border-top:1px solid var(--line);padding-left:0}.deck-slide .stats strong{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.deck-slide.is-current,.deck-revealed{animation:none}.deck-build-figure [data-ovb-x]{transition:none}}
+@media print{html,body,.shell,.main{height:auto!important;overflow:visible!important}.side,.deck-bar,.deck-tools,.deck-chapterinfo{display:none!important}.deck-slide{display:block!important;height:auto!important;overflow:visible!important;padding:28px 0!important}.deck-slide [data-deck-hidden]{display:block!important}}
+
+/* v1.4: 16:9 presentation-first layout; no page-level scrolling on desktop */
+@media(min-width:851px){
+ .deck-slide,.deck-slide.section{overflow:hidden;scrollbar-gutter:auto;padding:clamp(12px,2.1vh,22px) max(2px,calc((100% - 1040px)/2)) 5px}
+ .deck-slide.hero{padding-top:clamp(22px,4.7vh,47px)}
+ .deck-slide h2{font-size:clamp(25px,2.7vw,32px);margin:3px 0 9px;line-height:1.34}
+ .deck-slide .deck-chapterinfo{margin:0 0 7px;min-height:16px}
+ .deck-slide .section-label{margin:0 0 3px}
+ .deck-slide .prose{font-size:14px;line-height:1.64;margin:0 0 12px}
+ .deck-slide .hero-copy{font-size:15px;line-height:1.65}
+ .deck-slide .hero-lead{font-size:clamp(19px,2vw,26px)}
+ .deck-slide .leadnote{padding:10px 14px;margin:10px 0;font-size:13px;line-height:1.7}
+ .deck-slide .reading-grid{margin:11px 0}
+ .deck-slide .reading-grid>div{padding:9px 11px 9px 0}
+ .deck-slide .reading-grid b{font-size:18px}
+ .deck-slide .three-steps article{padding:11px 0;gap:12px}
+ .deck-slide .three-steps p{font-size:13px}
+ .deck-slide .equation{padding:10px 8px;margin:10px 0;font-size:18px}
+ .deck-slide .studio-head{padding:11px 17px}
+ .deck-slide .studio-head h3{font-size:18px}
+ .deck-slide .studio-body{padding:11px 17px}
+ .deck-slide .controls{gap:13px;margin:0 0 11px}
+ .deck-slide .control label{margin-bottom:3px}
+ .deck-slide .stats>div{padding:7px 10px}
+ .deck-slide .stats strong{font-size:24px;margin-top:1px}
+ .deck-slide .vizwrap{margin:9px 0 5px}
+ .deck-slide .sim-conclusion{font-size:12px;line-height:1.65;padding:10px 14px;margin-top:9px}
+ .deck-slide .viz{max-height:clamp(142px,27vh,240px)}
+ .deck-slide #fwlChart{height:clamp(155px,30vh,245px)}
+ .deck-slide #ovbChart{height:clamp(130px,21vh,184px)}
+ .deck-slide #badDag{height:clamp(140px,25vh,205px)}
+ .deck-slide #paperDag{height:clamp(135px,25vh,205px)}
+ .deck-slide #paperSimChart{height:clamp(105px,20vh,150px)}
+ .deck-slide .caption{font-size:11px;line-height:1.5}
+ .deck-slide .deck-build-figure{max-width:750px;margin:10px 0;padding:8px 16px 6px}
+ .deck-slide .deck-build-figure svg{height:clamp(120px,26vh,188px)}
+ .deck-slide .deck-build-figure p{font-size:12px;margin:2px 0}
+ .deck-slide .bad-modes button{padding:9px 12px}
+ .deck-slide .bad-visual{gap:13px}
+ .deck-slide .bad-description{font-size:12px;line-height:1.68}
+ .deck-slide .bad-description p{margin:0 0 4px}
+ .deck-slide .bad-estimate{padding-top:6px}
+ .deck-slide .bad-estimate strong{font-size:23px}
+ .deck-slide .toggleline{margin:6px 0;font-size:12px}
+ .deck-slide .checklist article{padding:12px 0}
+ .deck-slide .checklist p{font-size:13px;line-height:1.7}
+ .deck-slide .paper-heading{padding:9px 16px 7px}
+ .deck-slide .paper-heading h3{font-size:17px;margin:4px 0 2px}
+ .deck-slide .paper-heading p{font-size:11px}
+ .deck-slide .paper-tabs{margin:0 13px;gap:2px}
+ .deck-slide .case-tab{padding:8px 5px;min-width:67px;font-size:11px}
+ .deck-slide .case-pages{padding:10px 17px;min-height:0}
+ .deck-slide .case-page h4{font-size:18px;margin:0 0 6px}
+ .deck-slide .case-page p{font-size:12px;line-height:1.65;margin:5px 0}
+ .deck-slide .paper-quote{margin:8px 0;padding:8px 11px;font-size:12px}
+ .deck-slide .case-bottom{padding:5px 14px}
+ .deck-slide .foot-sources{font-size:10px;line-height:1.5;padding:5px 12px}
+ .deck-slide .paper-control{gap:7px;margin:5px 0}
+ .deck-slide .paper-stats{margin:8px 0}
+ .deck-slide .paper-stats>div{padding:6px}
+ .deck-slide .paper-stats b{font-size:20px}
+ .deck-slide .assumptions{gap:6px}
+ .deck-slide .assumptions article{padding:5px 0 1px}
+ .deck-slide .assumptions p{margin:0;font-size:12px}
+ .deck-slide .frontier article{padding:10px 0;gap:10px}
+ .deck-slide .frontier h3{font-size:16px;margin:0 0 3px}
+ .deck-slide .frontier p{font-size:12px;margin:0 0 2px}
+ .deck-slide .code-tabs{margin:2px 0 6px}
+ .deck-slide .code-box{margin:6px 0}
+ .deck-slide .code-box pre{max-height:clamp(320px,62vh,540px);overflow:auto;padding:10px 17px;font:12px/1.55 Consolas,monospace}
+ .deck-slide .quiz-card{padding:14px 19px}
+ .deck-slide .quiz-card h3{font-size:16px}
+ .deck-slide .quiz-choice{padding:9px 12px}
+ .deck-slide .course-grid{margin:8px 0}
+ .deck-slide .course-grid>div{padding:7px 9px}
+ .deck-slide .refs{font-size:13px}
+ .deck-bar{padding-top:8px;padding-bottom:8px;min-height:74px}
+ .deck-ticks{margin-top:6px}
+}
+.deck-fit-content{width:100%;transform-origin:top left;}
+@media(max-width:850px){.deck-slide{overflow-y:auto}.deck-fit-content{zoom:1!important}}
+
+/* v1.5 — Readability takes precedence over forced one-screen shrink */
+@media(min-width:851px){
+ body.is-presenting .main{padding-left:clamp(25px,5vw,75px);padding-right:clamp(25px,5vw,75px)}
+ body.is-presenting .deck-slide{padding-left:0;padding-right:0}
+ body.is-presenting .deck-bar{padding-left:0;padding-right:0}
+ body.is-presenting .deck-tools{right:clamp(25px,5vw,75px)}
+ .deck-slide,.deck-slide.section{padding-top:clamp(14px,2.5vh,26px);padding-bottom:8px}
+ .deck-slide h2{font-size:clamp(30px,3vw,38px);line-height:1.26;margin:6px 0 14px}
+ .deck-slide .deck-chapterinfo{font-size:13px;margin-bottom:10px}
+ .deck-slide .prose{font-size:17px;line-height:1.65;margin:0 0 17px}
+ .deck-slide .hero-copy{font-size:18px;line-height:1.7}
+ .deck-slide .hero-lead{font-size:clamp(25px,2.6vw,32px)}
+ .deck-slide .hero-meta{font-size:15px}
+ .deck-slide .leadnote{font-size:15px;line-height:1.7;padding:12px 17px;margin:12px 0}
+ .deck-slide .reading-grid small{font-size:14px}
+ .deck-slide .reading-grid b{font-size:21px}
+ .deck-slide .three-steps strong{font-size:17px}
+ .deck-slide .three-steps p{font-size:16px;line-height:1.65}
+ .deck-slide .three-steps article{padding:13px 0}
+ .deck-slide .equation{font-size:23px;line-height:1.55}
+ .deck-slide .section-label{font-size:13px}
+ .deck-slide .studio-head h3{font-size:20px}
+ .deck-slide .studio-head .kicker,.deck-slide .studio-head .mutedlabel{font-size:12px}
+ .deck-slide .control label{font-size:15px}
+ .deck-slide .stats span{font-size:13px}
+ .deck-slide .stats strong{font-size:28px}
+ .deck-slide .sim-conclusion{font-size:15px;line-height:1.68;padding:11px 16px}
+ .deck-slide .mini-results{font-size:15px}
+ .deck-slide .viz{max-height:clamp(175px,30vh,270px)}
+ .deck-slide #fwlChart{height:clamp(195px,33vh,290px)}
+ .deck-slide #ovbChart{height:clamp(170px,27vh,235px)}
+ .deck-slide #badDag{height:clamp(175px,30vh,235px)}
+ .deck-slide #paperDag{height:clamp(180px,29vh,240px)}
+ .deck-slide #paperSimChart{height:clamp(165px,26vh,240px)}
+ .deck-slide .caption{font-size:13px;line-height:1.55}
+ .deck-slide .deck-build-figure p{font-size:16px;line-height:1.6}
+ .deck-slide .deck-build-figure svg{height:clamp(160px,29vh,230px)}
+ .deck-slide .bad-modes button{font-size:15px}
+ .deck-slide .bad-description{font-size:15px;line-height:1.7}
+ .deck-slide .bad-estimate strong{font-size:29px}
+ .deck-slide .bad-estimate span{font-size:13px}
+ .deck-slide .toggleline{font-size:15px}
+ .deck-slide .checklist strong{font-size:18px}
+ .deck-slide .checklist p{font-size:16px;line-height:1.68}
+ .deck-slide .checklist article{padding:17px 0}
+ .deck-slide .paper-heading h3{font-size:20px;line-height:1.4}
+ .deck-slide .paper-heading p{font-size:14px}
+ .deck-slide .paper-caps{font-size:12px}
+ .deck-slide .case-tab{font-size:14px;padding:10px 6px;min-width:86px}
+ .deck-slide .case-page h4{font-size:21px}
+ .deck-slide .case-page p{font-size:16px;line-height:1.7}
+ .deck-slide .paper-quote{font-size:15px;line-height:1.7}
+ .deck-slide .case-bottom{font-size:13px;padding:9px 17px}
+ .deck-slide .foot-sources{font-size:12px;line-height:1.55}
+ .deck-slide .assumptions strong{font-size:16px}
+ .deck-slide .assumptions p{font-size:15px}
+ .deck-slide .paper-control label{font-size:14px}
+ .deck-slide .paper-stats span{font-size:12px}
+ .deck-slide .paper-stats b{font-size:25px}
+ .deck-slide .frontier article{padding:16px 0;gap:15px}
+ .deck-slide .frontier h3{font-size:20px}
+ .deck-slide .frontier p{font-size:16px;line-height:1.6}
+ .deck-slide .frontier a{font-size:14px}
+ .deck-slide .code-box pre{font-size:15px;line-height:1.55;max-height:clamp(270px,57vh,530px)}
+ .deck-slide .quiz-card h3{font-size:20px}
+ .deck-slide .quiz-choice{font-size:16px;padding:12px 16px}
+ .deck-slide .quiz-feedback{font-size:15px}
+ .deck-slide .refs p{font-size:15px}
+ .deck-slide .course-grid>div{font-size:15px;padding:10px 13px}
+ .deck-slide .deck-status{font-size:14px}
+ .deck-slide .deck-nav{font-size:15px}
+ .deck-slide #paperDagNote{font-size:15px}
+ .deck-fit-content{zoom:1!important}
+}
+
+@media(min-width:851px){
+ /* Instead of shrinking whole panels, use the horizontal real estate. */
+ #omitted .studio-body{display:grid;grid-template-columns:minmax(290px,.8fr) minmax(0,1.2fr);gap:9px 24px;align-items:start}
+ #omitted .studio-body .controls{grid-column:1;grid-row:1;grid-template-columns:1fr;gap:10px}
+ #omitted .studio-body .vizwrap{grid-column:2;grid-row:1;margin:0;align-self:center}
+ #omitted .studio-body .stats{grid-column:1/-1;grid-row:2;margin:4px 0}
+ #omitted .studio-body .equation{grid-column:1/-1;grid-row:3;margin:3px 0;padding:6px;font-size:20px}
+ #omitted .studio-body #ovbIdentity{grid-column:1/-1;grid-row:4;margin:0}
+ #omitted .studio-body #ovbTakeaway{grid-column:1/-1;grid-row:5;margin:0}
+ #omitted #ovbChart{height:215px;max-height:215px}
+ #fwl .studio-body{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.85fr);gap:9px 20px;align-items:start}
+ #fwl #fwlChart{grid-column:1;grid-row:1/span 2;height:270px;max-height:270px;margin:0}
+ #fwl .studio-body .legend{grid-column:2;grid-row:1;flex-wrap:wrap;gap:9px}
+ #fwl #fwlInterpretation{grid-column:2;grid-row:2;margin:0}
+ #fwl .fwl-note{padding:9px 18px;font-size:14px;line-height:1.5}
+ #case h2{font-size:29px;line-height:1.22;margin:1px 0 7px}
+ #case .deck-chapterinfo{margin-bottom:3px}
+ #case>.deck-fit-content>.prose{margin:0 0 6px}
+ #case .paper-case{margin-top:5px;margin-bottom:3px}
+ #case .paper-heading{padding:9px 16px 5px}
+ #case .paper-heading h3{font-size:18px;margin:4px 0 2px}
+ #case .paper-heading p{font-size:13px}
+ #case .paper-tabs{padding:0;gap:3px}
+ #case .case-tab{padding:7px 5px}
+ #case .case-pages{padding:8px 18px 5px}
+ #case .case-page h4{font-size:20px;margin-bottom:6px}
+ #case .case-page p{font-size:15px;line-height:1.58;margin:5px 0}
+ #case .paper-quote{margin:6px 0;padding:7px 13px;font-size:14px;line-height:1.6}
+ #case .case-bottom{padding:6px 17px}
+ #case .foot-sources{padding:4px 11px;font-size:11px}
+ #page-flow .paper-figure{width:min(100%,820px)!important;height:260px!important;max-height:260px!important;margin:0 auto;object-fit:contain}
+ #page-flow>p{font-size:15px}
+ #page-dag #paperDag{height:220px;max-height:220px}
+ #page-dag .toggleline{margin:5px 0}
+ #page-sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:7px 14px}
+ #page-sim>.paper-caps,#page-sim>h4{grid-column:1/-1}
+ #page-sim>.paper-control{grid-column:1;grid-row:3;grid-template-columns:1fr;gap:9px;margin:0}
+ #page-sim>.paper-stats{grid-column:1;grid-row:4;margin:0}
+ #page-sim>#paperSimChart{grid-column:2;grid-row:3/span 2;max-height:270px;height:270px}
+ #page-sim>#paperSimExplanation{grid-column:1/-1;grid-row:5}
+ #page-sim .paper-control>div{margin:0}
+ #page-sim .paper-stats b{font-size:24px}
+ #page-sim .paper-stats span{font-size:12px}
+ #workflow .code-box pre{max-height:clamp(240px,52vh,470px)}
+ #frontiers .frontier article{padding:12px 0}
+ #references .course-grid>div{padding:7px 12px}
+}
+
+@media(min-width:851px){
+ .deck-focus .section-label,.deck-focus h2{display:none}
+ .deck-focus .deck-chapterinfo{padding:5px 0;margin:0 0 5px;min-height:18px}
+ .deck-paper-detail .paper-heading{display:none}
+ .deck-paper-detail .paper-case{position:relative}
+ .deck-paper-detail .paper-case:before{content:"MONTGOMERY · NYHAN · TORRES  /  AJPS 2018";display:block;font-size:12px;color:var(--green);letter-spacing:.07em;margin:8px 17px 0}
+ .deck-paper-detail .paper-tabs{margin-top:3px}
+ #case .paper-quote{margin:5px 0}
+ #case .paper-case{border-radius:3px}
+ #case .paper-caps{font-size:12px}
+ #case .case-pages{padding:7px 18px 4px}
+ #case .case-page p{line-height:1.55}
+}
+
+@media(min-width:851px) and (max-height:780px){
+ #omitted .studio-body{gap:5px 17px}
+ #omitted .studio-body .controls{gap:6px}
+ #omitted .studio-head{padding:7px 17px}
+ #omitted .studio-body{padding-top:8px;padding-bottom:8px}
+ #omitted #ovbTakeaway{padding:7px 13px}
+ #case:not(.deck-paper-detail) .paper-heading{padding:5px 13px 3px}
+ #case:not(.deck-paper-detail) .case-pages{padding-top:5px;padding-bottom:2px}
+ #case:not(.deck-paper-detail) .paper-case{margin:2px 0}
+ #case:not(.deck-paper-detail) .paper-quote{padding:5px 10px}
+ #page-sim{gap:4px 13px}
+ #page-sim>#paperSimChart{height:205px;max-height:205px}
+ #page-sim>.paper-control{gap:5px}
+ #page-sim>.paper-quote{padding:6px 10px;margin:2px 0}
+ #case .case-bottom{padding:4px 13px}
+}
+
+/* Accessible graph close-up; the underlying simulation stays untouched. */
+#deckMagnifyButton[hidden]{display:none!important}
+#deckMagnifier{border:1px solid #B9C9BD;border-radius:5px;background:#FFFEFB;color:#23312F;padding:0;width:min(1160px,94vw);max-width:94vw;max-height:92vh;box-shadow:0 20px 70px #16282033}
+#deckMagnifier::backdrop{background:#14241C9A}
+.magnifier-head{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #DDDCD4;padding:15px 23px;font-size:17px}
+.magnifier-head button{font-size:15px;border:1px solid #AFC3B5;background:#EDF1EB;color:#285B52;padding:6px 14px;cursor:pointer}
+.magnifier-figure{padding:24px;max-height:calc(92vh - 68px);overflow:auto}
+.magnifier-figure svg{display:block;width:100%!important;max-height:calc(92vh - 135px)!important;height:auto!important;margin:0 auto;object-fit:contain}
+@media(min-width:851px){#case.deck-case-sim .paper-case:before{display:none}}
+@media(min-width:851px){
+ .deck-slide .checklist article{grid-template-columns:180px minmax(0,1fr);gap:18px}
+ .deck-slide .checklist strong{white-space:nowrap}
+}
+@media(min-width:851px) and (max-height:650px){
+ /* Small virtual viewports may result from system text scaling. Never crop
+    instructional material: scrolling is safer than minifying the whole deck. */
+ .deck-slide,.deck-slide.section{overflow-y:auto}
+ .deck-slide .deck-fit-content{zoom:1!important}
+}
+</style><script>window.__courseReplaceStateSafe__=function(){try{return history.replaceState.apply(history,arguments)}catch(e){return null}};</script></head><body>
+<div id="progress" class="progress"></div><div class="shell"><aside class="side"><div class="side-kicker">CAUSAL METHODS / 03 OF 12</div><div class="brand">因果研究方法 <small>EDITORIAL RESEARCH SERIES</small></div><div class="side-heading smallcap">本讲阅读目录</div><nav id="nav">
+<a href="#intro">导论 · 系数与因果</a><a href="#logic">01 · 识别与估计</a><a href="#omitted">02 · 遗漏变量偏差</a><a href="#fwl">03 · 残差化与 FWL</a><a href="#badcontrols">04 · 不该控制什么</a><a href="#assumptions">05 · 回归假设与推断</a><a href="#case">06 · AJPS 论文拆解</a><a href="#workflow">07 · Stata / R 实操</a><a href="#frontiers">08 · 方法进展</a><a href="#quiz">09 · 知识检测</a><a href="#references">文献与课程目录</a></nav><div class="side-foot">本讲核心判断：<br>回归是估计工具。识别来自设计与假设。<p><a href="#course">查看完整12讲 →</a></p></div></aside>
+<main class="main"><header id="intro" class="hero"><div class="eyebrow">LECTURE 03 / REGRESSION & IDENTIFICATION</div><h1>回归系数，<br><em>何时具有因果意义？</em></h1><p class="hero-lead">控制变量不是越多越好；模型显著，也不是因果识别成功。</p><p class="hero-copy">从遗漏变量偏差、Frisch–Waugh–Lovell 定理到处理后控制偏差，理解为何同一份数据、不同控制变量会得到不同结论。结合一篇 <i>American Journal of Political Science</i> 研究，通过六标签完成研究设计拆解。</p><div class="hero-meta"><span>约 45–60 分钟</span><span>4 个交互图表与模拟</span><span>AJPS 真实方法研究</span><span>Stata + R</span></div></header>
+<section id="logic" class="section"><div class="section-label">01 / THE FIRST DISTINCTION</div><h2>OLS 会计算关系，但不会替我们证明因果</h2><p class="prose">在线性模型中，处理变量 <b>D</b> 的回归系数描述的是其他纳入模型的变量保持不变时，D 的条件线性关联。它是否等于目标因果效应，取决于处理如何产生、混杂是否被妥善解决，以及模型是否正确对应目标参数。</p>
+<div class="equation">Y<sub>i</sub> = α + βD<sub>i</sub> + γX<sub>i</sub> + ε<sub>i</sub></div>
+<div class="reading-grid"><div><span class="smallcap">D</span><b>处理变量</b><small>例如是否接收政治信息</small></div><div><span class="smallcap">Y</span><b>结果变量</b><small>例如政策态度或投票行为</small></div><div><span class="smallcap">X</span><b>协变量</b><small>可能是混杂、中介或对撞变量</small></div></div>
+<div class="three-steps"><article><span class="number">1</span><div><strong>因果问题 · Estimand</strong><p>我们想估计ATE、ATT，还是特定实验样本的平均处理效应？首先定义“对谁、在何时、接受何种处理”。</p></div></article><article><span class="number">2</span><div><strong>识别假设 · Identification</strong><p>如随机分配，或给定处理前 X 后潜在结果独立于 D。回归本身不会让此假设自动成立。</p></div></article><article><span class="number">3</span><div><strong>回归与推断 · Estimation / Inference</strong><p>OLS、稳健标准误、置信区间用于计算与衡量不确定性；它们不能修复不成立的识别假设。</p></div></article></div>
+<div class="leadnote"><strong>和第二讲 DAG 的连接：</strong>画图先于回归。只有当 X 构成恰当的调整集、满足必要的可比性与模型条件时，控制 X 才可能帮助识别目标因果效应。</div></section>
+<section id="omitted" class="section"><div class="section-label">02 / OMITTED VARIABLE BIAS</div><h2>为什么少控制一个变量，系数就变了？</h2><p class="prose">设 X 同时影响 D 和 Y。遗漏 X 后，OLS 会把一部分 X 与 Y 的关联错误归到 D 身上。下面所有数据都是固定随机种子的合成样本；调动滑块比较「未控制」与「控制 X」的处理系数。</p>
+<div class="studio"><div class="studio-head"><div><div class="kicker">INTERACTIVE EXPERIMENT 01</div><h3>遗漏变量偏差实验室</h3></div><span class="mutedlabel">N = 650 · 教学模拟</span></div><div class="studio-body"><div class="controls">
+<div class="control"><label for="ovbTau">真实处理效应 β <strong id="ovbTauV"></strong></label><input id="ovbTau" type="range" min="-2" max="4" step="0.25" value="1.5"></div>
+<div class="control"><label for="ovbSel">X 影响 D 的强度 <strong id="ovbSelV"></strong></label><input id="ovbSel" type="range" min="0" max="2.6" step="0.2" value="1.6"></div>
+<div class="control"><label for="ovbGamma">X 影响 Y 的强度 γ <strong id="ovbGammaV"></strong></label><input id="ovbGamma" type="range" min="-4" max="4" step="0.25" value="2.5"></div></div>
+<div class="stats"><div><span>真实因果效应</span><strong id="ovbTruth">—</strong></div><div><span>不控制 X 的 OLS</span><strong id="ovbNaive">—</strong></div><div><span>控制 X 的 OLS</span><strong id="ovbAdjusted">—</strong></div></div><div class="vizwrap"><svg id="ovbChart" viewBox="0 0 760 235" class="viz" aria-label="三个回归系数的可视化比较" role="img"></svg></div><div class="equation eq-small">β̃<sub>D</sub> − β̂<sub>D|X</sub> = γ̂<sub>X</sub> × Cov(D,X) / Var(D) <span style="font:12px sans-serif;color:#748178">（样本中含截距、线性 X 的精确分解）</span></div><p class="mini-results" id="ovbIdentity"></p><div class="sim-conclusion" id="ovbTakeaway" aria-live="polite"></div></div></div>
+</section>
+<section id="fwl" class="section"><div class="section-label">03 / GEOMETRY OF REGRESSION</div><h2>FWL：控制变量到底在做什么？</h2><p class="prose">Frisch–Waugh–Lovell 定理告诉我们：先用 X 解释 D 和 Y、分别取残差，再用 Y 的残差回归 D 的残差，得到的斜率与完整回归 <i>Y ~ D + X</i> 中 D 的斜率相同。它揭示了“净化后的变异”从何而来，<b>但残差化本身不提供外生性</b>。</p>
+<div class="studio"><div class="studio-head"><div><div class="kicker">INTERACTIVE VISUAL 02</div><h3>FWL：将处理与结果同时残差化</h3></div><span class="mutedlabel">沿用上方数据与参数</span></div><div class="view-switch" role="group" aria-label="查看散点图模式"><button id="fwlOriginal" class="on" type="button">原始 D–Y 散点</button><button id="fwlResidual" type="button">去除 X 后的残差散点</button></div><div class="studio-body"><svg id="fwlChart" class="viz" role="img" aria-label="原始或残差化后D与Y之间的关系" viewBox="0 0 760 345"></svg><div class="legend"><span><i class="swatch" style="background:#285B52"></i>样本观测</span><span><i class="swatch" style="background:#A87340"></i>线性拟合</span></div><div id="fwlInterpretation" class="sim-conclusion" aria-live="polite"></div></div><div class="fwl-note">注意：此处讨论的是线性投影恒等式。遗漏非线性关系、未测量混杂、处理后变量等问题，不会因 FWL 而消失。</div></div></section>
+<section id="badcontrols" class="section"><div class="section-label">04 / BAD CONTROLS</div><h2>更危险的错误：把不该控制的变量放进回归</h2><p class="prose">第二讲的 DAG 在这里变成可观察的数值偏差。即使处理 D 由随机分配产生，控制处理后的中介 M，或者控制对撞变量 C，都可能使你关心的总效应消失或偏移。切换三种结构，比较不控制与控制后的结果。</p>
+<div class="studio"><div class="bad-modes" role="tablist" aria-label="选择变量类型"><button type="button" class="active" data-bad="pre">处理前变量 X</button><button type="button" data-bad="med">处理后中介 M</button><button type="button" data-bad="col">处理后对撞 C</button></div><div class="studio-body"><div class="bad-visual"><div><svg id="badDag" class="viz" viewBox="0 0 570 240" role="img" aria-label="处理前变量、中介变量与对撞变量的教学DAG"></svg><label class="toggleline"><input type="checkbox" id="badCondition"> 在回归中控制图中的第三个变量</label><p class="caption">D 是随机分配的二元处理，Y 为连续结果。绿色箭头为因果作用，赭色箭头提示偏差相关的结构。</p></div><div class="bad-description"><div class="smallcap" id="badName"></div><h3 id="badTitle" style="margin:7px 0 13px"></h3><p id="badExplain"></p><div class="bad-estimate"><div><span>真实总效应</span><strong id="badTruth"></strong></div><div><span>当前回归 D 系数</span><strong id="badCurrent"></strong></div></div><div id="badConclusion" class="sim-conclusion" aria-live="polite"></div></div></div></div></div><div class="leadnote"><strong>实证应用中的判断顺序：</strong>先画 DAG、明确总效应还是直接效应，然后确定调整集。不能因为某个变量显著、R² 上升，或者“控制后系数更稳定”，就认为该控制合理。</div></section>
+<section id="assumptions" class="section"><div class="section-label">05 / CHECK YOUR DESIGN</div><h2>什么条件下，回归可以支持因果解释？</h2><div class="checklist">
+<article><strong>01 目标清楚</strong><p>若处理效应异质、模型包含交互或非线性，单个 β 未必是 ATE；要说明目标人群与对比情景。</p></article>
+<article><strong>02 调整集合理</strong><p>识别出处理前混杂因素，避免误控中介、对撞因子或其后代；变量选择依据因果结构，不是显著性筛选。</p></article>
+<article><strong>03 条件可比</strong><p>观察性研究常依赖条件独立性： (Y(1),Y(0)) ⟂ D | X。这个假设无法直接由 OLS t 检验证明。</p></article>
+<article><strong>04 重叠与形式</strong><p>处理组和对照组应在 X 上有足够重叠；线性设定、交互及非线性应符合研究目标，避免不恰当的外推。</p></article>
+<article><strong>05 推断与依赖</strong><p>根据异方差、聚类随机化或群组内相关采用相应标准误；稳健标准误修复的是推断公式，不是识别偏差。</p></article>
+<article><strong>06 报告透明</strong><p>报告预处理协变量、替代设定、样本筛选、失访与敏感性分析；警惕只呈现“想要的显著结果”。</p></article>
+</div><div class="equation eq-small">Y = α + βD + γX + δ(D × X) + ε <span style="font:12px sans-serif;color:#748178">（当效应因 X 而异时，应说明 β 的参照值含义）</span></div></section>
+<section id="case" class="section"><div class="section-label">06 / JOURNAL ARTICLE LAB · AJPS 2018</div><h2>顶刊论文拆解：控制处理后变量如何毁掉一次实验？</h2><p class="prose">选用 Montgomery、Nyhan 与 Torres（2018）的 <i>American Journal of Political Science</i> 方法研究。它不是一项单独的选举政策试验，而是一篇结合方法论推导、已发表研究调查及真实数据再分析的文章；恰好解释为什么错误的回归控制可能破坏实验识别。</p>
+<div class="paper-case"><div class="paper-heading"><div class="paper-caps">MONTGOMERY · NYHAN · TORRES / AJPS 62(3), 760–775</div><h3>How Conditioning on Posttreatment Variables Can Ruin Your Experiment and What to Do about It</h3><p>2018 · <i>American Journal of Political Science</i> · <a target="_blank" rel="noopener" href="https://doi.org/10.1111/ajps.12357">原文 DOI ↗</a></p></div>
+<div class="paper-tabs" role="tablist" aria-label="AJPS论文六标签拆解"><button class="case-tab" role="tab" data-paper="finding" id="tab-finding" aria-controls="page-finding" aria-selected="true" tabindex="0">论文发现</button><button class="case-tab" role="tab" data-paper="flow" id="tab-flow" aria-controls="page-flow" aria-selected="false" tabindex="-1">研究流程</button><button class="case-tab" role="tab" data-paper="dag" id="tab-dag" aria-controls="page-dag" aria-selected="false" tabindex="-1">因果图 DAG</button><button class="case-tab" role="tab" data-paper="assume" id="tab-assume" aria-controls="page-assume" aria-selected="false" tabindex="-1">识别假设</button><button class="case-tab" role="tab" data-paper="formula" id="tab-formula" aria-controls="page-formula" aria-selected="false" tabindex="-1">估计与公式</button><button class="case-tab" role="tab" data-paper="sim" id="tab-sim" aria-controls="page-sim" aria-selected="false" tabindex="-1">交互模拟</button></div>
+<div class="case-pages">
+<section id="page-finding" role="tabpanel" aria-labelledby="tab-finding" class="case-page"><div class="paper-caps">WHAT THE PAPER ACTUALLY SHOWS</div><h4>随机化不会保护你免于处理后控制偏差</h4><p>作者指出，实验研究常会控制受到处理影响的变量、依据处理后测量剔除样本，或对子样本进行筛选。这些步骤可能使随机实验得到的估计发生偏移。论文使用理论分析、可视化和已发表研究的数据再分析展示问题。</p><div class="paper-quote"><strong>46.7%</strong> — 作者在 AJPS 的研究介绍中报告：其编码的 2012–2014 年间发表于 AJPS、APSR 与 <i>Journal of Politics</i> 的实验论文，有这一比例涉及处理后条件化。此数字是作者对所研究文献样本的总结，不是所有政治学论文的总体比例。</div><p>这一讲使用该研究来学习“坏控制”，<strong>下方所有滑块、系数、散点图均为教学模拟，绝非论文原始结果。</strong></p><p class="caption">来源：<a target="_blank" rel="noopener" href="https://doi.org/10.1111/ajps.12357">期刊原文及摘要</a>；<a target="_blank" rel="noopener" href="https://ajps.org/2019/06/10/conditioning-on-posttreatment-variables-can-ruin-your-experiment/">AJPS 作者研究介绍（2019）</a>。</p></section>
+<section id="page-flow" role="tabpanel" aria-labelledby="tab-flow" class="case-page" hidden><div class="paper-caps">RECONSTRUCTING THE METHODOLOGICAL ARGUMENT</div><h4>识别如何被一个额外的控制步骤破坏？</h4><svg class="paper-figure" viewBox="0 0 740 250" role="img" aria-label="从随机分配到处理后变量控制导致偏差的研究逻辑" style="width:100%"><defs><marker id="flowArrow03" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#6B8C77"/></marker></defs><rect x="25" y="74" width="135" height="78" fill="#EFF3ED" stroke="#B7C9B6"/><text x="92" y="102" font-size="17" fill="#285B52" text-anchor="middle">随机分配 D</text><text x="92" y="125" font-size="12" fill="#69776A" text-anchor="middle">实验起点</text><path d="M160 112H214" stroke="#6B8C77" stroke-width="2.5" marker-end="url(#flowArrow03)"/><rect x="215" y="74" width="135" height="78" fill="#F5EEE6" stroke="#D8BFA3"/><text x="283" y="102" font-size="16" text-anchor="middle" fill="#80623B">处理后 M</text><text x="283" y="125" font-size="12" fill="#69776A" text-anchor="middle">受到 D 影响</text><path d="M350 112H404" stroke="#6B8C77" stroke-width="2.5" marker-end="url(#flowArrow03)"/><rect x="406" y="74" width="144" height="78" fill="#F5EEE6" stroke="#D8BFA3"/><text x="478" y="99" font-size="16" text-anchor="middle" fill="#80623B">控制 / 筛选 M</text><text x="478" y="125" font-size="12" fill="#69776A" text-anchor="middle">打开或截断路径</text><path d="M550 112H602" stroke="#6B8C77" stroke-width="2.5" marker-end="url(#flowArrow03)"/><rect x="604" y="74" width="112" height="78" fill="#F1F2EC" stroke="#B7C9B6"/><text x="660" y="102" font-size="16" text-anchor="middle" fill="#285B52">回归估计</text><text x="660" y="125" font-size="12" text-anchor="middle" fill="#69776A">可能偏误</text><text x="25" y="207" font-size="13" fill="#65726D">说明：此流程图是根据论文方法论论点绘制的教学重构，不是作者论文的原始实验流程。</text></svg><p>区别于“观测性数据中遗漏了混杂变量”，这篇文章讨论的是：研究者已经进行随机实验，却因错误控制处理后变量、按结果筛样等分析步骤改变了原本的估计对象。</p></section>
+<section id="page-dag" role="tabpanel" aria-labelledby="tab-dag" class="case-page" hidden><div class="paper-caps">AN ILLUSTRATIVE DAG / NOT ORIGINAL AUTHOR FIGURE</div><h4>控制对撞因子 C 为什么会打开后门？</h4><svg class="paper-figure" id="paperDag" viewBox="0 0 740 285" role="img" aria-label="D到C和Y，U到C和Y的DAG教学图" style="width:100%"></svg><label class="toggleline"><input id="paperColliderSwitch" type="checkbox"> 在回归中控制处理后变量 C</label><div id="paperDagNote" class="paper-quote" aria-live="polite"></div><p class="caption">图中 D 是随机处理、U 是未测量参与倾向、C 是处理与 U 的共同结果、Y 是最终结果。该 DAG 是为展示论文讨论的一种偏差机制而构建的教学简化图，并不是论文的原图。</p></section>
+<section id="page-assume" role="tabpanel" aria-labelledby="tab-assume" class="case-page" hidden><div class="paper-caps">WHICH ASSUMPTION IS DOING THE WORK?</div><h4>“随机”与“控制”依赖不同条件</h4><div class="assumptions"><article><strong>随机分配</strong><p>如果 D 是随机分配的，D 在分配时与所有潜在结果、处理前共同原因独立；因此不控制处理后变量，组均值差通常具有明确因果解释。</p></article><article><strong>处理后条件化</strong><p>一旦按 C 选择子样本或把 C 放入回归，所分析的样本/条件关联可能不再保留随机分配的可比性。</p></article><article><strong>直接效应 ≠ 总效应</strong><p>若 M 是中介，控制 M 通常会改变估计目标；即便在特殊假设下能够识别直接效应，也不能把它当作总效应。</p></article><article><strong>未测量的 U</strong><p>如果 U 同时影响处理后 C 和 Y，控制 C 可能把 D 与 U 联系起来，形成开放的非因果路径。</p></article></div></section>
+<section id="page-formula" role="tabpanel" aria-labelledby="tab-formula" class="case-page" hidden><div class="paper-caps">ESTIMAND VS. REGRESSION COEFFICIENT</div><h4>额外加入 C，为什么不是“更严谨”？</h4><div class="equation eq-small">Y = α + τD + ε <span style="font:12px sans-serif">（随机分配时，未控制C的比较）</span></div><div class="equation eq-small">Y = α' + τ'<sub>C</sub>D + θC + ε' <span style="font:12px sans-serif">（额外控制处理后C）</span></div><p>如果 <b>D → C ← U → Y</b>，第二个回归里的 τ'<sub>C</sub> 一般不是原本的总处理效应 τ；打开路径会制造偏差。若 <b>D → M → Y</b>，控制 M 则可能截断总效应中的中介部分。仅凭统计显著性不能决定哪个回归是正确的。</p><div class="paper-stats"><div><span>教学设定：真实总效应</span><b id="paperTruth">—</b></div><div><span>不控制 C 的系数</span><b id="paperUnadj">—</b></div><div><span>控制 C 的系数</span><b id="paperAdj">—</b></div></div><p class="caption">这些数字由同一教学模拟更新，不来自论文真实样本。</p></section>
+<section id="page-sim" role="tabpanel" aria-labelledby="tab-sim" class="case-page" hidden><div class="paper-caps">SYNTHETIC DATA / NOT ARTICLE DATA</div><h4>试着创造一次“显著但错误”的调整</h4><div class="paper-control"><div><label for="paperTau">真实处理总效应 <strong id="paperTauV"></strong></label><input id="paperTau" type="range" min="-2" max="4" step="0.25" value="2"></div><div><label for="paperColliderD">处理 D → C 强度 <strong id="paperColliderDV"></strong></label><input id="paperColliderD" type="range" min="0" max="2.4" step="0.2" value="1.2"></div><div><label for="paperU">未测量 U → Y 强度 <strong id="paperUV"></strong></label><input id="paperU" type="range" min="0" max="4" step="0.25" value="2.75"></div><div><label for="paperCU">未测量 U → C 强度 <strong id="paperCUV"></strong></label><input id="paperCU" type="range" min="0" max="2.4" step="0.2" value="1.3"></div></div><div class="paper-stats"><div><span>真实总效应</span><b id="paperTauTrue">—</b></div><div><span>不控制 C</span><b id="paperNaiveSim">—</b></div><div><span>错误控制 C</span><b id="paperAdjustedSim">—</b></div></div><svg class="paper-figure" id="paperSimChart" viewBox="0 0 720 198" role="img" aria-label="真实效应和两种回归估计比较" style="width:100%"></svg><div class="paper-quote" id="paperSimExplanation" aria-live="polite"></div></section>
+</div><div class="case-bottom"><span id="caseCounter">01 / 06 · 论文发现</span><button id="caseNext" class="plain-button" type="button">下一标签 →</button></div><div class="foot-sources">真实论文：<a target="_blank" rel="noopener" href="https://doi.org/10.1111/ajps.12357">Montgomery et al. (2018), AJPS</a> · <a target="_blank" rel="noopener" href="https://ajps.org/2019/06/10/conditioning-on-posttreatment-variables-can-ruin-your-experiment/">作者研究介绍</a>　｜　教学模型、图形和数值并非论文原始估计。</div></div></section>
+<section id="workflow" class="section"><div class="section-label">07 / FROM GRAPH TO CODE</div><h2>将识别判断转化为 Stata 与 R</h2><p class="prose">代码用模拟数据重现两种问题：遗漏处理前混杂变量 X，以及在随机分配后错误控制对撞变量 C。代码可直接复制运行，数据不来自顶刊论文。</p><div class="code-tabs"><button class="active" type="button" data-code="stata">Stata</button><button type="button" data-code="r">R（base）</button></div><div class="code-box"><div class="code-top"><span id="codeFilename">lesson03_regression.do</span><button type="button" id="copyCode">复制代码</button></div><pre><code id="codeText"></code></pre></div><div class="leadnote"><strong>实操习惯：</strong>对比的不是哪种设定“星号最多”，而是两组模型各自估计了什么对象，是否存在开放的后门路径、处理后条件化或模型外推。</div></section>
+<section id="frontiers" class="section"><div class="section-label">08 / RESEARCH FRONTIERS</div><h2>超越简单OLS：回归调整如何继续发展？</h2><p class="prose">以下是代表性方法研究，不把“更复杂的估计算法”误写成“无需识别假设”。</p><div class="frontier"><article><span>01</span><div><h3>回归调整与实验精度：Lin（2013）</h3><p>随机实验中，带充分处理×协变量交互的回归调整可改善大样本精度的理论保障，并使用相应的稳健推断；同时警惕模型选择的透明性问题。</p><a target="_blank" rel="noopener" href="https://doi.org/10.1214/12-AOAS583">Annals of Applied Statistics · DOI ↗</a></div></article><article><span>02</span><div><h3>双重 / 去偏机器学习：Chernozhukov 等（2018）</h3><p>在高维辅助函数估计中，用正交得分与交叉拟合减少机器学习误差对目标效应参数的影响，前提仍是相应的因果识别与统计正则性条件。</p><a target="_blank" rel="noopener" href="https://doi.org/10.1111/ectj.12097">The Econometrics Journal · DOI ↗</a></div></article><article><span>03</span><div><h3>2025 年：机器学习辅助随机化推断</h3><p>Yu、Hutson 与 Ma（2025）提出用非参数模型辅助随机试验协变量调整，在其模拟条件下改善检验效率与控制一类错误。它体现的是估计与推断方法的演进，而非替代随机化。</p><a target="_blank" rel="noopener" href="https://www.nature.com/articles/s41598-025-10566-1">Scientific Reports · 原文 ↗</a></div></article></div><div class="leadnote"><strong>持续有效的方法论原则：</strong>先清楚说明识别假设，再选择最适合的估计器；算法可以减少估计误差，但无法把不成立的因果假设变为事实。</div></section>
+<section id="quiz" class="section"><div class="section-label">09 / KNOWLEDGE CHECK</div><h2>六道题，检查有没有真正理解</h2><div id="quizRoot" class="quiz"></div><div id="quizScore" class="leadnote" hidden></div></section>
+<section id="references" class="section"><div class="section-label">REFERENCE & COURSE ROUTE</div><h2>来源、阅读边界与下一讲</h2><p class="prose">教材关联：上传的《因果推断》第三章讨论 DAG、后门路径、对撞偏差和坏控制；第五章介绍条件独立性、子分类与匹配。<strong>OLS / FWL 及本文所引 AJPS 论文属于为完整课程而补充的外部内容</strong>，并非声称原扫描文件包含这些章节。</p><div class="refs"><p><a target="_blank" rel="noopener" href="https://doi.org/10.1111/ajps.12357">Montgomery, Nyhan & Torres (2018).</a> <i>How Conditioning on Posttreatment Variables Can Ruin Your Experiment and What to Do about It.</i> AJPS 62(3):760–775.</p><p><a target="_blank" rel="noopener" href="https://doi.org/10.1214/12-AOAS583">Lin (2013).</a> <i>Agnostic notes on regression adjustments to experimental data.</i> Annals of Applied Statistics.</p><p><a target="_blank" rel="noopener" href="https://doi.org/10.1111/ectj.12097">Chernozhukov et al. (2018).</a> <i>Double/debiased machine learning for treatment and structural parameters.</i> The Econometrics Journal.</p><p><a target="_blank" rel="noopener" href="https://www.nature.com/articles/s41598-025-10566-1">Yu, Hutson & Ma (2025).</a> <i>Machine learning assisted adjustment boosts efficiency of exact inference in randomized controlled trials.</i> Scientific Reports.</p></div>
+<h3 id="course" style="margin:35px 0 19px;font:500 24px Georgia,'Songti SC',serif">完整课程 · 12讲固定学习路线</h3><div id="courseGrid" class="course-grid"></div><div class="leadnote">下一讲：<strong>第04讲 · 匹配与倾向得分</strong>。当我们愿意以“在可观测协变量 X 上条件独立”为识别假设时，如何通过匹配、子分类与 IPW 构建具有可比性的处理组与控制组？</div><footer>EDITORIAL RESEARCH SYSTEM · CAUSAL METHODS / LECTURE 03　|　独立 HTML，交互离线可运行；论文链接需联网。</footer></section>
+</main></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), round=(x,n=2)=>Number(x).toFixed(n), fmt=x=>(x>=0?'+':'')+round(x), clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function rng(seed){let x=seed>>>0;return ()=>{x=(1664525*x+1013904223)>>>0;return x/4294967296}}
+function norm(r){let u=Math.max(r(),1e-9),v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function fit(rows,cols,out='y'){const p=cols.length+1,n=rows.length;let mat=Array.from({length:p},()=>Array(p+1).fill(0));for(const row of rows){const a=[1,...cols.map(c=>row[c])],y=row[out];for(let i=0;i<p;i++){for(let j=0;j<p;j++)mat[i][j]+=a[i]*a[j];mat[i][p]+=a[i]*y;}}for(let i=0;i<p;i++){let k=i;for(let j=i+1;j<p;j++)if(Math.abs(mat[j][i])>Math.abs(mat[k][i]))k=j;[mat[i],mat[k]]=[mat[k],mat[i]];let d=mat[i][i];if(Math.abs(d)<1e-10)return Array(p).fill(NaN);for(let j=i;j<=p;j++)mat[i][j]/=d;for(let k=0;k<p;k++){if(k===i)continue;let t=mat[k][i];for(let j=i;j<=p;j++)mat[k][j]-=t*mat[i][j]}}return mat.map(r=>r[p])}
+function mean(a){return a.reduce((s,v)=>s+v,0)/a.length}
+function drawCoefChart(id,items){const el=$(id),w=760,cx=377,limit=Math.max(4,...items.map(a=>Math.abs(a.v)))*1.13,scale=305/limit;let out=`<line x1="${cx}" y1="18" x2="${cx}" y2="220" stroke="#C4CEC3" stroke-dasharray="5,5"/><text x="${cx}" y="15" text-anchor="middle" font-size="12" fill="#738177">0</text>`;items.forEach((item,i)=>{let y=42+i*65,len=Math.abs(item.v)*scale,start=item.v<0?cx-len:cx;out+=`<text x="22" y="${y+16}" font-size="14" fill="#41554A">${item.label}</text><rect x="${start}" y="${y-1}" width="${Math.max(2,len)}" height="27" fill="${item.color}"/><text x="${item.v<0?Math.max(start-10,170):Math.min(start+len+10,700)}" y="${y+18}" text-anchor="${item.v<0?'end':'start'}" font-size="15" font-family="Georgia" fill="#2A4538">${fmt(item.v)}</text>`});el.innerHTML=out}
+let ovbRows=[],ovbResult=null,fwlView='original';const ovbBase=(()=>{const r=rng(9603);return Array.from({length:650},()=>({x:norm(r),u:r(),noise:norm(r)*.95}))})();
+function updateOvb(){let tau=+$('ovbTau').value,s=+$('ovbSel').value,g=+$('ovbGamma').value;[['ovbTauV',tau],['ovbSelV',s],['ovbGammaV',g]].forEach(([id,v])=>$(id).textContent=round(v,2));ovbRows=ovbBase.map(v=>({...v,d:Number(v.u<1/(1+Math.exp(-s*v.x))),y:50+tau*Number(v.u<1/(1+Math.exp(-s*v.x)))+g*v.x+v.noise}));let naive=fit(ovbRows,['d'])[1],full=fit(ovbRows,['d','x']),adj=full[1];ovbResult={tau,s,g,naive,adj,gamma:full[2]};$('ovbTruth').textContent=fmt(tau);$('ovbNaive').textContent=fmt(naive);$('ovbAdjusted').textContent=fmt(adj);drawCoefChart('ovbChart',[{label:'真实效应 β',v:tau,color:'#285B52'},{label:'不控制 X',v:naive,color:'#A87340'},{label:'控制 X',v:adj,color:'#527487'}]);let d=ovbRows.map(r=>r.d),x=ovbRows.map(r=>r.x),md=mean(d),mx=mean(x),cov=d.reduce((s,di,i)=>s+(di-md)*(x[i]-mx),0)/d.length,varD=d.reduce((s,di)=>s+(di-md)**2,0)/d.length,ovb=full[2]*cov/varD;$('ovbIdentity').textContent=`精确核验：未控制系数 − 已控制系数 = ${round(naive-adj,3)}；γ̂×Cov(D,X)/Var(D) = ${round(ovb,3)}。`;$('ovbTakeaway').innerHTML=Math.abs(naive-adj)<.16?'当前配置下，遗漏 X 带来的系数变化很小。试着同时提高 X→D 和 X→Y 的影响强度。':`当前不控制 X 的估计相对控制 X <strong>${naive-adj>=0?'高':'低'} ${round(Math.abs(naive-adj),2)}</strong>。这来自 X 与 D 的共同变动，以及 X 对 Y 的作用。控制 X 之所以在本模拟中有用，是因为它是处理前共同原因且模型设定恰当。`;drawFWL()}
+function drawFWL(){if(!ovbRows.length)return;const el=$('fwlChart');const rows=ovbRows.slice(0,230);let xx=[],yy=[],lo,hi,yl,yh,title,slope;if(fwlView==='original'){xx=rows.map(r=>r.d+.13*Math.sin(r.x*15));yy=rows.map(r=>r.y);title='原始数据：横轴 D（左右轻微抖动），纵轴 Y';slope=fit(ovbRows,['d'])[1];lo=-.2;hi=1.2}else{let dmod=fit(ovbRows,['x'],'d'),ymod=fit(ovbRows,['x'],'y');xx=rows.map(r=>r.d-dmod[0]-dmod[1]*r.x);yy=rows.map(r=>r.y-ymod[0]-ymod[1]*r.x);title='残差化：横轴 D 对 X 的残差，纵轴 Y 对 X 的残差';slope=fit(ovbRows,['d','x'])[1];lo=Math.min(...xx)-.12;hi=Math.max(...xx)+.12}yl=Math.min(...yy)-1.4;yh=Math.max(...yy)+1.4;const X=t=>72+(t-lo)/(hi-lo)*613,Y=t=>294-(t-yl)/(yh-yl)*239;let xmean=mean(xx),ymean=mean(yy);let html=`<rect x="0" y="0" width="760" height="345" fill="#FBFBF8"/><text x="75" y="23" font-size="13" fill="#52675B">${title}</text><line x1="65" y1="295" x2="700" y2="295" stroke="#AAB7AB"/><line x1="65" y1="54" x2="65" y2="295" stroke="#AAB7AB"/>`;xx.forEach((x,i)=>html+=`<circle cx="${X(x).toFixed(1)}" cy="${Y(yy[i]).toFixed(1)}" r="2.4" fill="#527487" opacity=".54"/>`);let left=xmean+slope*(lo-xmean),right=xmean+slope*(hi-xmean);left=ymean+slope*(lo-xmean);right=ymean+slope*(hi-xmean);html+=`<line x1="${X(lo)}" y1="${Y(left)}" x2="${X(hi)}" y2="${Y(right)}" stroke="#A87340" stroke-width="3"/><text x="76" y="322" font-size="12" fill="#6C786E">拟合斜率：${fmt(slope)}</text>`;el.innerHTML=html;$('fwlInterpretation').innerHTML=fwlView==='original'?`只用 D 解释 Y 时，处理系数为 <strong>${fmt(ovbResult.naive)}</strong>。若 X 是混杂因素，该斜率会把 X 带来的差异一起吸收。`:`先去除 D 和 Y 中可被 X 线性预测的部分，再做残差回归，斜率为 <strong>${fmt(ovbResult.adj)}</strong>，与完整 OLS 的 D 系数相同。这是 FWL 恒等式，而不是额外的因果识别假设。`}
+['ovbTau','ovbSel','ovbGamma'].forEach(id=>$(id).addEventListener('input',updateOvb));$('fwlOriginal').onclick=()=>{fwlView='original';$('fwlOriginal').classList.add('on');$('fwlResidual').classList.remove('on');drawFWL()};$('fwlResidual').onclick=()=>{fwlView='residual';$('fwlResidual').classList.add('on');$('fwlOriginal').classList.remove('on');drawFWL()};updateOvb();
+const badBase=(()=>{let r=rng(202603);return Array.from({length:1200},()=>({d:Number(r()<.5),x:norm(r),u:norm(r),e:norm(r)*.9,mnoise:norm(r)*.5,cnoise:norm(r)*.45}))})();let badMode='pre';const badDefs={pre:{name:'PRETREATMENT COVARIATE',title:'处理前预测因子：可以改善精度',txt:'处理 D 随机分配，X 是处理前变量，仅影响结果 Y。控制 X 不应系统性改变真实处理效应；它可减少残差变异，有时提升精度。'},med:{name:'MEDIATOR / POSTTREATMENT',title:'中介变量：改变了目标效应',txt:'D 改变中介 M，M 再影响 Y。不控制时估计包含间接路径的总效应；控制 M 后，D 的系数更接近直接效应（此模拟中约 0.7），不再是原来的总效应 2。'},col:{name:'COLLIDER / POSTTREATMENT',title:'对撞变量：打开原本关闭的路径',txt:'D 随机分配，U 是无法观察的参与倾向。二者共同影响处理后 C，U 又影响 Y。条件化 C 打开 D ↔ U → Y 的非因果路径，即使 D 随机也可能导致偏差。'}};
+function badData(mode){return badBase.map(v=>{let out={...v};if(mode==='pre'){out.z=v.x;out.y=42+2*v.d+2.3*v.x+v.e}else if(mode==='med'){out.z=1.2*v.d+v.mnoise;out.y=42+.7*v.d+ (1.3/1.2)*out.z+v.e}else{out.z=1.1*v.d+1.3*v.u+v.cnoise;out.y=42+2*v.d+2.8*v.u+v.e}return out})}
+function graphNode(x,y,t,cap){return `<circle cx="${x}" cy="${y}" r="25" class="nodecircle"/><text x="${x}" y="${y+1}" class="nodetext">${t}</text><text x="${x}" y="${y+45}" class="nodelabel">${cap}</text>`}
+const defs=`<defs><marker id="arrowMain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#285B52"/></marker><marker id="arrowBias" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#A87340"/></marker></defs>`;
+function drawBadGraph(mode,checked){let h=defs; if(mode==='pre'){h+=`<path d="M161 179H392" class="arrowcausal"/><path d="M273 83L410 151" class="arrowconf"/>`+graphNode(125,179,'D','随机处理')+graphNode(276,62,'X','处理前')+graphNode(425,179,'Y','结果')}else if(mode==='med'){h+=`<path d="M166 144H250 M316 144H396" class="arrowcausal"/><path d="M152 123Q278 10 410 124" class="arrowcausal"/>`+graphNode(130,144,'D','处理')+graphNode(283,144,'M','中介')+graphNode(430,144,'Y','结果')}else{h+=`<path d="M166 152H394 M150 129L256 72 M294 72L409 130" class="arrowcausal"/><path d="M305 52L412 129" class="arrowconf"/>`+graphNode(128,152,'D','随机处理')+graphNode(284,52,'C','对撞')+graphNode(430,152,'Y','结果')+graphNode(410,52,'U','未测量')/*correct edges override below*/}
+ if(mode==='col'){h=defs+`<path d="M153 151L263 72 M153 169L401 169" class="arrowcausal"/><path d="M398 55L308 55 M404 75L418 141" class="arrowconf"/>`+graphNode(128,169,'D','随机处理')+graphNode(286,55,'C','对撞')+graphNode(431,169,'Y','结果')+graphNode(431,55,'U','未测量'); /* U->C needs arrow at C; line x=399 y=55 to x=313 y=55 */}
+ h+=checked?`<circle cx="${mode==='pre'?276:mode==='med'?283:286}" cy="${mode==='pre'?62:mode==='med'?144:55}" r="31" fill="none" stroke="#A87340" stroke-width="3.3" stroke-dasharray="5,4"/>`:'';$('badDag').innerHTML=h}
+function updateBad(){let check=$('badCondition').checked,defs=badDefs[badMode],data=badData(badMode),b0=fit(data,['d'])[1],b1=fit(data,['d','z'])[1];$('badName').textContent=defs.name;$('badTitle').textContent=defs.title;$('badExplain').textContent=defs.txt;$('badTruth').textContent='+2.00';$('badCurrent').textContent=fmt(check?b1:b0);$('badConclusion').innerHTML=check?badMode==='pre'?`控制处理前 X 后，回归系数为 <strong>${fmt(b1)}</strong>。在随机化与模型设定成立的条件下，调整没有改变因果识别来源。`:badMode==='med'?`控制中介 M 后，D 的系数为 <strong>${fmt(b1)}</strong>，相比总效应 2.00 明显减小；因为部分因果作用经过 M 传递。`:`控制对撞 C 后，D 的系数变成 <strong>${fmt(b1)}</strong>；原本随机的 D 与未测量 U 在 C 条件下关联，估计出现偏差。`:`不控制第三变量时，D 的系数为 <strong>${fmt(b0)}</strong>。由于 D 由随机分配产生，它应接近预设的真实总效应 +2.00（有限样本会有波动）。`;drawBadGraph(badMode,check)}
+document.querySelectorAll('[data-bad]').forEach(b=>b.onclick=()=>{badMode=b.dataset.bad;$('badCondition').checked=false;document.querySelectorAll('[data-bad]').forEach(x=>x.classList.toggle('active',x===b));updateBad()});$('badCondition').addEventListener('change',updateBad);updateBad();
+function paperData(){let r=rng(33626),tau=+$('paperTau').value,dc=+$('paperColliderD').value,uy=+$('paperU').value,uc=+$('paperCU').value;return Array.from({length:2200},()=>{let d=Number(r()<.5),u=norm(r),e=norm(r)*.6,ce=norm(r)*.7,c=dc*d+uc*u+ce;return {d,c,y:40+tau*d+uy*u+e}})}let paperResult={};function updatePaper(){let data=paperData(),tau=+$('paperTau').value,un=fit(data,['d'])[1],ad=fit(data,['d','c'])[1];paperResult={tau,un,ad};[['paperTauV','paperTau'],['paperColliderDV','paperColliderD'],['paperUV','paperU'],['paperCUV','paperCU']].forEach(([a,b])=>$(a).textContent=round(+$ (b).value,2));[['paperTruth',tau],['paperUnadj',un],['paperAdj',ad],['paperTauTrue',tau],['paperNaiveSim',un],['paperAdjustedSim',ad]].forEach(([k,v])=>$(k).textContent=fmt(v));drawCoefChart('paperSimChart',[{label:'真实总效应',v:tau,color:'#285B52'},{label:'不控制 C',v:un,color:'#527487'},{label:'控制 C',v:ad,color:'#A87340'}]);$('paperSimExplanation').innerHTML=`当前随机分配下，不控制 C 的系数为 <b>${fmt(un)}</b>；控制 C 后为 <b>${fmt(ad)}</b>。偏差方向和大小随 D→C、U→C、U→Y 的强度而变。<b>这些是教学模拟结果，不是 AJPS 原文的真实估计值。</b>`}
+['paperTau','paperColliderD','paperU','paperCU'].forEach(id=>$(id).addEventListener('input',updatePaper));updatePaper();
+function drawPaperDag(){let checked=$('paperColliderSwitch').checked;let s=defs+`<path d="M142 154L275 79 M145 171H577" class="arrowcausal"/><path d="M576 59L328 59 M601 81L601 145" class="arrowconf"/>`+graphNode(121,170,'D','随机处理')+graphNode(306,59,'C','处理后')+graphNode(600,170,'Y','结果')+graphNode(600,59,'U','未测量');if(checked)s+=`<circle cx="306" cy="59" r="32" fill="none" stroke="#A87340" stroke-width="3" stroke-dasharray="5 4"/>`;$('paperDag').innerHTML=s;$('paperDagNote').innerHTML=checked?'已控制 C：对撞结构 D → C ← U 使 D 与 U 条件相关，进而打开 <b>D — C — U → Y</b> 的非因果关联。随机分配的优势可能因分析阶段的选择而被破坏。':'未控制 C：D 是随机的，与 U 独立；D → C ← U 这条对撞路径默认关闭。D 的组均值差可用于估计随机分配所对应的总效应（在无干扰等条件下）。'}$('paperColliderSwitch').addEventListener('change',drawPaperDag);drawPaperDag();
+const paperTabs=['finding','flow','dag','assume','formula','sim'],tabLabels=['论文发现','研究流程','因果图 DAG','识别假设','估计与公式','交互模拟'];let tabIdx=0;function showPaperTab(idx,focus=false){tabIdx=(idx+paperTabs.length)%paperTabs.length;paperTabs.forEach((key,i)=>{const b=$('tab-'+key),p=$('page-'+key);b.setAttribute('aria-selected',String(i===tabIdx));b.setAttribute('tabindex',i===tabIdx?'0':'-1');p.hidden=i!==tabIdx});$('caseCounter').textContent=`${String(tabIdx+1).padStart(2,'0')} / 06 · ${tabLabels[tabIdx]}`;if(focus)$('tab-'+paperTabs[tabIdx]).focus();if(typeof requestAnimationFrame==='function')requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')))}
+document.querySelectorAll('[data-paper]').forEach(b=>{b.addEventListener('click',()=>showPaperTab(paperTabs.indexOf(b.dataset.paper)));b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='Home'||e.key==='End'){e.preventDefault();showPaperTab(e.key==='Home'?0:e.key==='End'?paperTabs.length-1:tabIdx+(e.key==='ArrowRight'?1:-1),true)}})});$('caseNext').addEventListener('click',()=>showPaperTab(tabIdx+1));showPaperTab(0);
+const code={stata:`* 第03讲：模拟数据（不使用论文原始数据）
+clear all
+set seed 202603
+set obs 3000
+
+* 场景A：遗漏处理前共同原因 X
+gen x = rnormal()
+gen d = (runiform() < invlogit(1.2*x))
+gen y = 40 + 2*d + 3*x + rnormal()
+reg y d, vce(robust)
+reg y d x, vce(robust)
+
+* 场景B：随机分配 D，误控处理后对撞 C
+gen z = (runiform() < .5)
+gen u = rnormal()
+gen c = 1.2*z + 1.3*u + rnormal()
+gen y2 = 40 + 2*z + 2.7*u + rnormal()
+reg y2 z, vce(robust)
+reg y2 z c, vce(robust)
+
+* 注意：robust SE不修复错误控制引起的偏差`,r:`# 第03讲：模拟数据（不使用论文原始数据）
+set.seed(202603)
+n <- 3000
+
+# 场景A：遗漏处理前混杂 X
+x <- rnorm(n)
+d <- rbinom(n, 1, plogis(1.2*x))
+y <- 40 + 2*d + 3*x + rnorm(n)
+summary(lm(y ~ d))
+summary(lm(y ~ d + x))
+
+# 场景B：随机分配后，控制处理后对撞变量
+z <- rbinom(n, 1, .5)
+u <- rnorm(n)
+c <- 1.2*z + 1.3*u + rnorm(n)
+y2 <- 40 + 2*z + 2.7*u + rnorm(n)
+summary(lm(y2 ~ z))
+summary(lm(y2 ~ z + c))
+
+# 如需异方差稳健SE，可配合sandwich与lmtest包`};let language='stata';function updateCode(){language=language==='r'?'r':'stata';$('codeText').textContent=code[language];$('codeFilename').textContent=language==='r'?'lesson03_regression.R':'lesson03_regression.do';document.querySelectorAll('[data-code]').forEach(el=>el.classList.toggle('active',el.dataset.code===language))}document.querySelectorAll('[data-code]').forEach(el=>el.addEventListener('click',()=>{language=el.dataset.code;updateCode()}));$('copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code[language]);$('copyCode').textContent='已复制';}catch(e){const r=document.createRange();r.selectNodeContents($('codeText'));const s=window.getSelection();s.removeAllRanges();s.addRange(r);$('copyCode').textContent='请使用 Ctrl/Cmd+C';}setTimeout(()=>{$('copyCode').textContent='复制代码'},1600)});updateCode();
+const questions=[{q:'OLS中 D 的系数显著，足以表明 D 导致 Y 吗？',a:['足以','不足，还需识别假设与研究设计','只要 R² 高就足够'],ok:1,why:'显著性衡量统计不确定性，不足以排除混杂、选择等结构性偏差。'},{q:'若 X 同时影响 D 与 Y，遗漏 X 可能导致什么？',a:['遗漏变量偏差','一定提高精度','对因果估计绝无影响'],ok:0,why:'在非零共同变动及X对Y有影响时，D系数会吸收X的一部分关联。'},{q:'FWL残差化能否自动消除未测量混杂？',a:['可以','不能，只是线性回归的代数等价','只在样本超过1万时可以'],ok:1,why:'FWL说明回归运算机制，并不自动建立潜在结果独立性。'},{q:'估计 D 对 Y 的总效应时，通常应如何对待处理中介 M？',a:['必然控制M','控制M总能提升识别','不能机械控制M，因为会阻断部分因果路径'],ok:2,why:'控制中介可能改变目标效应，从总效应变为特定条件下的直接效应参数。'},{q:'随机实验中条件化 C，当 D→C←U→Y 时会怎样？',a:['可能打开对撞路径产生偏差','随机化保证无论怎么控制都无偏','只会改变标准误不会改变系数'],ok:0,why:'处理后对撞变量会把原本独立的D和U联系起来。'},{q:'异方差稳健标准误主要解决什么？',a:['遗漏变量混杂','更合适的推断，不是修复因果识别','处理变量内生性'],ok:1,why:'稳健标准误可修正特定方差假设下的推断，但不能消除识别偏差。'}];let answers={};$('quizRoot').innerHTML=questions.map((q,i)=>`<div class="quiz-card"><h3>${i+1}. ${q.q}</h3>${q.a.map((a,j)=>`<button class="quiz-choice" type="button" data-q="${i}" data-a="${j}">${String.fromCharCode(65+j)} · ${a}</button>`).join('')}<div class="quiz-feedback" id="feedback${i}"></div></div>`).join('');document.querySelectorAll('[data-q]').forEach(btn=>btn.addEventListener('click',()=>{let i=+btn.dataset.q,j=+btn.dataset.a;answers[i]=j;const q=questions[i];document.querySelectorAll(`[data-q="${i}"]`).forEach(b=>{b.classList.toggle('selected',+b.dataset.a===j&&j===q.ok);b.classList.toggle('wrong',+b.dataset.a===j&&j!==q.ok)});$('feedback'+i).textContent=(j===q.ok?'✓ 正确。':'✗ 再想想。')+q.why;if(Object.keys(answers).length===questions.length){$('quizScore').hidden=false;$('quizScore').textContent=`完成 ${questions.length} 题，正确 ${questions.filter((q,k)=>answers[k]===q.ok).length} 题。建议回看答错题对应的实验。`}}));
+const course=['因果推断导论','DAG 与因果结构','回归与因果识别','匹配与倾向得分','面板数据与固定效应','双重差分 DID','断点回归 RDD','工具变量 IV','合成控制 SCM','现代面板因果推断','因果机器学习','研究设计与复现'];$('courseGrid').innerHTML=course.map((t,i)=>`<div class="${i===2?'current':''}"><span>${String(i+1).padStart(2,'0')}</span>${t}</div>`).join('');
+let raf=false;window.addEventListener('scroll',()=>{if(raf)return;raf=true;requestAnimationFrame(()=>{let d=document.documentElement;$('progress').style.width=(100*d.scrollTop/Math.max(1,d.scrollHeight-d.clientHeight))+'%';let all=[...document.querySelectorAll('header[id],section.section[id]')],now=all.filter(x=>x.getBoundingClientRect().top<190).pop();document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',now&&a.hash==='#'+now.id));raf=false})},{passive:true});
+</script>
+<script>
+/* Progressive lesson player. No content is discarded: the deck selectively
+   presents preserved original nodes, and original experiments stay mounted. */
+(function(){
+ 'use strict';
+ const root=document.querySelector('main.main');
+ const secs=[...root.children].filter(el=>el.matches('header[id],section[id]'));
+ if(secs.length!==11) {console.warn('Deck expects 11 lesson units; found',secs.length);return}
+ const byId=id=>document.getElementById(id);
+ const omission=byId('omitted');
+ const quizSection=byId('quiz');quizSection.querySelector('#quizScore').insertAdjacentHTML('beforebegin','<div class="leadnote" id="deckQuizSummary" aria-live="polite">本讲六题可逐题完成。请回看未完成的步骤，再检查答案与解释。</div>');
+ omission.querySelector('.studio').insertAdjacentHTML('beforebegin',`
+<div class="deck-build-figure phase-zero" id="ovbBuildFigure" aria-live="polite">
+  <svg viewBox="0 0 750 175" role="img" aria-label="从D到Y的直接箭头，逐步出现混杂变量X及后门路径">
+    <defs><marker id="deckArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8Z" fill="#285B52"/></marker><marker id="deckBiasArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8Z" fill="#A87340"/></marker></defs>
+    <path d="M270 124 L473 124" stroke="#285B52" stroke-width="3" marker-end="url(#deckArrow)"/>
+    <g data-ovb-x="true"><path d="M362 42 L252 103" stroke="#A87340" stroke-width="3" marker-end="url(#deckBiasArrow)"/><path d="M390 42 L490 103" stroke="#A87340" stroke-width="3" marker-end="url(#deckBiasArrow)"/><circle cx="376" cy="29" r="24" stroke="#A87340" stroke-width="2" fill="#F3EEE4"/><text x="376" y="35" text-anchor="middle" fill="#5E4B34" font-size="18">X</text><text x="438" y="24" font-size="13" fill="#A87340">共同原因</text></g>
+    <circle cx="243" cy="124" r="27" stroke="#285B52" stroke-width="2" fill="#E8EEE7"/><text x="243" y="131" text-anchor="middle" font-size="19" fill="#285B52">D</text>
+    <circle cx="501" cy="124" r="27" stroke="#A87340" stroke-width="2" fill="#F3EEE4"/><text x="501" y="131" text-anchor="middle" font-size="19" fill="#A87340">Y</text>
+    <text x="242" y="168" text-anchor="middle" fill="#66766D" font-size="13">处理</text><text x="501" y="168" text-anchor="middle" fill="#66766D" font-size="13">结果</text>
+  </svg>
+  <p id="ovbBuildNote">第一步：只看到 D 与 Y 的联系。此时观察到相关性，还不足以认定它就是因果效应。</p>
+</div>
+`);
+ const scene=(label,show,action,animate=false)=>({label,show,action,animate});
+ // Complete principles, findings and reading lists are shown together. Only
+ // causal figures, transformations and live demonstrations use successive builds.
+ const P={
+  intro:[scene('本讲问题与学习路线',['.hero-lead','.hero-copy','.hero-meta'])],
+  logic:[
+   scene('回归系数代表什么？',['.prose','.equation','.reading-grid']),
+   scene('识别的三项核心判断',['.three-steps','.leadnote'])
+  ],
+  omitted:[
+   scene('先看 D → Y',['.prose','#ovbBuildFigure'],{type:'ovb',n:0},true),
+   scene('再加入混杂因素 X',['.prose','#ovbBuildFigure'],{type:'ovb',n:1},true),
+   scene('实验：调节混杂强度',['.studio'],null,true)
+  ],
+  fwl:[
+   scene('第一幅图：原始关联',['.prose','.studio','.fwl-note'],{type:'fwl',n:'original'},true),
+   scene('第二幅图：去除 X 后的关联',['.prose','.studio','.fwl-note'],{type:'fwl',n:'residual'},true)
+  ],
+  badcontrols:[
+   scene('处理前变量：控制前',['.prose','.studio','.leadnote'],{type:'bad',mode:'pre',control:false},true),
+   scene('处理前变量：控制后',['.prose','.studio','.leadnote'],{type:'bad',mode:'pre',control:true},true),
+   scene('中介：不控制 M',['.prose','.studio','.leadnote'],{type:'bad',mode:'med',control:false},true),
+   scene('中介：控制 M',['.prose','.studio','.leadnote'],{type:'bad',mode:'med',control:true},true),
+   scene('对撞：不控制 C',['.prose','.studio','.leadnote'],{type:'bad',mode:'col',control:false},true),
+   scene('对撞：控制 C',['.prose','.studio','.leadnote'],{type:'bad',mode:'col',control:true},true)
+  ],
+  assumptions:[
+   scene('识别条件：目标、调整与可比性',['.checklist'],{type:'checklist',start:0,end:3}),
+   scene('识别条件：模型、推断与透明度',['.checklist','.equation'],{type:'checklist',start:3,end:6})
+  ],
+  case:[...['论文发现','研究流程','因果图 DAG','识别假设','估计与公式','交互模拟']
+   .map((name,i)=>scene(name,i===0?['.prose','.paper-case']:['.paper-case'],{type:'paper',n:i},i===1||i===2||i===5))],
+  workflow:[
+   scene('理解代码与估计对象',['.prose','.leadnote']),
+   scene('Stata：可复制的复现实验',['.code-tabs','.code-box'],{type:'code',n:'stata'}),
+   scene('R：可复制的复现实验',['.code-tabs','.code-box'],{type:'code',n:'r'})
+  ],
+  frontiers:[scene('三个研究进展与一条共同原则',['.prose','.frontier','.leadnote'])],
+  quiz:[...Array.from({length:6},(_,i)=>scene('知识检查 · 第 '+(i+1)+' 题',['#quizRoot'],{type:'quiz',n:i})),
+   scene('学习反馈与下一步',['#deckQuizSummary','#quizScore'],{type:'quiz',n:6})],
+  references:[
+   scene('参考论文与阅读边界',['.prose','.refs']),
+   scene('全套12讲课程路线',['#course','#courseGrid','.leadnote','footer'])
+  ]
+ };
+ const defs=secs.map(s=>({id:s.id,el:s,steps:P[s.id]}));
+ defs.forEach(d=>{
+  d.el.classList.add('deck-slide');
+  const ch=document.createElement('div');ch.className='deck-chapterinfo';ch.innerHTML=`<em>${String(defs.indexOf(d)+1).padStart(2,'0')} / 11</em><span class="deck-line"></span><span data-scene-title></span>`;
+  const heading=d.el.querySelector('h2') || d.el.querySelector('h1');heading.insertAdjacentElement('afterend',ch);
+  const allSelectors=[...new Set(d.steps.flatMap(x=>x.show))];
+  d.maybe=allSelectors.flatMap(sel=>[...d.el.querySelectorAll(sel)]).filter(n=>n!==ch);
+  // Some nodes are referenced in multiple scenes. Unique and mark once.
+  d.maybe=[...new Set(d.maybe)];
+  const fitBox=document.createElement('div');fitBox.className='deck-fit-content';
+  while(d.el.firstChild)fitBox.appendChild(d.el.firstChild);
+  d.el.appendChild(fitBox);d.fitBox=fitBox;
+ });
+ const tools=document.createElement('div');tools.className='deck-tools';tools.innerHTML='<span class="deck-help">← → 翻页 · 空格下一步</span><button class="deck-mode" id="deckMagnifyButton" type="button">放大图表 ↗</button><button class="deck-mode" id="deckMode" type="button" aria-pressed="false">演示模式 ⛶</button>';
+ const bar=document.createElement('div');bar.className='deck-bar';bar.setAttribute('aria-label','课程播放控制');
+ bar.innerHTML='<button class="deck-nav" type="button" id="deckPrev">← 上一步</button><div class="deck-middle"><div class="deck-status" id="deckStatus" aria-live="polite"></div><div class="deck-ticks" id="deckTicks" aria-label="本单元的播放步骤"></div></div><button class="deck-nav deck-next" type="button" id="deckNext">下一步 →</button>';
+ root.prepend(tools);root.append(bar);
+ const magnifier=document.createElement('dialog');magnifier.id='deckMagnifier';
+ magnifier.innerHTML='<div class="magnifier-head"><strong>图表放大视图</strong><button type="button" id="deckMagnifierClose">关闭 ×</button></div><div class="magnifier-figure" id="deckMagnifierContent"></div>';
+ document.body.append(magnifier);
+ document.getElementById('deckMagnifierClose').addEventListener('click',()=>magnifier.close());
+ magnifier.addEventListener('click',e=>{if(e.target===magnifier)magnifier.close()});
+ function visibleFigure(){
+  const slide=defs[page].el;
+  return [...slide.querySelectorAll('svg.viz,svg.paper-figure,svg#badDag,svg#ovbChart,svg#fwlChart,svg#paperDag,svg#paperSimChart,.deck-build-figure svg')]
+   .find(el=>{const rect=el.getBoundingClientRect();return rect.width>40&&rect.height>40&&!el.closest('[hidden],[data-deck-hidden="true"]')});
+ }
+ function refreshMagnify(){document.getElementById('deckMagnifyButton').hidden=!visibleFigure()}
+ document.getElementById('deckMagnifyButton').addEventListener('click',()=>{
+   const source=visibleFigure();if(!source)return;
+   const content=document.getElementById('deckMagnifierContent');
+   content.replaceChildren(source.cloneNode(true));
+   magnifier.showModal();
+ });
+ let page=0,step=0;
+ function setPartVisibility(d,parts){
+  const selected=new Set(parts.flatMap(sel=>[...d.el.querySelectorAll(sel)]));
+  d.maybe.forEach(node=>{
+   const shown=selected.has(node);node.setAttribute('data-deck-hidden',String(!shown));
+   if(shown && !node.closest('.three-steps, .checklist, .frontier, .refs, .course-grid')){node.classList.remove('deck-revealed');void node.offsetWidth;node.classList.add('deck-revealed')}
+  });
+ }
+ function applyAction(d,act){
+  const S=d.el;
+  if(act?.type==='ovb'){
+   const f=byId('ovbBuildFigure');f.classList.toggle('phase-zero',act.n===0);f.classList.toggle('phase-one',act.n===1);
+   byId('ovbBuildNote').textContent=act.n===0?'第一步：只看到 D 与 Y 的联系。此时观察到相关性，还不足以认定它就是因果效应。':'第二步：共同原因 X 同时指向 D 与 Y，打开 D ← X → Y 这条后门路径。下一步对比回归系数。';
+  }
+  if(act?.type==='logic')S.querySelectorAll('.three-steps article').forEach((a,i)=>a.setAttribute('data-deck-hidden',String(i>=act.n)));
+  else if(d.id==='logic')S.querySelectorAll('.three-steps article').forEach(a=>a.removeAttribute('data-deck-hidden'));
+  if(act?.type==='fwl')byId(act.n==='original'?'fwlOriginal':'fwlResidual').click();
+  if(act?.type==='bad'){
+    S.querySelector(`[data-bad="${act.mode}"]`).click();const input=byId('badCondition');
+    if(input.checked!==act.control){input.checked=act.control;input.dispatchEvent(new Event('change',{bubbles:true}))}
+  }
+  if(act?.type==='checklist')S.querySelectorAll('.checklist article').forEach((a,i)=>a.setAttribute('data-deck-hidden',String(i<act.start||i>=act.end)));
+  if(act?.type==='paper')showPaperTab(act.n);
+  if(act?.type==='code')S.querySelector(`[data-code="${act.n}"]`).click();
+  if(act?.type==='frontier')S.querySelectorAll('.frontier article').forEach((a,i)=>a.setAttribute('data-deck-hidden',String(i!==act.n)));
+  if(act?.type==='quiz'){
+    const cards=[...byId('quizRoot').querySelectorAll('.quiz-card')];cards.forEach((a,i)=>a.setAttribute('data-deck-hidden',String(act.n!==6&&i!==act.n)));
+    if(act.n===6){cards.forEach(c=>c.removeAttribute('data-deck-hidden'));const done=cards.filter(c=>c.querySelector('.quiz-choice.selected,.quiz-choice.wrong')).length; const ok=cards.filter(c=>c.querySelector('.quiz-choice.selected')).length;byId('deckQuizSummary').innerHTML=`<strong>学习检测完成度：${done} / 6 题。</strong><br>目前答对 ${ok} 题。${done<6?'还有未回答的题目：通过上一步或进度条返回即可继续。':'可以回看答错题对应的因果机制，再进入下一讲。'}`;}
+  }
+ }
+ let resizeScheduled=false;
+ function fitSlide(d){
+  if(!d?.el.classList.contains('is-current'))return;
+  const box=d.fitBox,slide=d.el;
+  // Editorial rule: NEVER reduce the whole scene. It shrinks the text and
+  // defeats the purpose of a slide presentation.
+  box.style.zoom='1';
+  const cs=getComputedStyle(slide);
+  const available=slide.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-2;
+  const natural=box.getBoundingClientRect().height;
+  const excess=Math.max(0,natural-available);
+  slide.dataset.fit='100';
+  slide.dataset.overflow=Math.round(excess);
+  slide.classList.toggle('deck-overfull',excess>4);
+ }
+ function scheduleFit(){if(resizeScheduled)return;resizeScheduled=true;requestAnimationFrame(()=>{resizeScheduled=false;fitSlide(defs[page]);});}
+ window.addEventListener('resize',scheduleFit);
+ document.addEventListener('input',e=>{if(e.target.closest('.deck-slide'))scheduleFit()},true);
+ function goto(p,s,init=false){
+  page=Math.max(0,Math.min(defs.length-1,p));
+  const d=defs[page];step=Math.max(0,Math.min(d.steps.length-1,s));
+  defs.forEach((e,i)=>e.el.classList.toggle('is-current',i===page));
+  d.el.classList.toggle('deck-focus', (d.id==='omitted' && step===2) || d.id==='fwl' || (d.id==='case' && step>0));
+  d.el.classList.toggle('deck-paper-detail',d.id==='case' && step>0);
+  d.el.classList.toggle('deck-case-sim',d.id==='case' && step===5);
+  const info=d.steps[step];setPartVisibility(d,info.show);applyAction(d,info.action);refreshMagnify();
+  d.el.querySelector('[data-scene-title]').textContent='当前步骤 · '+info.label;
+  if(!init)d.el.scrollTop=0;
+  scheduleFit();
+  byId('deckStatus').innerHTML=`<strong>第 ${String(page+1).padStart(2,'0')} / ${defs.length} 单元</strong> · 第 ${String(step+1).padStart(2,'0')} / ${d.steps.length} 步 <span style="color:#89988B">· ${info.label}</span>`;
+  const ticks=byId('deckTicks');ticks.innerHTML=d.steps.map((t,i)=>`<button type="button" class="deck-tick ${i<step?'is-done':''} ${i===step?'is-active':''}" data-go-step="${i}" aria-label="跳转到本单元第${i+1}步：${t.label}" title="${t.label}"></button>`).join('');
+  byId('deckPrev').disabled=page===0&&step===0;
+  byId('deckNext').disabled=page===defs.length-1&&step===d.steps.length-1;
+  const nextItem=d.steps[step+1];byId('deckNext').textContent=nextItem?.animate?'播放下一步 →':'下一页 →';
+  byId('deckPrev').textContent=step>0&&d.steps[step].animate?'← 上一步':'← 上一页';
+  document.querySelectorAll('.side nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+d.id));
+  const hash='#'+d.id;
+  if(location.hash!==hash && history.replaceState)window.__courseReplaceStateSafe__(null,'',hash);
+ }
+ function advance(n){
+  if(n>0){if(step<defs[page].steps.length-1)goto(page,step+1);else if(page<defs.length-1)goto(page+1,0)}
+  else {if(step>0)goto(page,step-1);else if(page>0)goto(page-1,defs[page-1].steps.length-1)}
+ }
+ byId('deckPrev').addEventListener('click',()=>advance(-1));byId('deckNext').addEventListener('click',()=>advance(1));
+ byId('deckTicks').addEventListener('click',e=>{const t=e.target.closest('[data-go-step]');if(t)goto(page,Number(t.dataset.goStep))});
+ byId('deckMode').addEventListener('click',()=>{document.body.classList.toggle('is-presenting');const on=document.body.classList.contains('is-presenting');byId('deckMode').textContent=on?'返回学习模式 ↙':'演示模式 ⛶';byId('deckMode').setAttribute('aria-pressed',String(on));scheduleFit()});
+ document.querySelectorAll('.side a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const id=a.getAttribute('href')?.slice(1); const at=defs.findIndex(x=>x.id===id);
+  if(at>=0){e.preventDefault();goto(at,0)}
+  else if(id==='course'){e.preventDefault();goto(defs.length-1,1)}
+ }));
+ // Preserve original six paper tabs as genuine substeps of this unit.
+ document.querySelectorAll('[data-paper]').forEach(el=>el.addEventListener('click',()=>{if(defs[page].id==='case')goto(page,Math.max(0,['finding','flow','dag','assume','formula','sim'].indexOf(el.dataset.paper)))}));
+ byId('caseNext').addEventListener('click',()=>{if(defs[page].id==='case')goto(page,tabIdx)});
+ document.addEventListener('keydown',e=>{
+  if(e.altKey||e.ctrlKey||e.metaKey||e.isComposing)return;
+  const target=e.target;
+  if(target.closest('input, textarea, select, [role="tablist"], [role="tab"], pre, code, a, .studio, .paper-case, .code-box, .quiz-card') && !target.closest('.deck-bar'))return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '||e.key==='PageDown'){e.preventDefault();advance(1)}
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();advance(-1)}
+ },true);
+ let sx=0,sy=0,activeSwipe=false;
+ root.addEventListener('touchstart',e=>{const t=e.target;
+  activeSwipe=!t.closest('input,button,a,svg,.studio,.paper-case,.code-box,.quiz-card,.deck-bar');
+  if(activeSwipe){sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY}
+ },{passive:true});
+ root.addEventListener('touchend',e=>{if(!activeSwipe)return;const x=e.changedTouches[0].clientX-sx,y=e.changedTouches[0].clientY-sy;if(Math.abs(x)>90&&Math.abs(x)>1.6*Math.abs(y))advance(x<0?1:-1)}, {passive:true});
+ document.body.classList.add('is-presenting');
+ byId('deckMode').textContent='返回学习模式 ↙';
+ byId('deckMode').setAttribute('aria-pressed','true');
+ const initial=defs.findIndex(d=>'#'+d.id===location.hash);goto(initial>=0?initial:0,0,true);
+
+/* Embedded course-portal navigation bridge: original teaching logic unchanged. */
+(function(){
+  const PORTAL_LESSON='03';
+  function sendState(){
+    const active=document.querySelector('.deck-slide.is-current');
+    const all=Array.from(document.querySelectorAll('.deck-slide'));
+    let selected=active?all.indexOf(active):0;
+    if(selected<0)selected=0;
+    const heading=active&&active.querySelector('h1,h2');
+    if(window.parent!==window)window.parent.postMessage({kind:'causal-course-state',lesson:PORTAL_LESSON,index:selected,title:heading?heading.textContent.trim():''},'*');
+  }
+  window.addEventListener('message',e=>{
+    if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-jump'||e.data.lesson!==PORTAL_LESSON)return;
+    let index=Number(e.data.index||0),step=Number(e.data.step||0);
+    if(!Number.isFinite(index)||!Number.isFinite(step))return;
+    try {goto(Math.max(0,Math.floor(index)),Math.max(0,Math.floor(step)));}catch(err){console.error('Lesson jump error',err)}
+    setTimeout(sendState,30);
+  });
+  let pending=0;
+  const observer=new MutationObserver(()=>{if(pending)return;pending=requestAnimationFrame(()=>{pending=0;sendState()})});
+  const host=document.querySelector('main.main')||document.body;
+  observer.observe(host,{subtree:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('load',()=>setTimeout(sendState,90));
+  setTimeout(sendState,140);
+})();
+
+})();
+</script>
+
+<style>
+@media(max-width:600px){
+ header.top{padding:0 9px!important;gap:6px!important}
+ header.top .logo{font-size:11px!important;letter-spacing:0!important;white-space:nowrap!important}
+ header.top .topright{display:flex!important;gap:4px!important;flex-shrink:0}
+ header.top .topright .small{display:none!important}
+ header.top .topright .mode{white-space:nowrap!important;font-size:11px!important;padding:5px 6px!important}
+}
+</style>
+<!-- INTEGRATED PORTAL CONTROLS: connect embedded player and course shell -->
+<script>
+(function(){
+ if(window.parent===window) return;
+ const lessonId='03';
+ function send(action){ try{window.parent.postMessage({kind:'causal-course-action',lesson:lessonId,action:action},'*')}catch(e){} }
+ // Child fullscreen used to hide the parent home control. Delegate instead.
+ window.toggleFullscreen=function(){send('fullscreen')};
+ window.addEventListener('message',function(e){
+  if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-display'||e.data.lesson!==lessonId)return;
+  document.querySelectorAll('button[onclick="toggleFullscreen()"],button[onclick="toggleFullscreen();"]').forEach(function(b){
+   b.textContent=e.data.expanded?'退出全屏':'全屏';
+   b.setAttribute('aria-pressed',e.data.expanded?'true':'false');
+  });
+ });
+ window.addEventListener('keydown',function(e){if(e.key==='Escape')send('escape')});
+})();
+</script>
+
+</body></html>

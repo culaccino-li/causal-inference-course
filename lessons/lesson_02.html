@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="light" name="color-scheme"/><title>第02讲 · DAG 与因果结构｜因果研究方法</title>
+<style>:root{--paper:#F6F4EF;--white:#FFFEFB;--ink:#23312F;--muted:#65726D;--line:#DDDCD4;--green:#285B52;--ochre:#A87340;--mild:#F0F1EC;--red:#9C584E;--blue:#4B7085}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.85 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}a{color:var(--green)}button,input{font:inherit}button{cursor:pointer}.app-shell{display:grid;grid-template-columns:236px minmax(0,1fr)}.progress{position:fixed;z-index:100;left:0;top:0;background:var(--green);height:2px;width:0}.side{height:100vh;position:sticky;top:0;background:var(--white);border-right:1px solid var(--line);padding:38px 20px 22px;overflow:auto}.brand-kicker,.side-kicker,.eyebrow,.section-label,.eyebrow-small,.inner-label,.paper-caps{font-size:10px;letter-spacing:.14em;color:var(--green);font-weight:700}.brand{font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif;font-size:20px;margin-top:16px;line-height:1.35}.brand span{display:block}.brand small{font:11px/1.5 Georgia,serif;color:var(--muted);letter-spacing:.06em}.side-kicker{margin:55px 10px 15px;color:var(--muted)}.side nav a{display:block;color:#56675E;text-decoration:none;padding:9px 10px;font-size:12px;line-height:1.5;border-left:2px solid transparent;transition:background .15s}.side nav a:hover,.side nav a.active{color:var(--green);border-left-color:var(--green);background:#EDF0EA}.side-footer{border-top:1px solid var(--line);padding-top:22px;margin:44px 7px 0}.side-caption{font-size:11px;color:var(--green);font-weight:700}.side-footer p{color:#59665F;font-size:12px;margin:7px 0 12px}.side-footer a{font-size:11px;text-decoration:none}.main{width:100%;max-width:1120px;margin:0 auto;padding:34px clamp(27px,5vw,74px) 110px;min-width:0}.hero{padding:56px 0 70px;border-bottom:1px solid var(--line);scroll-margin-top:25px}.sep{color:#9EA99F;padding:0 8px}.hero h1{font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif;font-size:clamp(46px,5.5vw,75px);font-weight:500;line-height:1.25;letter-spacing:-.045em;margin:24px 0}.hero h1 em{font-style:normal;color:var(--green)}.hero-lead{font:500 clamp(20px,2.4vw,27px)/1.65 Georgia,"Songti SC",serif;margin:30px 0 12px}.intro-copy{max-width:700px;color:#516057;margin:0 0 27px}.hero-meta{display:flex;gap:15px 20px;flex-wrap:wrap;font-size:12px;color:#657269}.hero-meta span:not(:last-child){padding-right:20px;border-right:1px solid var(--line)}.section{padding-top:75px;scroll-margin-top:26px}.section + .section{border-top:1px solid var(--line);margin-top:77px}.section h2{font:500 clamp(29px,3.2vw,40px)/1.4 Georgia,"Songti SC","Noto Serif CJK SC",serif;letter-spacing:-.035em;margin:9px 0 18px}.section h3,.section h4{font-family:Georgia,"Songti SC",serif;font-weight:550;line-height:1.48}.prose{color:#485950;max-width:790px;margin:0 0 25px}.definition-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:30px 0}.definition-strip>div{padding:24px 12px 17px 0}.definition-strip>div+div{border-left:1px solid var(--line);padding-left:18px}.definition-strip span{display:block;font-size:11px;color:var(--muted)}.definition-strip strong{display:block;font:500 23px/1.5 Georgia,serif;margin:6px 0}.definition-strip p{margin:0;color:var(--muted);font-size:12px}.note-line{border-left:2px solid var(--green);padding:13px 19px;background:var(--mild);font-size:14px;line-height:1.9;color:#405349;margin:25px 0}.studio,.paper-case{background:var(--white);border:1px solid var(--line)}.studio-bar{display:flex;border-bottom:1px solid var(--line);background:#F6F6F1;overflow:auto}.mode{flex:1 0 auto;font-size:13px;color:#566A5E;background:transparent;border:0;border-bottom:3px solid transparent;padding:13px 15px;white-space:nowrap}.mode:hover{background:#EEF1EC}.mode.active{color:var(--green);border-bottom-color:var(--green);font-weight:700;background:var(--white)}.studio-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:28px 29px 14px}.studio-heading h3{font-size:25px;margin:7px 0}.tag-outline{border:1px solid #C9D7CB;padding:4px 9px;color:var(--muted);font-size:11px;white-space:nowrap}.figure-area{padding:0 24px}.figure-area svg{display:block;width:100%;height:auto;background:#FAFAF6;border:1px solid #E5E8DF}.figure-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--muted);padding:11px 29px 18px}.leg-line{display:inline-block;width:21px;height:2px;margin:0 5px 4px 0}.leg-line.green{background:var(--green)}.leg-line.ochre{background:var(--ochre)}.leg-node{display:inline-block;width:11px;height:11px;border:3px solid var(--green);border-radius:50%;margin-right:6px;vertical-align:-2px}.control-line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding:16px 27px}.control-title{font-size:12px;color:var(--muted);margin-right:10px}.variable-buttons{display:flex;gap:7px;flex-wrap:wrap}.variable-btn{min-width:80px;border:1px solid #C5D0C8;color:#3C5A4C;background:white;border-radius:3px;padding:5px 13px;font-size:13px}.variable-btn.on{border-color:var(--green);background:#E9F0E9;color:var(--green);font-weight:700}.inline-btn{border:0;background:transparent;font-size:12px;text-decoration:underline;text-underline-offset:3px;color:#69766D}.path-layout{display:grid;grid-template-columns:1.25fr 1fr;border-top:1px solid var(--line)}.path-layout>div{padding:22px 26px}.path-layout>div+div{border-left:1px solid var(--line)}.panel-subtitle{font-size:11px;color:var(--green);letter-spacing:.07em;font-weight:700;margin-bottom:13px}.path-list{display:grid;gap:11px}.path-item{font-size:12px;border-bottom:1px solid #ECEEE8;padding-bottom:9px}.path-item:last-child{border:0}.path-symbol{font:15px/1.4 Georgia,serif;color:#2C473B;display:block;margin-bottom:4px}.path-status{font-size:11px;color:var(--ochre);font-weight:700}.path-status.closed{color:var(--green)}.path-expl{color:var(--muted);margin-top:2px}.analysis-result{background:#F2F3ED}.analysis-result>span{display:block;font-size:11px;letter-spacing:.1em;color:var(--muted)}.analysis-result strong{display:block;font-family:Georgia,"Songti SC",serif;font-size:22px;margin:11px 0;color:var(--green)}.analysis-result p{font-size:13px;color:#526258;margin:0 0 15px}.underlink{border:0;background:none;padding:0;border-bottom:1px solid var(--green);color:var(--green);font-size:12px}.source-footer,.subtle-foot{border-top:1px solid var(--line);font-size:11px;color:#788078;line-height:1.7;padding:12px 27px 17px}.rule-rows{border-top:1px solid var(--line)}.rule-rows article{display:grid;grid-template-columns:48px minmax(0,1fr) 145px;gap:16px;border-bottom:1px solid var(--line);padding:22px 0;align-items:start}.rule-id{font:24px Georgia,serif;color:var(--ochre)}.rule-rows h3{margin:0 0 5px;font-size:20px}.rule-rows p{color:#5B695E;font-size:14px;margin:0}.rule-tag{font-size:12px;text-align:right;padding-top:7px;color:var(--green)}.formula-note{padding:23px 25px;background:var(--mild);margin:27px 0 0}.formula-note b{font-size:14px;color:var(--green)}.formula-note .formula{font:17px/1.8 Georgia,"Songti SC",serif;text-align:center;padding:19px 6px;color:#2A4134}.formula-note p{margin:0;color:#5B675E;font-size:13px}.collider-demo{display:grid;grid-template-columns:1fr 1.22fr;border:1px solid var(--line);background:var(--white)}.collider-controls{padding:24px}.choice-line{display:flex;gap:7px;flex-wrap:wrap}.choice{font-size:12px;padding:8px 10px;background:transparent;border:1px solid #C8D4CA;color:#496353}.choice.active{background:#E9F0E9;border-color:var(--green);color:var(--green)}.range-label{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:25px;font-size:13px;color:#526459}.range-label strong{color:var(--green)}input[type=range]{width:100%;accent-color:var(--green);margin-top:9px}.collider-metrics{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.collider-metrics>div{padding:16px 10px 12px 0}.collider-metrics>div+div{border-left:1px solid var(--line);padding-left:15px}.collider-metrics small{font-size:11px;display:block;color:var(--muted)}.collider-metrics strong{font:29px Georgia,serif;color:var(--green)}.collider-comment{font-size:13px;color:#526459}.scatter-wrap{border-left:1px solid var(--line);padding:17px}.scatter-wrap svg{width:100%;display:block}.micro{font-size:10px;color:var(--muted);margin:4px 0}.simple-table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{border-bottom:1px solid var(--line);padding:15px 12px;text-align:left;font-size:13px;vertical-align:middle}th{color:#617366;font-size:11px;font-weight:700;border-top:1px solid var(--line)}td{color:#465A4D}.status{display:inline-block;padding:3px 8px;font-size:11px}.status.good{color:var(--green);background:#E5EEE6}.status.caution{color:#936633;background:#F2EBDE}.paper-header{padding:27px 30px;border-bottom:1px solid var(--line)}.paper-caps{color:var(--green)}.paper-header h3{font-family:Georgia,"Songti SC",serif;font-weight:500;font-size:24px;max-width:830px;line-height:1.48;margin:14px 0 5px}.paper-header p{font-size:12px;color:var(--muted);margin:0}.case-tabs{display:flex;overflow-x:auto;background:#F7F7F2;border-bottom:1px solid var(--line)}.case-tab{padding:14px 14px;font-size:12px;flex:1 0 auto;white-space:nowrap;border:0;border-bottom:3px solid transparent;background:transparent;color:#627368}.case-tab small{color:#8A9C90;margin-right:5px}.case-tab.active{border-bottom-color:var(--green);background:var(--white);color:var(--green);font-weight:700}.case-tab:hover{background:#EAEFE7}.case-pages{padding:29px 30px 22px;min-height:380px}.case-page[hidden]{display:none}.case-page h4{font-size:26px;line-height:1.45;margin:11px 0 17px}.case-page>p:not(.fine-print):not(.subtle-foot):not(.case-hint){font-size:14px;color:#536559;max-width:785px}.inner-label{color:var(--muted)}.paper-points{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:25px 0}.paper-points>div{padding:20px 17px 14px 0}.paper-points>div+div{border-left:1px solid var(--line);padding-left:20px}.paper-points strong{font-size:14px;color:var(--green)}.paper-points p{font-size:12px;margin:8px 0;color:var(--muted)}.paper-claim{border-left:2px solid var(--green);background:#F2F3ED;padding:15px 20px;margin-top:20px;font-size:13px;color:#455B4A}.paper-claim p{margin:5px 0 0}.fine-print{font-size:11px!important;color:#7B877C!important;line-height:1.8;margin-top:20px!important}.flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:24px}.flow-steps>div{padding:17px 12px 19px;background:#F2F4EE;position:relative}.flow-steps>div:not(:last-child):after{content:'→';position:absolute;right:-8px;top:25px;z-index:1;color:var(--green);font-size:18px}.flow-steps span{display:block;color:var(--ochre);font:20px Georgia,serif}.flow-steps strong{font-size:14px;display:block;margin:8px 0}.flow-steps small{font-size:11px;display:block;color:var(--muted)}.paper-graph-wrapper{border:1px solid var(--line);background:#FAFAF6;overflow-x:auto}.paper-graph-wrapper svg{min-width:580px;width:100%;height:auto;display:block}.toggle-label{display:flex;align-items:center;gap:9px;color:#3C5949;font-size:13px;margin:16px 0}.toggle-label input{accent-color:var(--green);height:17px;width:17px}.case-feedback{background:#EEF2EA;padding:12px 15px;font-size:12px!important;color:#3D594A!important}.assumption-rows>div{display:grid;grid-template-columns:33px 180px 1fr;align-items:baseline;border-top:1px solid var(--line);padding:14px 0;gap:12px}.assumption-rows b{color:var(--ochre);font:16px Georgia,serif}.assumption-rows strong{font-size:13px}.assumption-rows p{font-size:12px;color:var(--muted);margin:0}.equations>div{display:grid;grid-template-columns:110px 1fr;padding:17px 0;border-top:1px solid var(--line);gap:15px;font-size:13px;color:#4E6153}.equations span{color:var(--green);font-weight:700}.equation{font:22px Georgia,serif;color:#284C3B}.equations small{display:block;color:var(--muted);font-size:11px;margin-top:6px}.case-hint{font-size:13px;color:var(--muted)}.sim-inputs{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:25px 0}.sim-inputs label{font-size:12px;color:#5B6C60}.sim-inputs label strong{float:right;color:var(--green)}.estimate-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:16px 0}.estimate-grid>div{padding:13px}.estimate-grid>div+div{border-left:1px solid var(--line)}.estimate-grid span{display:block;color:var(--muted);font-size:11px}.estimate-grid strong{font:30px Georgia,serif;color:var(--green)}#paperEstimateChart{width:100%;display:block}.case-next{display:flex;justify-content:space-between;align-items:center;padding:12px 28px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.case-next button{border:0;background:transparent;color:var(--green);font-size:12px;border-bottom:1px solid var(--green);padding:3px 0}.code-tabs{display:flex;gap:10px;margin:25px 0 0}.code-choice{border:1px solid var(--line);padding:7px 22px;background:transparent;color:#53685B;font-size:13px}.code-choice.active{color:var(--green);background:#EDF2EA;border-color:#9BB5A1}.code-frame{border:1px solid var(--line);background:#FFFEFB;margin-top:12px}.code-top{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 16px;color:var(--muted);font-size:11px}.code-top button{background:transparent;border:0;color:var(--green);text-decoration:underline;font-size:11px}.code-frame pre{overflow:auto;padding:13px 20px;font:12px/1.8 "SFMono-Regular",Consolas,monospace;color:#32463D;margin:0;white-space:pre}.frontier-lines article{border-top:1px solid var(--line);padding:23px 0;display:grid;grid-template-columns:60px 1fr;gap:25px}.frontier-lines article>span{font:18px Georgia,serif;color:var(--ochre)}.frontier-lines h3{font-size:19px;margin:0 0 8px}.frontier-lines p{font-size:13px;color:var(--muted);margin:0 0 8px}.frontier-lines a{font-size:12px;text-decoration:none;border-bottom:1px solid #ACBEB0}.quiz-container{display:grid;gap:16px}.quiz-card{padding:20px 23px;background:var(--white);border:1px solid var(--line)}.quiz-card h3{font-size:17px;margin:0 0 12px}.quiz-option{display:block;width:100%;text-align:left;background:transparent;border:1px solid var(--line);padding:9px 12px;color:#4F6255;margin:6px 0;font-size:12px}.quiz-option:hover{border-color:#8CB099}.quiz-option.selected{background:#EAF0E9;border-color:var(--green)}.quiz-option.wrong{background:#F5EEE7;border-color:var(--ochre)}.quiz-feedback{font-size:12px;color:#52695B;padding-top:8px;min-height:12px}.quiz-score{margin-top:20px;border-left:2px solid var(--green);padding:13px 18px;background:var(--mild)}.references{padding:12px 0 16px}.references p{padding-bottom:12px;border-bottom:1px solid var(--line);font-size:12px;color:#566459}.course-heading{font:500 25px Georgia,"Songti SC",serif;margin:28px 0}.course-list{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-top:1px solid var(--line)}.course-list div{border-bottom:1px solid var(--line);padding:13px 10px;font-size:12px;color:#56695C}.course-list div span{margin-right:20px;color:var(--ochre);font:16px Georgia,serif}.course-list div.current{font-weight:700;color:var(--green);background:#EBF0E9}.main footer{margin-top:40px;font-size:11px;color:#839086}.mode:focus-visible,.variable-btn:focus-visible,.case-tab:focus-visible,.inline-btn:focus-visible,.choice:focus-visible,.code-choice:focus-visible,.quiz-option:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media(max-width:960px){.path-layout,.collider-demo{grid-template-columns:1fr}.path-layout>div+div{border-left:0;border-top:1px solid var(--line)}.scatter-wrap{border-left:0;border-top:1px solid var(--line)}.flow-steps{grid-template-columns:1fr 1fr}.flow-steps>div:after{display:none}.assumption-rows>div{grid-template-columns:30px 1fr}.assumption-rows p{grid-column:2}.figure-area{padding:0 12px}.main{padding-left:35px;padding-right:35px}}
+@media(max-width:760px){.app-shell{display:block}.side{height:auto;position:static;border:0;border-bottom:1px solid var(--line);padding:15px 20px}.brand-kicker{font-size:10px}.brand{font-size:18px;margin:5px 0}.side .side-kicker,.side nav,.side-footer{display:none}.main{padding:18px 19px 75px}.hero{padding:30px 0 48px}.hero h1{font-size:clamp(43px,11vw,56px)}.hero-meta{font-size:11px}.section{padding-top:51px}.section+.section{margin-top:55px}.definition-strip{grid-template-columns:1fr}.definition-strip>div{border-bottom:1px solid var(--line);padding:14px 0!important;border-left:0!important}.definition-strip>div:last-child{border-bottom:0}.studio-heading{padding:17px 17px 9px}.studio-heading h3{font-size:19px}.tag-outline{display:none}.figure-legend{padding:9px 15px}.control-line{padding:15px}.path-layout>div{padding:18px}.rule-rows article{grid-template-columns:30px 1fr;gap:8px}.rule-tag{grid-column:2;text-align:left;padding:0}.paper-header{padding:19px}.paper-header h3{font-size:20px}.case-pages{padding:19px}.paper-points{grid-template-columns:1fr}.paper-points>div{border:0!important;border-bottom:1px solid var(--line)!important;padding:12px 0!important}.paper-points>div:last-child{border-bottom:0!important}.case-page h4{font-size:21px}.assumption-rows>div{gap:8px}.sim-inputs{grid-template-columns:1fr}.estimate-grid strong{font-size:22px}.estimate-grid>div{padding:10px}.course-list{grid-template-columns:1fr}.frontier-lines article{grid-template-columns:48px 1fr;gap:12px}.collider-controls{padding:17px}.section h2{font-size:29px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+.mobile-figure-hint{display:none}
+@media(max-width:760px){.figure-area{overflow-x:auto;scrollbar-width:thin}.figure-area svg{min-width:650px}.mobile-figure-hint{display:block;margin:4px 15px 0;color:#708077;font-size:11px;text-align:right}}
+</style><style>
+/* Course Presentation System v1.5.1: readable by construction */
+body.course-deck{background:#F6F4EF!important;color:#23312F!important}
+body.course-deck:not(.course-reading),body.course-deck:not(.course-reading) html{overflow:hidden}
+body.course-deck:not(.course-reading) .progress{display:none}
+body.course-deck:not(.course-reading) .shell,body.course-deck:not(.course-reading) .app-shell{display:block!important;height:100dvh;overflow:hidden}
+body.course-deck:not(.course-reading) .sidebar,body.course-deck:not(.course-reading) .side{display:none!important}
+body.course-deck:not(.course-reading) .main{display:flex!important;flex-direction:column!important;max-width:none!important;width:100%!important;margin:0!important;padding:0 clamp(24px,5vw,90px)!important;height:100dvh;overflow:hidden;min-height:0}
+body.course-deck:not(.course-reading) .course-unit{display:none!important;overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;scrollbar-gutter:stable;overscroll-behavior:contain;margin:0 auto!important;border:0!important;width:min(100%,1150px);padding:clamp(30px,4.8vh,48px) clamp(4px,1.3vw,18px) 20px!important}
+body.course-deck:not(.course-reading) .course-unit.course-active{display:block!important;animation:cdScene .26s ease-out both}
+body.course-deck:not(.course-reading) .course-unit h1{font-size:clamp(38px,4.5vw,58px);line-height:1.2;margin:10px 0 16px}
+body.course-deck:not(.course-reading) .course-unit h2{font-size:clamp(27px,2.8vw,37px);line-height:1.35;margin:3px 0 14px}
+body.course-deck:not(.course-reading) .course-unit h3{font-size:clamp(18px,1.65vw,23px);line-height:1.45}
+body.course-deck:not(.course-reading) .course-unit p:not(.mini):not(.micro):not(.note):not(.small-note):not(.subtle-foot):not(.source-footer):not(.fine-print):not(.case-hint),body.course-deck:not(.course-reading) .course-unit li{font-size:clamp(16px,1.42vw,18px);line-height:1.67}
+body.course-deck:not(.course-reading) .course-unit .note,body.course-deck:not(.course-reading) .course-unit .small-note,body.course-deck:not(.course-reading) .course-unit .subtle-foot{font-size:14px;line-height:1.55}
+body.course-deck:not(.course-reading) .course-unit .eyebrow,body.course-deck:not(.course-reading) .course-unit .section-label,body.course-deck:not(.course-reading) .course-unit .sectionno{margin:0 0 7px;font-size:11px}
+body.course-deck:not(.course-reading) .course-unit .panel{margin:12px 0;padding:clamp(14px,1.6vw,22px)}
+body.course-deck:not(.course-reading) .course-unit .callout,body.course-deck:not(.course-reading) .course-unit .note-line{margin:12px 0;padding:11px 15px;font-size:16px}
+body.course-deck:not(.course-reading) .course-unit .formula{margin:12px 0;padding:12px 16px;font-size:clamp(20px,2vw,25px)}
+body.course-deck:not(.course-reading) .course-unit [data-course-hidden="true"]{display:none!important}
+body.course-deck:not(.course-reading) .course-unit [data-course-subhidden="true"]{display:none!important}
+body.course-deck:not(.course-reading) .course-unit .case-page[hidden]{display:none!important}
+.course-chapter-meta{display:none;color:#718077;letter-spacing:.08em;font-size:12px;margin:10px 0 14px}
+body.course-deck:not(.course-reading) .course-chapter-meta{display:flex;align-items:center;gap:13px}
+.course-chapter-meta:before{content:"";display:block;width:26px;height:1px;background:#82978a}
+.course-controls{display:none}
+body.course-deck:not(.course-reading) .course-controls{display:grid;grid-template-columns:150px 1fr 150px;align-items:center;gap:18px;flex:0 0 auto;min-height:78px;width:min(100%,1150px);margin:auto;background:#F6F4EF;border-top:1px solid #DDDCD4;padding:11px 5px 13px;z-index:15}
+.course-controls button{cursor:pointer}
+.course-prev,.course-next{border:1px solid #B9C8BD;border-radius:4px;background:#FFFEFB;color:#285B52;font-size:15px;min-height:46px;padding:8px 14px}
+.course-next{background:#285B52;color:white;border-color:#285B52}
+.course-prev:disabled,.course-next:disabled{opacity:.3;cursor:default}
+.course-status{text-align:center;line-height:1.4;font-size:13px;color:#526459}
+.course-status strong{font-weight:650;color:#285B52}
+.course-ticks{display:flex;justify-content:center;gap:5px;margin-top:9px}
+.course-tick{height:5px;width:min(24px,4vw);background:#d7ded5;border:0;border-radius:4px;padding:0}
+.course-tick.active{background:#285B52}.course-tick.done{background:#98B2A4}
+.course-tools{position:fixed;right:clamp(23px,4.4vw,76px);top:12px;display:flex;align-items:center;gap:8px;z-index:25}
+.course-tools button{border:1px solid #D1D8CE;background:#FFFEFB;color:#285B52;font-size:12px;border-radius:4px;padding:5px 10px;cursor:pointer}
+body.course-reading .course-tools{position:fixed;top:12px;right:15px}
+body.course-deck:not(.course-reading) .course-unit .viz{max-height:clamp(170px,34vh,280px);width:100%;margin:12px 0}
+body.course-deck:not(.course-reading) .course-unit .grid{gap:12px}
+body.course-deck:not(.course-reading) .course-unit .method{padding:12px}
+body.course-deck:not(.course-reading) .course-unit .case-shell,body.course-deck:not(.course-reading) .course-unit .paper-case{margin-top:8px}
+body.course-deck:not(.course-reading) .course-unit .case-header,body.course-deck:not(.course-reading) .course-unit .paper-header{padding:15px 20px}
+body.course-deck:not(.course-reading) .course-unit .case-header h3,body.course-deck:not(.course-reading) .course-unit .paper-header h3{font-size:19px;margin:5px 0}
+body.course-deck:not(.course-reading) .course-unit .case-header p,body.course-deck:not(.course-reading) .course-unit .paper-header p{font-size:13px!important;line-height:1.45}
+body.course-deck:not(.course-reading) .course-unit .case-contents,body.course-deck:not(.course-reading) .course-unit .case-pages{min-height:0;padding:13px 18px}
+body.course-deck:not(.course-reading) .course-unit .case-page h3,body.course-deck:not(.course-reading) .course-unit .case-page h4{font-size:clamp(21px,2vw,27px);margin:7px 0 12px}
+body.course-deck:not(.course-reading) .course-unit .case-tab{padding:9px 11px;font-size:13px}
+body.course-deck:not(.course-reading) .course-unit .case-bottom,body.course-deck:not(.course-reading) .course-unit .case-next{padding:7px 17px}
+body.course-deck:not(.course-reading) .course-unit .case-reflection{margin:8px 0}
+body.course-deck:not(.course-reading) .course-unit .controls{gap:10px}
+body.course-deck:not(.course-reading) .course-unit .metric .value{font-size:clamp(24px,2.4vw,32px)}
+body.course-deck:not(.course-reading) .course-unit .metric{padding:9px 13px}
+body.course-deck:not(.course-reading) .course-unit .formula-box .math{font-size:20px}
+body.course-deck:not(.course-reading) .course-unit pre{font-size:15px;max-height:50vh;overflow:auto;line-height:1.6}
+body.course-deck:not(.course-reading) .course-unit .quiz-choice{font-size:16px}
+.course-big-chart{position:fixed;inset:0;background:rgba(25,37,31,.65);display:grid;place-items:center;z-index:150;padding:35px}
+.course-big-chart[hidden]{display:none}
+.course-big-chart-inner{position:relative;background:#fffefa;border-radius:5px;padding:45px 30px 26px;width:min(1120px,96vw);max-height:92vh;overflow:auto}
+.course-big-chart svg{display:block;width:100%;height:auto;max-height:76vh}
+.course-big-chart button{position:absolute;right:15px;top:10px;border:1px solid #D5DDD3;background:#F5F5EF;padding:7px 14px;cursor:pointer}
+.course-next-note{font-size:12px;color:#738076}
+body.course-deck:not(.course-reading) .course-unit#methods .atlas,body.course-deck:not(.course-reading) .course-unit#methods .atlas-question{margin:8px 0}
+body.course-deck:not(.course-reading) .course-unit#methods .atlas-columns{gap:14px}
+body.course-deck:not(.course-reading) .course-unit#methods .atlas-techniques{margin:9px 0}
+body.course-deck:not(.course-reading) .course-unit#methods .course-index{margin-top:10px}
+body.course-deck:not(.course-reading) .course-unit#studio .studio{margin-top:12px}
+body.course-deck:not(.course-reading) .course-unit#studio .studio-heading{padding:8px 18px}
+body.course-deck:not(.course-reading) .course-unit#studio .figure-area{padding:0 14px}
+body.course-deck:not(.course-reading) .course-unit#studio .figure-area svg{max-height:clamp(195px,37vh,310px)}
+body.course-deck:not(.course-reading) .course-unit#studio .path-layout>div{padding:9px 14px}
+body.course-deck:not(.course-reading) .course-unit#studio .studio-bar{min-height:40px}
+body.course-deck:not(.course-reading) .course-unit#studio .mode{padding:9px 12px}
+body.course-deck:not(.course-reading) .course-unit#studio .figure-legend{padding:5px 18px;font-size:12px}
+body.course-deck:not(.course-reading) .course-unit#studio .control-line{padding:7px 15px}
+body.course-deck:not(.course-reading) .course-unit#studio .source-footer{padding:8px 16px}
+body.course-deck:not(.course-reading) .course-unit#colliderlab .collider-demo{margin-top:10px}
+body.course-deck:not(.course-reading) .course-unit#colliderlab .scatter-wrap svg{max-height:clamp(200px,40vh,320px)}
+body.course-deck:not(.course-reading) .course-unit#frontier .frontier-lines article{padding:10px 13px}
+@keyframes cdScene{from{opacity:.3;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:850px){
+ body.course-deck:not(.course-reading) .main{padding:0 16px!important}
+ body.course-deck:not(.course-reading) .course-unit{padding:34px 2px 16px!important}
+ body.course-deck:not(.course-reading) .course-unit h1{font-size:34px}
+ body.course-deck:not(.course-reading) .course-unit h2{font-size:25px}
+ body.course-deck:not(.course-reading) .course-controls{grid-template-columns:105px 1fr 105px;gap:6px;min-height:70px;padding:8px 2px}
+ .course-prev,.course-next{font-size:12px;min-height:40px;padding:5px}
+ .course-status{font-size:11px}
+ .course-tick{width:11px}
+ .course-tools{right:13px;top:7px;gap:4px}.course-tools button{font-size:11px;padding:5px 8px}
+ body.course-deck:not(.course-reading) .course-unit p:not(.mini):not(.micro):not(.note):not(.small-note):not(.subtle-foot):not(.source-footer):not(.fine-print):not(.case-hint){font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){body.course-deck:not(.course-reading) .course-unit.course-active{animation:none}}
+@media print{body.course-deck{overflow:visible!important}body.course-deck .main,body.course-deck .shell,body.course-deck .app-shell{height:auto!important;overflow:visible!important}body.course-deck .course-controls,.course-tools{display:none!important}body.course-deck .course-unit{display:block!important;overflow:visible!important}body.course-deck [data-course-hidden],body.course-deck [data-course-subhidden]{display:block!important}}
+
+body.course-deck:not(.course-reading) #dag .dag-studio>h3{display:none}
+body.course-deck:not(.course-reading) #dag .dag-stage{min-height:225px}
+body.course-deck:not(.course-reading) #dag .dag-stage svg{height:205px}
+body.course-deck:not(.course-reading) #dag .dag-modes{margin:6px 0 9px}
+body.course-deck:not(.course-reading) #dag .dag-explain{padding:9px 13px}
+body.course-deck:not(.course-reading) #dag .dag-explain p{font-size:15px;line-height:1.5;margin:4px 0}
+body.course-deck:not(.course-reading) #practice .case-header,body.course-deck:not(.course-reading) #study .paper-header{display:none}
+body.course-deck:not(.course-reading) #practice .case-contents,body.course-deck:not(.course-reading) #study .case-pages{padding:10px 15px}
+body.course-deck:not(.course-reading) #practice .case-bottom,body.course-deck:not(.course-reading) #study .case-next{display:none}
+body.course-deck:not(.course-reading) #practice .case-assump-row{padding:11px 15px}
+body.course-deck:not(.course-reading) #practice .case-sim-chart{max-height:205px}
+body.course-deck:not(.course-reading) #study .paper-graph-wrapper svg,body.course-deck:not(.course-reading) #study .case-page svg{max-height:230px}
+body.course-deck:not(.course-reading) #study .sim-inputs{margin:8px 0}
+body.course-deck:not(.course-reading) #studio .figure-area svg{max-height:clamp(200px,36vh,290px)}
+body.course-deck:not(.course-reading) #studio .studio-bar{height:40px}
+body.course-deck:not(.course-reading) #studio .source-footer{padding:8px 12px}
+body.course-deck:not(.course-reading) #bias .panel .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+body.course-deck:not(.course-reading) #methods .atlas-branch{padding:8px 11px}
+body.course-deck:not(.course-reading) #methods .atlas-branch article{padding:8px 11px}
+body.course-deck:not(.course-reading) #methods .atlas-branch p{font-size:14px!important;line-height:1.5}
+body.course-deck:not(.course-reading) #methods .atlas-question{padding:10px 16px}
+body.course-deck:not(.course-reading) #workflow .code-frame{max-height:45vh;overflow:auto}
+body.course-deck:not(.course-reading) .course-unit{padding-top:22px!important;padding-bottom:10px!important}
+body.course-deck:not(.course-reading) .course-unit.course-continuation>h2{display:none}
+body.course-deck:not(.course-reading) .course-unit.course-continuation>h1{display:none}
+body.course-deck:not(.course-reading) .course-unit.course-continuation>.sectionno,body.course-deck:not(.course-reading) .course-unit.course-continuation>.section-label{display:none}
+body.course-deck:not(.course-reading) #methods .atlas-columns:has(>.atlas-branch[data-course-subhidden="true"]){display:block}
+body.course-deck:not(.course-reading) #methods .atlas-columns .atlas-branch{margin:0}
+body.course-deck:not(.course-reading) #practice .case-page-heading{margin-bottom:10px}
+body.course-deck:not(.course-reading) #practice .case-page-heading h3{font-size:22px;margin:2px 0 5px}
+body.course-deck:not(.course-reading) #practice .case-page-heading>p:last-child{font-size:15px;line-height:1.5}
+body.course-deck:not(.course-reading) #practice .case-figure-scroller svg{max-height:255px}
+body.course-deck:not(.course-reading) #random .panel{display:grid;grid-template-columns:minmax(240px,0.8fr) minmax(300px,1.2fr);gap:8px 22px}
+body.course-deck:not(.course-reading) #random .panel .buttonrow{grid-column:1;grid-row:1}
+body.course-deck:not(.course-reading) #random .panel .grid{grid-column:1;grid-row:2;grid-template-columns:1fr}
+body.course-deck:not(.course-reading) #random .panel .viz{grid-column:2;grid-row:1 / 4;max-height:320px;align-self:center}
+body.course-deck:not(.course-reading) #random .panel .note{grid-column:1;grid-row:3}
+body.course-deck:not(.course-reading) #studio .path-layout{grid-template-columns:1fr 1fr}
+body.course-deck:not(.course-reading) #studio .path-layout>div{padding:9px 14px}
+body.course-deck:not(.course-reading) #studio .figure-area svg{max-height:clamp(190px,33vh,260px)}
+body.course-deck:not(.course-reading) #studio .studio-heading{padding:5px 14px}
+body.course-deck:not(.course-reading) #studio .control-line{padding:5px 14px}
+body.course-deck:not(.course-reading) #study .case-page h4{font-size:23px}
+body.course-deck:not(.course-reading) #sources .course-list{margin:8px 0}
+
+</style><script>window.__courseReplaceStateSafe__=function(){try{return history.replaceState.apply(history,arguments)}catch(e){return null}};</script></head>
+<body>
+<div class="progress" id="readProgress"></div>
+<div class="app-shell">
+<aside class="side">
+<div class="brand-kicker">CAUSAL STUDIES · 02/12</div><div class="brand"><span>因果研究方法</span><small>Research Methods Series</small></div>
+<p class="side-kicker">本讲目录</p>
+<nav aria-label="本讲章节" id="localNav">
+<a href="#intro">01　DAG为什么重要</a>
+<a href="#alphabet">02　节点、箭头与路径</a>
+<a href="#studio">03　DAG路径实验室</a>
+<a href="#rules">04　d-separation与后门</a>
+<a href="#colliderlab">05　对撞偏差数值实验</a>
+<a href="#adjustment">06　最小充分调整集</a>
+<a href="#study">07　AJPS顶刊研究拆解</a>
+<a href="#workflow">08　Stata / R与研究实践</a>
+<a href="#frontier">09　前沿与方法边界</a>
+<a href="#quiz">10　知识检测</a>
+<a href="#sources">资料来源与后续课程</a>
+</nav>
+<div class="side-footer"><div class="side-caption">本讲要回答</div><p>为什么有些变量必须控制，而另一些变量不能随便控制？</p><a href="#course">查看12讲课程目录 ↗</a></div>
+</aside>
+<main class="main">
+<header class="hero course-unit" id="intro"><div class="eyebrow" data-course-part="0">LECTURE 02 <span class="sep">/</span> CAUSAL STRUCTURE</div><h1 data-course-part="1">有向无环图<br/><em>与因果结构</em></h1><div class="course-chapter-meta">02 / 12 · INTRO</div><p class="hero-lead" data-course-part="2">控制变量越多，因果估计就越准确吗？</p><p class="intro-copy" data-course-part="3">DAG（Directed Acyclic Graph）最重要的作用，不是画出一张漂亮的关系图，而是帮助我们判断：<strong>变量之间有哪些路径，哪些会产生偏差，哪些调整反而会破坏识别。</strong></p><div class="hero-meta" data-course-part="4"><span>教材基础 · 《因果推断》第三章</span><span>核心工具 · d-separation</span><span>研究案例 · AJPS 2018</span></div></header>
+<section class="section course-unit" id="alphabet"><div class="section-label" data-course-part="0">01 / READ THE GRAPH</div><h2 data-course-part="1">先学会读图，再讨论回归</h2><div class="course-chapter-meta">02 / 12 · ALPHABET</div><p class="prose" data-course-part="2">DAG由<strong>节点</strong>与<strong>有向箭头</strong>组成：一个节点代表一个变量，箭头 A → B 表示研究者假设 A 对 B 有直接因果影响。<em>无环</em>意味着沿箭头不能从某个节点再回到自己；有反馈的真实过程通常需要明确时间顺序后才能画成DAG。</p>
+<div class="definition-strip" data-course-part="3"><div><span>节点</span><strong>D、Y、X …</strong><p>分别表示处理、结果、其他因素。</p></div><div><span>箭头</span><strong>A → B</strong><p>直接因果假设，不等于数据相关。</p></div><div><span>路径</span><strong>D ← X → Y</strong><p>沿边连接D和Y，不要求都顺箭头。</p></div></div>
+<div class="note-line" data-course-part="4"><b>三个需要永远区分的概念：</b>因果路径（作用如何传递）、非因果路径（可能制造关联）、调整集（选择哪些变量进行条件化）。DAG反映理论与设计假设，并非用相关系数自动生成的事实。</div></section>
+<section class="section course-unit" id="studio"><div class="section-label" data-course-part="0">02 / INTERACTIVE GRAPH STUDIO</div><h2 data-course-part="1">一张图，理解控制变量的全部直觉</h2><div class="course-chapter-meta">02 / 12 · STUDIO</div><p class="prose" data-course-part="2">先切换因果结构，再点击变量进行“控制”。图下会<strong>逐条检查 D 与 Y 之间的路径</strong>，解释是开放还是关闭。建议先看混杂，再看中介，最后看对撞及其后代。</p>
+<div class="studio" data-course-part="3" id="dagStudio">
+<div aria-label="切换因果结构" class="studio-bar" role="group"><button class="mode active" data-graph="fork" type="button">混杂</button><button class="mode" data-graph="chain" type="button">中介</button><button class="mode" data-graph="collider" type="button">对撞</button><button class="mode" data-graph="descendant" type="button">对撞后代</button><button class="mode" data-graph="combined" type="button">综合练习</button></div>
+<div class="studio-heading"><div><div class="eyebrow-small" id="graphIndex">STRUCTURE 01 / 05</div><h3 id="graphTitle">混杂：一条开放的后门路径</h3></div><span class="tag-outline">可交互示意图</span></div>
+<div class="figure-area"><svg aria-label="可控制变量的交互式因果有向无环图" id="graphSvg" role="img" viewbox="0 0 900 405"><defs><marker id="arrowGreen" markerheight="8" markerwidth="8" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0 0 L10 5 L0 10Z" fill="#285B52"></path></marker><marker id="arrowOchre" markerheight="8" markerwidth="8" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0 0 L10 5 L0 10Z" fill="#A87340"></path></marker></defs><g id="graphDrawing"></g></svg></div><p class="mobile-figure-hint">← 左右滑动可查看完整的DAG →</p>
+<div class="figure-legend"><span><i class="leg-line green"></i>因果路径</span><span><i class="leg-line ochre"></i>待判断的其他路径</span><span><i class="leg-node"></i>已条件化的变量</span></div>
+<div class="control-line"><div class="control-title">点击控制变量</div><div class="variable-buttons" id="adjustButtons"></div><button class="inline-btn" id="clearAdjust" type="button">清除控制</button></div>
+<div class="path-layout"><div><div class="panel-subtitle">路径逐条检验</div><div aria-live="polite" class="path-list" id="pathResults"></div></div><div class="analysis-result"><span>现在的判断</span><strong id="graphConclusion">—</strong><p id="graphReason"></p><button class="underlink" id="showOptimal" type="button">试试建议的调整集 →</button></div></div>
+<div class="source-footer">逻辑引自教材第三章关于后门路径、对撞因子偏差与控制变量的讨论（扫描本第2—10页，书页约98—108）。节点和例子为重新绘制的教学简化模型。</div>
+</div></section>
+<section class="section course-unit" id="rules"><div class="section-label" data-course-part="0">03 / FORMAL LOGIC</div><h2 data-course-part="1">路径什么时候算被阻断？</h2><div class="course-chapter-meta">02 / 12 · RULES</div><p class="prose" data-course-part="2">核心规则叫 <strong>d-separation（d-分离）</strong>。对给定的条件变量集合 Z，如果两节点之间每一条路径都被阻断，那么二者在DAG中被Z d-分离。在常见的因果图马尔可夫假设下，它对应条件独立的图形蕴含。</p>
+<div class="rule-rows" data-course-part="3"><article><span class="rule-id">A</span><div><h3>链式：D → M → Y</h3><p>如果对中间的<strong>非对撞节点 M</strong> 条件化，路径关闭。但如果M本来传递因果效应，这会改变想估计的总效应。</p></div><div class="rule-tag">控制 M → 关闭</div></article><article><span class="rule-id">B</span><div><h3>叉式：D ← X → Y</h3><p>X同时影响处理与结果，是典型的混杂结构。控制<strong>共同原因 X</strong>可以关闭这条非因果后门路径。</p></div><div class="rule-tag">控制 X → 关闭</div></article><article><span class="rule-id">C</span><div><h3>对撞：D → C ← Y</h3><p>路径默认关闭；但<strong>控制 C 或其后代 S</strong>可能打开路径，让D与Y产生原本没有的关联。</p></div><div class="rule-tag">控制 C/S → 打开</div></article></div>
+<div class="formula-note" data-course-part="4"><b>后门准则，直观版本</b><div class="formula">对 D → Y 的总效应：阻断所有由箭头指向 D 开始的后门路径，<br/>同时不要控制 D 的相关后代（尤其是中介）。</div><p>这是常见情形的简化表述；复杂图需要更一般的调整准则。更重要的是：<strong>控制变量必须先理解因果结构，再选择统计模型。</strong></p></div></section>
+<section class="section course-unit" id="colliderlab"><div class="section-label" data-course-part="0">04 / NUMERICAL EXPERIMENT</div><h2 data-course-part="1">对撞偏差可以凭空制造相关</h2><div class="course-chapter-meta">02 / 12 · COLLIDERLAB</div><p class="prose" data-course-part="2">设 D 与 Y 原本独立，同时影响入选指标 C：<strong>D → C ← Y</strong>。当研究者只分析 C 在特定范围内的样本，就等于对 C 条件化，可能出现显著的相关关系。</p>
+<div class="collider-demo" data-course-part="3"><div class="collider-controls"><div class="choice-line"><button class="choice active" id="colliderAll" type="button">查看全部样本</button><button class="choice" id="colliderSelected" type="button">仅看 C 接近 0 的样本</button></div><label class="range-label" for="colliderWidth">入选条件宽度 <strong id="colliderWidthVal">±0.60</strong></label><input id="colliderWidth" max="1.8" min="0.15" step="0.05" type="range" value="0.60"/><div class="collider-metrics"><div><small>样本量</small><strong id="colliderN">—</strong></div><div><small>D与Y相关系数</small><strong id="colliderCorr">—</strong></div></div><p aria-live="polite" class="collider-comment" id="colliderText"></p></div><div class="scatter-wrap"><svg aria-label="独立变量D和Y的散点图，条件化对撞因子后产生相关" id="colliderScatter" role="img" viewbox="0 0 550 335"></svg><p class="micro">模拟生成：D、Y相互独立；C = D + Y + 噪声。选中的样本不是论文数据。</p></div></div></section>
+<section class="section course-unit" id="adjustment"><div class="section-label" data-course-part="0">05 / ADJUSTMENT SET</div><h2 data-course-part="1">最小充分调整集：不是变量越多越好</h2><div class="course-chapter-meta">02 / 12 · ADJUSTMENT</div><p class="prose" data-course-part="2">识别一个<strong>总因果效应</strong>时，我们希望找到足以阻断非因果路径、又不会破坏目标因果路径的变量集合；满足条件的集合可能不止一个，也不一定可以从数据中直接判断。下面这张表把最常见的错误放在一起。</p>
+<div class="simple-table-wrap" data-course-part="3"><table><thead><tr><th>变量角色</th><th>示例结构</th><th>控制后可能发生什么</th><th>针对总效应</th></tr></thead><tbody><tr><td>混杂变量 X</td><td>D ← X → Y</td><td>阻断后门路径</td><td><span class="status good">通常应调整</span></td></tr><tr><td>中介变量 M</td><td>D → M → Y</td><td>截断间接因果路径</td><td><span class="status caution">一般不应调整</span></td></tr><tr><td>对撞因子 C</td><td>D → C ← Y</td><td>打开本来关闭的路径</td><td><span class="status caution">一般不应调整</span></td></tr><tr><td>对撞因子后代 S</td><td>D → C ← Y；C → S</td><td>可能间接打开对撞路径</td><td><span class="status caution">一般不应调整</span></td></tr></tbody></table></div>
+<div class="note-line" data-course-part="4"><strong>教材中的代表性警告：</strong>控制职业后，性别工资差异的回归系数可能反向；不能由此直接宣称“歧视消失”或“出现反向歧视”。职业可能同时受到性别、能力等因素影响，其因果角色必须讨论（第三章书页约106—110）。</div></section>
+<section class="section course-unit" id="study"><div class="section-label" data-course-part="0">06 / RESEARCH NOTE · AJPS 2018</div><h2 data-course-part="1">将DAG用在真实政治学顶刊研究中</h2><div class="course-chapter-meta">02 / 12 · STUDY</div><p class="prose" data-course-part="2">这里选用 Colantone 与 Stanig（2018）在 <em>American Journal of Political Science</em> 发表的贸易冲击与选举研究。阅读时请区分两层：<strong>论文实际采取的研究设计</strong>，以及本讲为练习变量角色而绘制的<strong>教学DAG</strong>。</p>
+<div class="paper-case" data-course-part="3" id="paperCase"><header class="paper-header"><div class="paper-caps">AMERICAN JOURNAL OF POLITICAL SCIENCE · 62(4) · 2018</div><h3>The Trade Origins of Economic Nationalism: Import Competition and Voting Behavior in Western Europe</h3><p>Italo Colantone &amp; Piero Stanig　·　<a href="https://doi.org/10.1111/ajps.12358" rel="noopener noreferrer" target="_blank">论文页面 ↗</a></p></header>
+<div aria-label="顶刊研究拆解" class="case-tabs" role="tablist"><button aria-controls="case-result" aria-selected="true" class="case-tab active" data-tab="result" id="tab-result" role="tab" tabindex="0"><small>01</small>论文发现</button><button aria-controls="case-design" aria-selected="false" class="case-tab" data-tab="design" id="tab-design" role="tab" tabindex="-1"><small>02</small>研究流程</button><button aria-controls="case-model" aria-selected="false" class="case-tab" data-tab="model" id="tab-model" role="tab" tabindex="-1"><small>03</small>因果图 DAG</button><button aria-controls="case-assume" aria-selected="false" class="case-tab" data-tab="assume" id="tab-assume" role="tab" tabindex="-1"><small>04</small>识别假设</button><button aria-controls="case-est" aria-selected="false" class="case-tab" data-tab="est" id="tab-est" role="tab" tabindex="-1"><small>05</small>目标参数</button><button aria-controls="case-sim" aria-selected="false" class="case-tab" data-tab="sim" id="tab-sim" role="tab" tabindex="-1"><small>06</small>交互模拟</button></div>
+<div class="case-pages">
+<section aria-labelledby="tab-result" class="case-page" id="case-result" role="tabpanel" tabindex="0"><div class="inner-label">ACTUAL ARTICLE / 论文事实</div><h4>贸易冲击是否改变了政治选择？</h4><p>论文研究<strong>1988—2007年、15个西欧国家</strong>，结合选区层面的官方选举结果与个体投票数据，通过地区历史产业专业化构造对中国进口竞争的暴露程度，并使用中国对美国出口所对应的进口冲击作为工具变量来源。</p><div class="paper-points"><div><strong>研究对象</strong><p>地区与个人层面的选举行为</p></div><div><strong>处理 / 暴露</strong><p>地区受到的中国进口竞争冲击</p></div><div><strong>结果</strong><p>民族主义、孤立主义及激进右翼支持等</p></div></div><div class="paper-claim"><strong>论文报告</strong><p>进口竞争暴露较强的地区，对民族主义和孤立主义政党的支持增加，激进右翼支持增加，整体选民偏右；作者也报告了个体投票数据的一致证据。</p></div><p class="fine-print">以上为期刊摘要支持的研究描述；未在此虚构具体回归系数。参考 <a href="https://doi.org/10.1111/ajps.12358" rel="noopener" target="_blank">AJPS 原文摘要</a>。</p></section>
+<section aria-labelledby="tab-design" class="case-page" hidden="" id="case-design" role="tabpanel" tabindex="0"><div class="inner-label">RESEARCH DESIGN / 原论文识别思路</div><h4>怎样从全球贸易变化走向地方选举结果？</h4><div class="flow-steps"><div><span>01</span><strong>历史产业结构</strong><small>各地区既有的工业专业化程度</small></div><div><span>02</span><strong>地区进口暴露</strong><small>结合行业冲击构造本地冲击程度</small></div><div><span>03</span><strong>工具变量策略</strong><small>利用中国对美国出口相关的进口变化提供外部来源</small></div><div><span>04</span><strong>政治结果</strong><small>地区投票结果与个体投票选择</small></div></div><p class="subtle-foot">这是阅读流程的教学重构，而非论文原图。工具变量有效性依赖实质性假设，并非“使用其他国家的进口变化”就自动成立。</p></section>
+<section aria-labelledby="tab-model" class="case-page" hidden="" id="case-model" role="tabpanel" tabindex="0"><div class="inner-label">DAG RECONSTRUCTION / 本讲教学图</div><h4>看见结构差异：混杂、中介与工具变量</h4><div class="paper-graph-wrapper"><svg aria-label="贸易冲击与投票结果的简化教学DAG" id="paperDag" role="img" viewbox="0 0 860 335"></svg></div><label class="toggle-label"><input id="ivViolation" type="checkbox"/> 假设工具变量 Z 还会直接影响投票 Y（违反排除限制）</label><p aria-live="polite" class="case-feedback" id="paperDagInfo"></p><p class="fine-print">图形仅用于演示：X=地区处理前特征，Z=工具变量，D=进口冲击暴露，M=可能的就业与经济机制，Y=投票结果。<strong>不是作者原图，也不声称中介机制已被独立识别。</strong></p></section>
+<section aria-labelledby="tab-assume" class="case-page" hidden="" id="case-assume" role="tabpanel" tabindex="0"><div class="inner-label">IDENTIFICATION / 因果解释的条件</div><h4>能画出DAG，还需要证明哪些假设？</h4><div class="assumption-rows"><div><b>01</b><strong>变量的时间顺序</strong><p>地区既有产业结构应在研究暴露之前确定；处理后的就业结果不能机械作为总效应的控制变量。</p></div><div><b>02</b><strong>可观测与未观测混杂</strong><p>地区历史条件可能共同影响进口暴露与投票。控制可观测X无法保证全部后门路径被关闭。</p></div><div><b>03</b><strong>IV相关性与排除限制</strong><p>工具Z必须能够预测D；且Z对Y不能通过D以外的路径产生作用。</p></div><div><b>04</b><strong>外生性与可推广性</strong><p>工具变量与影响Y的未观测因素应独立；所得局部效应是否适用于其他地区和时期需另行讨论。</p></div></div></section>
+<section aria-labelledby="tab-est" class="case-page" hidden="" id="case-est" role="tabpanel" tabindex="0"><div class="inner-label">ESTIMAND / 简化模型</div><h4>同一个DAG会改变你解释的系数</h4><div class="equations"><div><span>目标</span><div>进口竞争 D 对政治结果 Y 的<strong>总因果效应</strong></div></div><div><span>调整思路</span><div>利用先于处理的X阻断混杂路径；不在总效应回归中机械控制中介M。</div></div><div><span>简化IV表达式</span><div class="equation">β<sub>IV</sub> = Cov(Z, Y) / Cov(Z, D)</div><small>仅在单工具、无其他协变量的简化线性设定下成立。真实论文的估计模型更复杂。</small></div></div><div class="paper-claim"><b>关键区别</b><p>“找到一个与处理高度相关的变量”不等于找到有效工具变量。只要Z还有一条绕开D通往Y的路径，上式就可能不再识别所需因果效应。</p></div></section>
+<section aria-labelledby="tab-sim" class="case-page" hidden="" id="case-sim" role="tabpanel" tabindex="0"><div class="inner-label">INTERACTIVE / 教学模拟，非论文原始数据</div><h4>动手制造遗漏变量与无效工具变量</h4><p class="case-hint">调整四个参数，观察朴素OLS与简化IV估计怎样偏离真实效应。模型：D=aZ+bU，Y=βD+cU+δZ+ε，其中Z与U独立。</p><div class="sim-inputs"><label>真实效应 β <strong id="paperBetaVal">1.50</strong><input id="paperBeta" max="3" min="-3" step="0.25" type="range" value="1.5"/></label><label>混杂强度 b×c <strong id="paperConfVal">1.60</strong><input id="paperConf" max="3" min="0" step="0.2" type="range" value="1.6"/></label><label>工具变量第一阶段 a <strong id="paperFirstVal">1.50</strong><input id="paperFirst" max="3" min="0.2" step="0.1" type="range" value="1.5"/></label><label>Z→Y 的直接效应 δ <strong id="paperDirectVal">0.00</strong><input id="paperDirect" max="2" min="-2" step="0.2" type="range" value="0"/></label></div><div class="estimate-grid"><div><span>真实 β</span><strong id="paperTrue">1.50</strong></div><div><span>朴素 OLS（模型均值）</span><strong id="paperOLS">—</strong></div><div><span>简化 IV（模型均值）</span><strong id="paperIV">—</strong></div></div><svg aria-label="真实效应与OLS和IV估计偏差示意" id="paperEstimateChart" role="img" viewbox="0 0 700 160"></svg><p aria-live="polite" class="case-feedback" id="paperSimComment"></p><p class="fine-print">模拟结果为代数期望示意，不是论文的回归估计、不包含标准误。数值可理解为“结果指标单位/冲击单位”；不直接当作论文中的投票率百分点。</p></section>
+</div><div class="case-next"><span id="paperPageIndex">01 / 06 · 论文发现</span><button id="paperNext" type="button">下一标签 →</button></div></div></section>
+<section class="section course-unit" id="workflow"><div class="section-label" data-course-part="0">07 / FROM GRAPH TO CODE</div><h2 data-course-part="1">把图形判断翻译成 Stata / R</h2><div class="course-chapter-meta">02 / 12 · WORKFLOW</div><p class="prose" data-course-part="2">代码应当服从DAG，而不是相反。下面使用两套<strong>完全独立的人工生成数据</strong>：先展示控制混杂因子的作用，再展示控制对撞因子为什么会引入偏差。代码不涉及AJPS论文原数据。</p>
+<div aria-label="选择代码语言" class="code-tabs" data-course-part="3" role="tablist"><button class="code-choice active" data-lang="stata" type="button">Stata</button><button class="code-choice" data-lang="r" type="button">R</button></div><div class="code-frame" data-course-part="4"><div class="code-top"><span id="codeFile">lesson02_dag.do</span><button id="copyCode" type="button">复制代码</button></div><pre><code id="codeContent"></code></pre></div><p class="subtle-foot" data-course-part="5">实操时关注“调整前后系数为什么变化”，而不是仅看显著性。更复杂的图可以借助 <a href="https://dagitty.net/" rel="noopener noreferrer" target="_blank">DAGitty</a> 检查候选调整集。</p></section>
+<section class="section course-unit" id="frontier"><div class="section-label" data-course-part="0">08 / RECENT DEVELOPMENTS</div><h2 data-course-part="1">2024—2025：DAG研究推进到哪里？</h2><div class="course-chapter-meta">02 / 12 · FRONTIER</div><div class="frontier-lines" data-course-part="2"><article><span>2024</span><div><h3>从“给定DAG做估计”到“学习DAG结构”</h3><p>Huber（2024）系统介绍因果发现（causal discovery）、马尔可夫等价类、d-separation与图形识别。重点是：数据有时只能排除部分结构，难以唯一决定箭头方向。</p><a href="https://doi.org/10.1186/s41937-024-00131-4" rel="noopener" target="_blank">An introduction to causal discovery ↗</a></div></article><article><span>2025</span><div><h3>从DAG走向潜在结果显式化的SWIG</h3><p>一篇发表于 <em>American Journal of Epidemiology</em> 的实践指南解释如何将潜在结果与图结合，用于讨论干预、识别和g-formula。它是扩展DAG表达能力，而非取代研究设计。</p><a href="https://doi.org/10.1093/aje/kwae353" rel="noopener" target="_blank">Single world intervention graphs: a practical guide ↗</a></div></article><article><span>2025</span><div><h3>因果发现更重视现实应用与假设失效</h3><p>Brouillard 等在 CLeaR 2025 回顾指出，算法常用的玩具数据和理想化假设，与真实研究中的复杂数据仍有距离。机器学习画出的箭头不能被自动视为已证实的因果关系。</p><a href="https://proceedings.mlr.press/v275/brouillard25a.html" rel="noopener" target="_blank">The Landscape of Causal Discovery Data ↗</a></div></article></div></section>
+<section class="section course-unit" id="quiz"><div class="section-label" data-course-part="0">09 / KNOWLEDGE CHECK</div><h2 data-course-part="1">六道问题，检验你是否真正会读DAG</h2><div class="course-chapter-meta">02 / 12 · QUIZ</div><div class="quiz-container" data-course-part="2" id="quizContainer"></div><div class="quiz-score" data-course-part="3" hidden="" id="quizScore"></div></section>
+<section class="section course-unit" id="sources"><div class="section-label" data-course-part="0">10 / SOURCES &amp; CURRICULUM</div><h2 data-course-part="1">资料来源与学习路线</h2><div class="course-chapter-meta">02 / 12 · SOURCES</div><p class="prose" data-course-part="2"><strong>教材依据：</strong>用户上传《因果推断》第三章扫描本，共19页，主要涉及DAG的含义、前门/后门路径、对撞因子与条件化、工资差异、警察使用暴力研究中的选择偏差等。本讲交互图、散点模拟与代码系课程原创教学示意，不是原书复刻。</p><div class="references" data-course-part="3"><p>Colantone, I. &amp; Stanig, P. (2018). “The Trade Origins of Economic Nationalism.” <em>American Journal of Political Science</em>, 62(4), 936–953. <a href="https://doi.org/10.1111/ajps.12358" rel="noopener" target="_blank">DOI ↗</a></p><p>Textor, J. et al. (2016). “Robust causal inference using directed acyclic graphs: the R package ‘dagitty’.” <em>International Journal of Epidemiology</em>. <a href="https://doi.org/10.1093/ije/dyw341" rel="noopener" target="_blank">DOI ↗</a></p><p>Huber, M. (2024). “An introduction to causal discovery.” <em>Swiss Journal of Economics and Statistics</em>. <a href="https://doi.org/10.1186/s41937-024-00131-4" rel="noopener" target="_blank">DOI ↗</a></p><p>Lamb, M. R. et al. (2025). “Single world intervention graphs: a practical guide.” <em>American Journal of Epidemiology</em>. <a href="https://doi.org/10.1093/aje/kwae353" rel="noopener" target="_blank">DOI ↗</a></p><p>Brouillard, P. et al. (2025). “The Landscape of Causal Discovery Data.” <em>Proceedings of Causal Learning and Reasoning</em>. <a href="https://proceedings.mlr.press/v275/brouillard25a.html" rel="noopener" target="_blank">Paper ↗</a></p></div>
+<h3 class="course-heading" data-course-part="4" id="course">完整课程 · 固定12讲</h3><div class="course-list" data-course-part="5" id="courseList"><div><span>01</span>因果推断导论</div><div class="current"><span>02</span>DAG与因果结构</div><div><span>03</span>回归与因果识别</div><div><span>04</span>匹配与倾向得分</div><div><span>05</span>面板数据与固定效应</div><div><span>06</span>双重差分 DID</div><div><span>07</span>断点回归 RDD</div><div><span>08</span>工具变量 IV</div><div><span>09</span>合成控制 SCM</div><div><span>10</span>现代面板因果推断</div><div><span>11</span>因果机器学习</div><div><span>12</span>研究设计与复现</div></div><footer data-course-part="6">CAUSAL STUDIES · LECTURE 02 / 12　　独立HTML可离线运行交互；文献链接需要联网。</footer></section>
+</main></div>
+<script>'use strict';
+const byId=id=>document.getElementById(id);
+const qs=(s,root=document)=>[...root.querySelectorAll(s)];
+const clean=v=>Math.round(v*100)/100;
+const fmt=v=>(Math.abs(v)<0.0000001?0:v).toFixed(2);
+const graphModes={
+ fork:{title:'混杂：一条开放的后门路径',index:1,blurb:'共同原因 X 影响 D 与 Y；控制 X 能阻断非因果路径。',nodes:[{id:'D',x:135,y:250,label:'处理'},{id:'Y',x:765,y:250,label:'结果'},{id:'X',x:450,y:70,label:'共同原因'}],edges:[['X','D'],['X','Y'],['D','Y']],opt:['X'],help:'适当控制处理前的共同原因 X，以关闭 D ← X → Y 的后门路径。'},
+ chain:{title:'中介：控制它会截断因果路径',index:2,blurb:'M传递D对Y的间接因果作用，研究总效应时通常不应控制。',nodes:[{id:'D',x:135,y:216,label:'处理'},{id:'Y',x:765,y:216,label:'结果'},{id:'M',x:450,y:310,label:'中介'}],edges:[['D','M'],['M','Y'],['D','Y']],opt:[],help:'在图示结构下，无需控制第三变量就能保留总效应；控制 M 会屏蔽间接因果路径。'},
+ collider:{title:'对撞：原本关闭的非因果路径',index:3,blurb:'D和Y共同指向C。默认不经C相关；条件化C可能打开一条非因果路径。',nodes:[{id:'D',x:135,y:125,label:'处理'},{id:'Y',x:765,y:125,label:'结果'},{id:'C',x:450,y:285,label:'对撞点'}],edges:[['D','C'],['Y','C']],opt:[],help:'无需控制 C；条件化这个共同结果会让 D 与 Y 产生非因果关联。'},
+ descendant:{title:'对撞后代：控制 S 也可能打开路径',index:4,blurb:'C是对撞因子；S是C的后代。条件化S也可能激活D→C←Y。',nodes:[{id:'D',x:135,y:95,label:'处理'},{id:'Y',x:765,y:95,label:'结果'},{id:'C',x:450,y:237,label:'对撞点'},{id:'S',x:450,y:344,label:'C的后代'}],edges:[['D','C'],['Y','C'],['C','S']],opt:[],help:'C与S都不应被当作消除混杂的控制变量。'},
+ combined:{title:'综合练习：找到最小充分调整集',index:5,blurb:'同时存在混杂、间接效应和对撞路径。逐一试试 X、M、C。',nodes:[{id:'D',x:130,y:235,label:'处理'},{id:'Y',x:774,y:235,label:'结果'},{id:'X',x:360,y:56,label:'混杂因素'},{id:'M',x:448,y:350,label:'中介'},{id:'C',x:600,y:70,label:'对撞点'}],edges:[['X','D'],['X','Y'],['D','M'],['M','Y'],['D','Y'],['D','C'],['Y','C']],opt:['X'],help:'只控制 X：关闭混杂后门路径，同时保留 D→Y 和 D→M→Y；不要为了“控制更多”而加上 M 或 C。'}
+};
+let graphKey='fork', adjusted=new Set();
+function graphEdge(g,from,to){return g.edges.some(([a,b])=>a===from&&b===to)}
+function directedReach(g,from,to){const q=[from],seen=new Set([from]);while(q.length){const u=q.shift();if(u===to)return true;for(const [a,b] of g.edges)if(a===u&&!seen.has(b)){seen.add(b);q.push(b)}}return false}
+function getPaths(g){let out=[];function visit(curr,trail){if(curr==='Y'){out.push(trail);return}for(const [a,b] of g.edges){let next=a===curr?b:b===curr?a:null;if(next&&!trail.includes(next))visit(next,[...trail,next])}}visit('D',['D']);return out}
+function inspectPath(g,trail){const isCausal=trail.every((n,i)=>i===0||graphEdge(g,trail[i-1],n));let blockers=[],openers=[];
+ for(let i=1;i<trail.length-1;i++){let prev=trail[i-1],node=trail[i],next=trail[i+1], collider=graphEdge(g,prev,node)&&graphEdge(g,next,node);
+ if(collider){const trigger=[...adjusted].find(a=>a===node||directedReach(g,node,a));if(trigger)openers.push(`${node} 是对撞点，条件化 ${trigger} 打开它`);else blockers.push(`${node} 是未条件化的对撞点`)}
+ else if(adjusted.has(node))blockers.push(`${node} 是被条件化的非对撞点`)
+ }
+ return {trail,isCausal,open:!blockers.length,reason:blockers.length?blockers.join('；'):openers.length?openers.join('；'):'没有阻断节点'}
+}
+function renderMainGraph(){const g=graphModes[graphKey], nodes=Object.fromEntries(g.nodes.map(x=>[x.id,x]));byId('graphTitle').textContent=g.title;byId('graphIndex').textContent=`STRUCTURE ${String(g.index).padStart(2,'0')} / 05`;
+ qs('[data-graph]').forEach(b=>{let on=b.dataset.graph===graphKey;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});
+ let s='';for(const [a,b] of g.edges){const start=nodes[a],end=nodes[b],dx=end.x-start.x,dy=end.y-start.y,len=Math.hypot(dx,dy),r=32;const x1=start.x+dx*r/len,y1=start.y+dy*r/len,x2=end.x-dx*r/len,y2=end.y-dy*r/len;
+  let causal=directedReach(g,'D',a)&&directedReach(g,b,'Y') || a==='D'&& directedReach(g,b,'Y');
+  s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${causal?'#285B52':'#A87340'}" stroke-width="${causal?3.1:2.8}" marker-end="url(#${causal?'arrowGreen':'arrowOchre'})"/>`;
+ }
+ for(const node of g.nodes){const sel=adjusted.has(node.id);s+=`<circle cx="${node.x}" cy="${node.y}" r="29" fill="${node.id==='Y'?'#F3EDDF':node.id==='D'?'#E6EEE7':'#F1F2ED'}" stroke="${sel?'#285B52':'#92A79A'}" stroke-width="${sel?5:1.8}"/><text x="${node.x}" y="${node.y+6}" font-size="22" fill="#2D4637" text-anchor="middle" font-family="Georgia" font-weight="600">${node.id}</text><text x="${node.x}" y="${node.y+56}" font-size="14" fill="#63736A" text-anchor="middle">${node.label}</text>${sel?`<text x="${node.x+35}" y="${node.y-26}" fill="#285B52" font-size="12">已控制</text>`:''}`}
+ byId('graphDrawing').innerHTML=s;
+ const btns=g.nodes.filter(n=>!['D','Y'].includes(n.id));byId('adjustButtons').innerHTML=btns.length?btns.map(n=>`<button type="button" data-adjust="${n.id}" class="variable-btn ${adjusted.has(n.id)?'on':''}" aria-pressed="${adjusted.has(n.id)}">${n.id} ${n.label}</button>`).join(''):'<span>当前无需第三个变量</span>';
+ qs('[data-adjust]').forEach(b=>b.addEventListener('click',()=>{let n=b.dataset.adjust;if(adjusted.has(n))adjusted.delete(n);else adjusted.add(n);renderMainGraph()}));
+ const results=getPaths(g).map(p=>inspectPath(g,p)), openNon=results.filter(p=>!p.isCausal&&p.open),closedCausal=results.filter(p=>p.isCausal&&!p.open);
+ const symbols=r=>r.trail.map((n,i)=>i===0?n:graphEdge(g,r.trail[i-1],n)?'→ '+n:'← '+n).join(' ');
+ byId('pathResults').innerHTML=results.map((r,i)=>`<div class="path-item"><span class="path-symbol">${symbols(r)}</span><span class="path-status ${r.open?'':'closed'}">${r.isCausal?'因果路径':'非因果路径'} · ${r.open?'开放':'关闭'}</span><div class="path-expl">${r.reason}</div></div>`).join('');
+ let headline,explain;if(openNon.length){headline=`还有 ${openNon.length} 条非因果路径开放`;explain='直接比较仍可能出现偏差。检查是否控制了混杂因素，或者错误打开了对撞因子。'}else if(closedCausal.length){headline='非因果路径已关，但因果路径受阻';explain='如果目标是总效应，这个调整策略可能移除了部分真实作用。'}else{headline='非因果路径已关闭';explain='在这张简化图及相关识别假设下，路径条件符合总效应调整的直觉；图形本身不证明没有遗漏变量。'}
+ byId('graphConclusion').textContent=headline;byId('graphReason').textContent=explain+' '+g.help;
+}
+qs('[data-graph]').forEach(b=>b.addEventListener('click',()=>{graphKey=b.dataset.graph;adjusted=new Set();renderMainGraph()}));
+byId('clearAdjust').addEventListener('click',()=>{adjusted=new Set();renderMainGraph()});byId('showOptimal').addEventListener('click',()=>{adjusted=new Set(graphModes[graphKey].opt);renderMainGraph()});renderMainGraph();
+
+// Fixed, reproducible simulated data for collider selection.
+let seed=1988;const rand=()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296};function normal(){let u=Math.max(rand(),1e-7),v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const colliderData=Array.from({length:950},()=>{const d=normal(),y=normal(),c=d+y+normal()*.55;return {d,y,c}});let colliderSelection=false;
+function corr(pts){const n=pts.length;if(n<2)return NaN;let mx=pts.reduce((s,v)=>s+v.d,0)/n,my=pts.reduce((s,v)=>s+v.y,0)/n;let xy=0,xx=0,yy=0;for(let p of pts){let x=p.d-mx,y=p.y-my;xy+=x*y;xx+=x*x;yy+=y*y}return xy/Math.sqrt(xx*yy)}
+function renderCollider(){let w=+byId('colliderWidth').value;byId('colliderWidthVal').textContent='±'+w.toFixed(2);qs('.choice').forEach(b=>b.classList.toggle('active',b.id===(colliderSelection?'colliderSelected':'colliderAll')));
+ const pts=colliderSelection?colliderData.filter(p=>Math.abs(p.c)<=w):colliderData;byId('colliderN').textContent=pts.length.toString();let r=corr(pts);byId('colliderCorr').textContent=Number.isFinite(r)?r.toFixed(2):'—';
+ let out='<line x1="54" y1="160" x2="528" y2="160" stroke="#B6C3B8"/><line x1="290" y1="18" x2="290" y2="302" stroke="#B6C3B8"/>';
+ out+='<text x="505" y="179" fill="#6C7B70" font-size="13">D</text><text x="301" y="28" fill="#6C7B70" font-size="13">Y</text>';
+ for(const p of pts){let x=290+p.d*65,y=160-p.y*57;if(x<56||x>527||y<18||y>303)continue;out+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.25" fill="${colliderSelection?'#A87340':'#285B52'}" opacity=".52"/>`}
+ byId('colliderScatter').innerHTML=out;
+ byId('colliderText').textContent=colliderSelection?'只保留 C 接近 0 的样本后，D 越大，Y 通常需要越小才能同时符合入选条件。由此出现负相关，即使两者在总体中完全独立。':'使用完整样本时，D 与 Y 是独立生成的，相关系数接近零。切换为“按 C 筛选样本”，观察关联如何出现。';
+}
+byId('colliderAll').addEventListener('click',()=>{colliderSelection=false;renderCollider()});byId('colliderSelected').addEventListener('click',()=>{colliderSelection=true;renderCollider()});byId('colliderWidth').addEventListener('input',renderCollider);renderCollider();
+
+// AJPS paper tabs and teaching DAG.
+const tabNames={result:'论文发现',design:'研究流程',model:'因果图 DAG',assume:'识别假设',est:'目标参数',sim:'交互模拟'};let paperTab='result';const tabOrder=Object.keys(tabNames);
+function activateTab(key,focus=false){paperTab=key;qs('[data-tab]').forEach(btn=>{let on=btn.dataset.tab===key;btn.classList.toggle('active',on);btn.setAttribute('aria-selected',String(on));btn.tabIndex=on?0:-1;if(on&&focus)btn.focus()});qs('.case-page',byId('paperCase')).forEach(p=>p.hidden=p.id!=='case-'+key);byId('paperPageIndex').textContent=`${String(tabOrder.indexOf(key)+1).padStart(2,'0')} / 06 · ${tabNames[key]}`;byId('paperNext').textContent=key==='sim'?'返回论文发现 ↺':'下一标签 →'}
+qs('[data-tab]').forEach(btn=>{btn.addEventListener('click',()=>activateTab(btn.dataset.tab));btn.addEventListener('keydown',e=>{let curr=tabOrder.indexOf(btn.dataset.tab);if(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='Home'||e.key==='End'){e.preventDefault();let i=e.key==='Home'?0:e.key==='End'?tabOrder.length-1:(curr+(e.key==='ArrowRight'?1:-1)+tabOrder.length)%tabOrder.length;activateTab(tabOrder[i],true)}})});byId('paperNext').addEventListener('click',()=>activateTab(tabOrder[(tabOrder.indexOf(paperTab)+1)%tabOrder.length]));activateTab('result');
+function drawPaperDAG(){const violated=byId('ivViolation').checked;let s='';const nd={Z:[105,176,'IV来源'],X:[325,55,'既有地区条件'],D:[365,176,'进口冲击'],M:[585,273,'就业等机制'],Y:[755,176,'政治结果']};const edges=[['Z','D',1],['X','D',0],['X','Y',0],['D','Y',1],['D','M',1],['M','Y',1]];if(violated)edges.push(['Z','Y',0]);
+ s+='<defs><marker id="paGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#285B52"/></marker><marker id="paGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#A87340"/></marker></defs>';
+ for(const [a,b,isG] of edges){const [x1,y1]=nd[a],[x2,y2]=nd[b],dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy),r=35;let ax=x1+dx*r/l,ay=y1+dy*r/l,bx=x2-dx*r/l,by=y2-dy*r/l;let col=isG?'#285B52':'#A87340';if(a==='Z'&&b==='Y')s+=`<path d="M ${ax} ${ay} Q 440 298 ${bx} ${by}" stroke="${col}" fill="none" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#paGold)"/>`;else s+=`<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="${col}" stroke-width="2.8" marker-end="url(#${isG?'paGreen':'paGold'})"/>`}
+ for(const [k,[x,y,t]] of Object.entries(nd)){s+=`<circle cx="${x}" cy="${y}" r="32" stroke="${k==='Y'?'#B6976C':'#88A08E'}" stroke-width="2" fill="${k==='Y'?'#F4EEDF':'#EDF1EA'}"/><text x="${x}" y="${y+7}" font-size="23" fill="#244D3C" text-anchor="middle" font-family="Georgia" font-weight="600">${k}</text><text x="${x}" y="${y+57}" font-size="13" fill="#596D5F" text-anchor="middle">${t}</text>`}
+ byId('paperDag').innerHTML=s;byId('paperDagInfo').textContent=violated?'现在多出 Z → Y 的直接路径。即使Z与未观测混杂因素独立，Wald/IV也可能因排除限制失效而有偏。':'关闭 Z → Y 的直接路径只是表达排除限制的假设，不是证明其真实成立。X仍可能共同影响D与Y，M可能是D作用于Y的中介。';
+}
+byId('ivViolation').addEventListener('change',drawPaperDAG);drawPaperDAG();
+
+// Deterministic population moments from D = a Z + b U and Y = beta D + c U + delta Z + eps.
+function updatePaperSim(){const beta=+byId('paperBeta').value,bc=+byId('paperConf').value,a=+byId('paperFirst').value,delta=+byId('paperDirect').value,b=1.25,c=bc/b;const varD=a*a+b*b;let ols=beta+b*c/varD+delta*a/varD,iv=beta+delta/a;
+ for(const [id,v] of Object.entries({paperBetaVal:beta,paperConfVal:bc,paperFirstVal:a,paperDirectVal:delta,paperTrue:beta,paperOLS:ols,paperIV:iv}))byId(id).textContent=fmt(v);
+ let values=[beta,ols,iv],lim=Math.max(3.4,...values.map(v=>Math.abs(v)+.5)),mid=355,k=285/lim,s=`<line x1="${mid}" y1="12" x2="${mid}" y2="148" stroke="#85998B" stroke-width="1.3"/><text x="${mid+4}" y="15" fill="#7C8B7E" font-size="11">0</text>`;
+ for(let i=0;i<values.length;i++){const v=values[i],x=v<0?mid+v*k:mid,width=Math.abs(v*k),y=27+i*42;s+=`<text x="12" y="${y+18}" font-size="14" fill="#53675A">${['真实效应','朴素OLS','简化IV'][i]}</text><rect x="${x}" y="${y}" height="22" width="${Math.max(width,.8)}" fill="${i===0?'#285B52':i===1?'#A87340':'#62898C'}" opacity=".9"/><text x="${Math.min(650,Math.max(115,mid+v*k+10))}" y="${y+17}" font-size="12" fill="#344F3E">${fmt(v)}</text>`}
+ byId('paperEstimateChart').innerHTML=s;byId('paperSimComment').textContent=Math.abs(delta)>.01?`因为 Z→Y 的直接效应 δ=${fmt(delta)} 不等于0，IV产生偏差：β_IV = β + δ/a = ${fmt(iv)}。工具相关性再强也不能自动修复排除限制。`:`Z→Y 的直接效应设为零，因此简化IV的总体比率等于真实β（${fmt(beta)}）；朴素OLS仍可能受未观测混杂影响。此结果只在模拟假设下成立。`;
+}
+['paperBeta','paperConf','paperFirst','paperDirect'].forEach(id=>byId(id).addEventListener('input',updatePaperSim));updatePaperSim();
+
+const snippets={stata:`* 第02讲：混杂与对撞偏差（人工生成数据）
+clear all
+set seed 2026
+set obs 3000
+
+* A. 混杂：X 同时影响 D 和 Y
+ gen x = rnormal()
+ gen d = 0.8*x + rnormal()
+ gen y = 1.5*d + 1.1*x + rnormal()
+ reg y d             // 未调整：包含混杂偏差
+ reg y d x           // 关闭 D <- X -> Y
+
+* B. 对撞：D 与 Y 原本独立
+ gen d2 = rnormal()
+ gen y2 = rnormal()
+ gen c  = d2 + y2 + rnormal()
+ reg y2 d2           // 通常接近零
+ reg y2 d2 c         // 控制 C，可能出现虚假关联`,r:`# 第02讲：混杂与对撞偏差（人工生成数据）
+set.seed(2026)
+n <- 3000
+
+# A. 混杂：X 同时影响 D 和 Y
+x <- rnorm(n)
+d <- 0.8 * x + rnorm(n)
+y <- 1.5 * d + 1.1 * x + rnorm(n)
+summary(lm(y ~ d))       # 未调整
+summary(lm(y ~ d + x))   # 调整混杂X
+
+# B. 对撞：D2和Y2原本独立
+d2 <- rnorm(n)
+y2 <- rnorm(n)
+c <- d2 + y2 + rnorm(n)
+summary(lm(y2 ~ d2))
+summary(lm(y2 ~ d2 + c))  # 错误控制C`};let lang='stata';function renderCode(){byId('codeContent').textContent=snippets[lang];byId('codeFile').textContent=lang==='stata'?'lesson02_dag.do':'lesson02_dag.R';qs('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))}qs('[data-lang]').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;renderCode()}));byId('copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(snippets[lang]);byId('copyCode').textContent='已复制';setTimeout(()=>byId('copyCode').textContent='复制代码',1200)}catch(e){byId('copyCode').textContent='请选择并手动复制'}});renderCode();
+
+const quiz=[
+ {q:'1. D ← X → Y 中，X 的角色是？',a:['处理变量的后代','D与Y的共同原因','对撞因子'],c:1,why:'X同时影响处理与结果。控制处理前共同原因X可以阻断这条后门路径。'},
+ {q:'2. 在 D → M → Y 中，研究D对Y总效应时，机械控制M会怎样？',a:['可能移除间接因果效应','自动消除所有偏差','必然提高总效应'],c:0,why:'M在因果路径上，条件化M可能改变估计目标，不再是原始总效应。'},
+ {q:'3. 对撞结构 D → C ← Y 中，什么会打开路径？',a:['不控制C','控制C或者其后代','控制任何处理前变量'],c:1,why:'对撞点及其后代被条件化，会激活本来关闭的非因果路径。'},
+ {q:'4. 给定某DAG，所有路径都被阻断时，称为？',a:['多重共线性','d-separation','过度拟合'],c:1,why:'d-分离是图形上的路径阻断关系，可推出相应条件独立蕴含。'},
+ {q:'5. 一个地区的就业变化可能受贸易冲击影响。研究贸易冲击对投票的总效应时应如何处理？',a:['不经思考将就业变化放进控制组','根据因果结构判断它是否是中介','所有变量都不控制'],c:1,why:'如果就业是中介，控制它会改变总效应的含义。'},
+ {q:'6. 有效工具变量 Z 已预测 D，为什么还不能直接断言有因果识别？',a:['还需论证外生性、排除限制等','只要第一阶段显著就够','只要画出DAG就够'],c:0,why:'工具相关性不等于工具有效性；识别依赖不能由显著性自动保证的条件。'}
+];let answers={};byId('quizContainer').innerHTML=quiz.map((it,i)=>`<article class="quiz-card"><h3>${it.q}</h3>${it.a.map((a,j)=>`<button type="button" class="quiz-option" data-q="${i}" data-a="${j}">${'ABC'[j]}. ${a}</button>`).join('')}<div class="quiz-feedback" id="feedback${i}" aria-live="polite"></div></article>`).join('');qs('.quiz-option').forEach(b=>b.addEventListener('click',()=>{let i=+b.dataset.q,j=+b.dataset.a,it=quiz[i];answers[i]=j;qs(`[data-q="${i}"]`).forEach(o=>{o.classList.toggle('selected',+o.dataset.a===j&&j===it.c);o.classList.toggle('wrong',+o.dataset.a===j&&j!==it.c)});byId('feedback'+i).textContent=(j===it.c?'答对了。':'再想一想。')+it.why;let done=Object.keys(answers).length;if(done===quiz.length){byId('quizScore').hidden=false;byId('quizScore').textContent=`本讲测验完成：${quiz.reduce((s,v,k)=>s+(answers[k]===v.c?1:0),0)} / ${quiz.length} 题正确。建议回看没有掌握的路径规则。`}}));
+const sections=qs('.main section[id],.main header[id]');let scheduled=false;function onScroll(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{const scrollMax=document.documentElement.scrollHeight-window.innerHeight;byId('readProgress').style.width=(scrollMax>0?100*window.scrollY/scrollMax:0)+'%';let section=sections.filter(s=>s.getBoundingClientRect().top<160).pop();qs('#localNav a').forEach(a=>a.classList.toggle('active',section&&a.hash==='#'+section.id));scheduled=false})}window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+</script><script>
+/* Presentation deck, content-preserving. Ordinary prose is not animated. */
+(function(){
+'use strict';
+const SPEC={"intro":[{"label":"DAG 解决什么问题？","parts":[0,1,2,3,4]}],"alphabet":[{"label":"节点、箭头与路径","parts":[0,1,2,3,4]}],"studio":[{"label":"混杂：观察因果图","parts":[0,1,3],"action":{"graph":"fork","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,2,3,4,5]}},{"label":"混杂：判断路径的开闭","parts":[0,1,3],"action":{"graph":"fork","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,5,6,7]}},{"label":"中介：观察因果图","parts":[0,1,2,3],"action":{"graph":"chain","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,2,3,4,5]}},{"label":"中介：判断路径的开闭","parts":[0,1,3],"action":{"graph":"chain","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,5,6,7]}},{"label":"对撞：观察因果图","parts":[0,1,2,3],"action":{"graph":"collider","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,2,3,4,5]}},{"label":"对撞：判断路径的开闭","parts":[0,1,3],"action":{"graph":"collider","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,5,6,7]}},{"label":"对撞后代：观察因果图","parts":[0,1,2,3],"action":{"graph":"descendant","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,2,3,4,5]}},{"label":"对撞后代：判断路径的开闭","parts":[0,1,3],"action":{"graph":"descendant","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,5,6,7]}},{"label":"综合练习：观察因果图","parts":[0,1,2,3],"action":{"graph":"combined","adjust":false},"sub":{"selector":"#dagStudio > *","keep":[0,1,2,3,4,5]}},{"label":"综合练习：判断路径的开闭","parts":[0,1,3],"action":{"graph":"combined","adjust":false},"sub":[{"selector":"#dagStudio > *","keep":[5,6,7]},{"selector":"#dagStudio .path-layout > *","keep":[0]}]},{"label":"综合练习：调整策略与解释","parts":[0,1,3],"action":{"graph":"combined","adjust":false},"sub":[{"selector":"#dagStudio > *","keep":[0,1,5,6,7]},{"selector":"#dagStudio .path-layout > *","keep":[1]}]},{"label":"混杂：控制共同原因","parts":[0,1,2,3],"action":{"graph":"fork","adjust":true},"sub":{"selector":"#dagStudio > *","keep":[0,1,2,3,4,5]}}],"rules":[{"label":"非对撞节点：链式与叉式","parts":[0,1,2,3],"sub":{"selector":".rule-rows > *","keep":[0,1]}},{"label":"对撞节点、后门准则","parts":[0,1,2,3,4],"sub":{"selector":".rule-rows > *","keep":[2]}}],"colliderlab":[{"label":"完整样本：两个变量原本独立","parts":[0,1,2,3],"action":{"collider":"all"}},{"label":"条件筛选后：虚假相关出现","parts":[0,1,2,3],"action":{"collider":"selected"}}],"adjustment":[{"label":"变量角色与合理调整集","parts":[0,1,2,3]},{"label":"教材中的控制职业案例","parts":[0,1,4]}],"study":[{"label":"顶刊研究：研究问题与样本","parts":[0,1,3],"action":{"case":"result"},"sub":{"selector":"#case-result > *","keep":[0,1,2,3]}},{"label":"顶刊研究：主要结果与边界","parts":[0,1,3],"action":{"case":"result"},"sub":{"selector":"#case-result > *","keep":[4,5]}},{"label":"研究流程：贸易暴露与选举","parts":[0,1,3],"action":{"case":"design"}},{"label":"DAG：展示贸易冲击路径","parts":[0,1,3],"action":{"case":"model"},"sub":{"selector":"#case-model > *","keep":[0,1,2]}},{"label":"DAG：排除限制怎么失效？","parts":[0,1,3],"action":{"case":"model"},"sub":{"selector":"#case-model > *","keep":[3,4,5]}},{"label":"识别假设：何时可以因果解释","parts":[0,1,3],"action":{"case":"assume"}},{"label":"目标参数、回归与工具变量","parts":[0,1,3],"action":{"case":"est"}},{"label":"交互模拟：设置参数","parts":[0,1,3],"action":{"case":"sim"},"sub":{"selector":"#case-sim > *","keep":[0,1,2,3,4]}},{"label":"交互模拟：估计结果与图形","parts":[0,1,3],"action":{"case":"sim"},"sub":{"selector":"#case-sim > *","keep":[0,1,5,6,7]}}],"workflow":[{"label":"Stata：示例代码与调整逻辑","parts":[0,1,3,4,5],"action":{"code":"stata"}},{"label":"R：示例代码与调整逻辑","parts":[0,1,3,4,5],"action":{"code":"r"}}],"frontier":[{"label":"因果发现与SWIG","parts":[0,1,2],"sub":{"selector":".frontier-lines > *","keep":[0,1]}},{"label":"因果发现的现实限制","parts":[0,1,2],"sub":{"selector":".frontier-lines > *","keep":[2]}}],"quiz":[{"label":"第 1 题","parts":[0,1,2],"action":{"quiz":0}},{"label":"第 2 题","parts":[0,1,2],"action":{"quiz":1}},{"label":"第 3 题","parts":[0,1,2],"action":{"quiz":2}},{"label":"第 4 题","parts":[0,1,2],"action":{"quiz":3}},{"label":"第 5 题","parts":[0,1,2],"action":{"quiz":4}},{"label":"第 6 题","parts":[0,1,2],"action":{"quiz":5}},{"label":"测验结果","parts":[0,1,3],"action":{"quiz":6}}],"sources":[{"label":"论文与方法参考文献","parts":[0,1,2,3],"sub":{"selector":".references > *","keep":[0,1,2]}},{"label":"拓展资料与12讲目录","parts":[0,1,3,4,5,6],"sub":[{"selector":".references > *","keep":[3,4]},{"selector":"#courseList > *","keep":[0,1,2,3,4,5]}]},{"label":"12讲目录：第二部分","parts":[0,1,4,5,6],"sub":{"selector":"#courseList > *","keep":[6,7,8,9,10,11]}}]};
+const root=document.querySelector('main.main');const ids=Object.keys(SPEC);
+const units=ids.map(id=>document.getElementById(id));
+let pg=0,st=0;
+const tools=document.createElement('div');tools.className='course-tools';tools.innerHTML='<button id="courseZoom" type="button">放大图表 ↗</button><button id="courseMode" type="button">阅读模式 ↗</button>';
+const bar=document.createElement('nav');bar.className='course-controls';bar.setAttribute('aria-label','课程翻页控制');
+bar.innerHTML='<button type="button" id="coursePrev" class="course-prev">← 上一步</button><div class="course-status"><strong id="courseCounter"></strong><div id="courseSubtitle"></div><div class="course-ticks" id="courseTicks"></div></div><button type="button" id="courseNext" class="course-next">下一步 →</button>';
+root.prepend(tools);root.append(bar);
+const zoom=document.createElement('div');zoom.className='course-big-chart';zoom.hidden=true;zoom.innerHTML='<div class="course-big-chart-inner"><button type="button" id="courseCloseZoom">关闭 ×</button><div id="courseBig"></div></div>';document.body.append(zoom);
+const $$=s=>[...document.querySelectorAll(s)];const id=s=>document.getElementById(s);
+function setParts(unit,scene){
+  [...unit.children].filter(n=>n.hasAttribute('data-course-part')).forEach(n=>{const nidx=+n.getAttribute('data-course-part');n.setAttribute('data-course-hidden',String(!scene.parts.includes(nidx)))});
+  $$('[data-course-subhidden]').forEach(n=>n.removeAttribute('data-course-subhidden'));
+  if(scene.sub){for(const sub of (Array.isArray(scene.sub)?scene.sub:[scene.sub])){const children=[...unit.querySelectorAll(sub.selector)];children.forEach((n,i)=>n.setAttribute('data-course-subhidden',String(!sub.keep.includes(i))))}}
+}
+function action(a,unit){if(!a)return;
+ if(a.dag){const btn=unit.querySelector('[data-dag="'+a.dag+'"]');btn?.click();const sw=id('dagCondition');if(sw&&sw.checked!==a.condition){sw.checked=a.condition;sw.dispatchEvent(new Event('change',{bubbles:true}))}}
+ if(a.graph){unit.querySelector('[data-graph="'+a.graph+'"]')?.click();if(a.adjust){unit.querySelector('#showOptimal')?.click()}}
+ if(a.case){if(2===1){unit.querySelector('[data-case-tab="'+a.case+'"]')?.click()}else{const keys=['result','design','model','assume','est','sim'];const i=keys.indexOf(a.case);[...unit.querySelectorAll('.case-tab')][i]?.click()}}
+ if(a.collider)id(a.collider==='all'?'colliderAll':'colliderSelected')?.click();
+ if(a.code){const candidates=[...unit.querySelectorAll('.code-tabs button,[data-code],.code-tab')];const target=candidates.find(n=>n.textContent.toLowerCase().includes(a.code));target?.click()}
+ if(a.quiz!==undefined){const host=unit.querySelector('#quizRoot,#quizContainer');if(host){const cards=[...host.children].filter(n=>n.nodeType===1);cards.forEach((n,i)=>n.setAttribute('data-course-subhidden',String(a.quiz>=cards.length||i!==a.quiz)))}}
+}
+function show(p,s){pg=Math.max(0,Math.min(ids.length-1,p));st=Math.max(0,Math.min(SPEC[ids[pg]].length-1,s));const scene=SPEC[ids[pg]][st];units.forEach((u,i)=>u.classList.toggle('course-active',i===pg));
+ const unit=units[pg];unit.classList.toggle('course-continuation',st>0);setParts(unit,scene);action(scene.action,unit);unit.scrollTop=0;
+ id('courseCounter').textContent='第 '+String(pg+1).padStart(2,'0')+' / '+String(ids.length).padStart(2,'0')+' 单元';id('courseSubtitle').textContent='步骤 '+(st+1)+' / '+SPEC[ids[pg]].length+' · '+scene.label;
+ id('courseTicks').innerHTML=SPEC[ids[pg]].map((_,i)=>'<button aria-label="切换到本节步骤 '+(i+1)+'" data-tick="'+i+'" class="course-tick '+(i===st?'active':i<st?'done':'')+'" type="button"></button>').join('');
+ id('courseTicks').querySelectorAll('[data-tick]').forEach(b=>b.onclick=()=>show(pg,+b.dataset.tick));
+ id('coursePrev').disabled=pg===0&&st===0;id('courseNext').disabled=pg===ids.length-1&&st===SPEC[ids[pg]].length-1;
+ const fig=[...unit.querySelectorAll('svg')].find(n=>{const r=n.getBoundingClientRect();return r.width>80&&r.height>50&&!n.closest('[hidden],[data-course-hidden="true"],[data-course-subhidden="true"]')});
+ id('courseZoom').hidden=!fig;window.__courseReplaceStateSafe__(null,'','#'+ids[pg]);
+}
+function next(){if(st+1<SPEC[ids[pg]].length)show(pg,st+1);else if(pg+1<ids.length)show(pg+1,0)}
+function prev(){if(st>0)show(pg,st-1);else if(pg>0)show(pg-1,SPEC[ids[pg-1]].length-1)}
+id('courseNext').onclick=next;id('coursePrev').onclick=prev;
+id('courseMode').onclick=()=>{const reading=document.body.classList.toggle('course-reading');id('courseMode').textContent=reading?'开始演示 ⛶':'阅读模式 ↗';if(reading){ $$('[data-course-hidden],[data-course-subhidden]').forEach(n=>{n.removeAttribute('data-course-hidden');n.removeAttribute('data-course-subhidden')});units[pg].scrollIntoView({block:'start'})}else show(pg,st)};
+id('courseZoom').onclick=()=>{const u=units[pg],fig=[...u.querySelectorAll('svg')].find(n=>{const r=n.getBoundingClientRect();return r.width>80&&r.height>50&&!n.closest('[hidden],[data-course-hidden="true"],[data-course-subhidden="true"]')});if(!fig)return;id('courseBig').replaceChildren(fig.cloneNode(true));zoom.hidden=false;};
+id('courseCloseZoom').onclick=()=>zoom.hidden=true;zoom.addEventListener('click',e=>{if(e.target===zoom)zoom.hidden=true});
+document.addEventListener('keydown',e=>{if(document.body.classList.contains('course-reading')||!zoom.hidden)return;const t=e.target;if(t&&(t.closest('input,textarea,select,button,[contenteditable="true"]')))return;if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next()}else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}});
+let start=null;root.addEventListener('touchstart',e=>{if(e.target.closest('input,button,.case-tabs,.studio-bar,svg,.figure-area'))return;start={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});root.addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;start=null;if(Math.abs(dx)>80&&Math.abs(dx)>1.7*Math.abs(dy))dx<0?next():prev()},{passive:true});
+document.body.classList.add('course-deck');const selected=ids.indexOf(location.hash.slice(1));show(selected>=0?selected:0,0);
+
+/* Embedded course-portal navigation bridge: original teaching logic unchanged. */
+(function(){
+  const PORTAL_LESSON='02';
+  function sendState(){
+    const active=document.querySelector('.course-active');
+    const all=Array.from(document.querySelectorAll('.course-unit, .course-intro'));
+    let selected=active?all.indexOf(active):0;
+    if(selected<0)selected=0;
+    const heading=active&&active.querySelector('h1,h2');
+    if(window.parent!==window)window.parent.postMessage({kind:'causal-course-state',lesson:PORTAL_LESSON,index:selected,title:heading?heading.textContent.trim():''},'*');
+  }
+  window.addEventListener('message',e=>{
+    if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-jump'||e.data.lesson!==PORTAL_LESSON)return;
+    let index=Number(e.data.index||0),step=Number(e.data.step||0);
+    if(!Number.isFinite(index)||!Number.isFinite(step))return;
+    try {show(Math.max(0,Math.floor(index)),Math.max(0,Math.floor(step)));}catch(err){console.error('Lesson jump error',err)}
+    setTimeout(sendState,30);
+  });
+  let pending=0;
+  const observer=new MutationObserver(()=>{if(pending)return;pending=requestAnimationFrame(()=>{pending=0;sendState()})});
+  const host=document.querySelector('.course-stage')||document.body;
+  observer.observe(host,{subtree:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('load',()=>setTimeout(sendState,90));
+  setTimeout(sendState,140);
+})();
+
+})();
+</script>
+<style>
+@media(max-width:600px){
+ header.top{padding:0 9px!important;gap:6px!important}
+ header.top .logo{font-size:11px!important;letter-spacing:0!important;white-space:nowrap!important}
+ header.top .topright{display:flex!important;gap:4px!important;flex-shrink:0}
+ header.top .topright .small{display:none!important}
+ header.top .topright .mode{white-space:nowrap!important;font-size:11px!important;padding:5px 6px!important}
+}
+</style>
+<!-- INTEGRATED PORTAL CONTROLS: connect embedded player and course shell -->
+<script>
+(function(){
+ if(window.parent===window) return;
+ const lessonId='02';
+ function send(action){ try{window.parent.postMessage({kind:'causal-course-action',lesson:lessonId,action:action},'*')}catch(e){} }
+ // Child fullscreen used to hide the parent home control. Delegate instead.
+ window.toggleFullscreen=function(){send('fullscreen')};
+ window.addEventListener('message',function(e){
+  if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-display'||e.data.lesson!==lessonId)return;
+  document.querySelectorAll('button[onclick="toggleFullscreen()"],button[onclick="toggleFullscreen();"]').forEach(function(b){
+   b.textContent=e.data.expanded?'退出全屏':'全屏';
+   b.setAttribute('aria-pressed',e.data.expanded?'true':'false');
+  });
+ });
+ window.addEventListener('keydown',function(e){if(e.key==='Escape')send('escape')});
+})();
+</script>
+
+</body></html>

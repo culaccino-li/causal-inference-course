@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>因果推断导论｜第一讲 · 完整版（含面板数据方法地图）</title>
+<style>
+:root{--bg:#f8fafc;--panel:#ffffff;--panel2:#f1f5f9;--line:#dbe4ee;--txt:#172b46;--muted:#60758e;--accent:#087f8c;--blue:#2563a6;--orange:#be6b20;--red:#be4765;--good:#138358}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.8 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input{font:inherit}a{color:var(--accent)}.shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);padding:28px 18px;overflow:auto;background:#ffffff}.brand{font-weight:800;font-size:17px;line-height:1.45;color:var(--accent)}.mini{font-size:12px;color:var(--muted)}.navtitle{letter-spacing:.13em;text-transform:uppercase;font-size:11px;color:#667d98;margin:30px 12px 12px}.sidebar a{display:block;text-decoration:none;padding:9px 12px;border-radius:10px;color:#49627e;font-size:13px}.sidebar a:hover,.sidebar a.active{background:#e8f3f7;color:#0b6976;font-weight:700}.main{max-width:1110px;width:100%;margin:auto;padding:46px 56px 100px}.eyebrow{font-size:13px;color:var(--accent);letter-spacing:.15em;font-weight:800}.hero{padding:56px 0 46px;border-bottom:1px solid var(--line)}h1{font-size:clamp(35px,5vw,58px);line-height:1.16;letter-spacing:-.035em;margin:17px 0}h2{font-size:31px;line-height:1.3;margin:0 0 20px}h3{font-size:19px;line-height:1.5;margin:0 0 12px}.lead{font-size:19px;color:#526982;max-width:780px}.pill{display:inline-block;font-size:12px;background:#e8f4f4;border:1px solid #b4d9d8;color:#0b757e;border-radius:30px;padding:4px 12px;margin-right:6px;margin-bottom:8px}.section{padding-top:66px;scroll-margin-top:28px}.sectionno{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.13em;margin-bottom:10px}.copy{max-width:840px;color:#40556d}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.panel{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:24px;margin:20px 0}.panel.soft{background:var(--panel2)}.callout{border-left:3px solid var(--accent);padding:14px 20px;background:#edf8f8;border-radius:0 12px 12px 0;margin:24px 0}.callout.warning{border-color:var(--orange);background:#fff5e9}.metric{background:#f8fbff;border:1px solid var(--line);border-radius:12px;padding:14px}.value{font-size:30px;line-height:1.3;font-weight:800;font-variant-numeric:tabular-nums}.key{font-size:12px;color:var(--muted)}.accent{color:var(--accent)}.orange{color:var(--orange)}.blue{color:var(--blue)}.red{color:var(--red)}.formula{padding:16px;background:#f3f7fc;border-radius:12px;text-align:center;font-size:20px;font-family:Georgia,"Times New Roman",serif;overflow-x:auto;margin:15px 0;color:#173251}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.control{display:grid;gap:6px}.control label{font-size:13px;color:#465c75}.control input{width:100%;accent-color:var(--accent)}.control strong{color:var(--accent)}.btn{border:1px solid #0b7e89;border-radius:10px;padding:10px 14px;background:#0b7e89;color:#ffffff;cursor:pointer;font-weight:700}.btn:hover{background:#086773}.btn.secondary{border-color:var(--line);background:#f0f5fb;color:#34506f}.buttonrow{display:flex;gap:10px;flex-wrap:wrap}.viz{width:100%;display:block;background:#fbfdff;border-radius:14px;border:1px solid var(--line);margin:20px 0}.legend{display:flex;flex-wrap:wrap;gap:16px;color:var(--muted);font-size:12px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:560px}th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;font-size:14px;vertical-align:top}th{color:#117987}td{color:#344d68}.steps{display:grid;gap:12px}.step{display:flex;gap:15px;align-items:flex-start}.step .n{border-radius:50%;background:#ddf1f1;width:30px;height:30px;flex:none;display:grid;place-items:center;color:#086e77;font-weight:800}.quiz-choice{width:100%;display:block;text-align:left;background:#ffffff;border:1px solid #cbd8e5;color:#223b58;padding:12px 16px;border-radius:10px;margin:9px 0;cursor:pointer}.quiz-choice:hover{border-color:var(--accent);background:#f0fafb}.feedback{min-height:42px;font-size:14px;padding-top:8px}.note{font-size:13px;color:var(--muted)}.footer{padding:55px 0;color:#6c829a;font-size:13px}.progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:10;width:0}.method{border:1px solid var(--line);padding:18px;border-radius:13px;background:#ffffff}.method b{color:var(--accent)}.method small{display:block;color:var(--muted);line-height:1.65;margin-top:6px}.bib li{margin-bottom:12px}kbd{font-family:monospace;font-size:12px;background:#edf2f7;padding:2px 7px;border-radius:5px}@media(max-width:850px){.shell{display:block}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:16px}.sidebar .navtitle,.sidebar nav{display:none}.main{padding:25px 19px 70px}.hero{padding:22px 0 35px}.grid,.controls{grid-template-columns:1fr}h2{font-size:26px}.panel{padding:17px}.section{padding-top:50px}}
+
+/* Refined light editorial theme */
+body{background:linear-gradient(135deg,#f9fbff 0%,#f7fafc 55%,#f1f7f8 100%)}
+.sidebar{box-shadow:3px 0 22px rgba(26,56,83,.035)}
+.hero{background:transparent}
+.panel,.method{box-shadow:0 5px 22px rgba(25,60,86,.04)}
+.panel.soft{background:linear-gradient(125deg,#eaf5f6,#f4f8fc);border-color:#cddfe6}
+.metric{background:#f7fafc}
+.viz{background:#fbfdff}
+.quiz-choice{transition:background .2s,border-color .2s}
+.quiz-choice:focus-visible,.btn:focus-visible{outline:3px solid #a8dce0;outline-offset:2px}
+::selection{background:#c6ebea;color:#173251}
+
+/* DAG teaching studio */
+.dag-intro{font-size:18px;max-width:770px;color:#435b75}.dag-studio{background:#fff;border:1px solid #d8e4ea;border-radius:20px;padding:26px;margin-top:22px;box-shadow:0 8px 30px rgba(24,63,83,.05)}.dag-modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 23px}.dag-mode{border:1px solid #d4e2e9;border-radius:11px;background:#f6f9fc;color:#32526b;padding:11px 6px;cursor:pointer;font-size:14px;font-weight:650}.dag-mode.on{background:#e3f3f3;border-color:#14818a;color:#096c73}.dag-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(230px,1fr);gap:18px;align-items:stretch}.dag-stage{position:relative;border:1px solid #dce8ee;background:linear-gradient(180deg,#fcfeff,#f6fafc);border-radius:16px;padding:10px;min-height:320px}.dag-stage svg{width:100%;height:280px;display:block}.dag-explain{border-radius:15px;background:#f2f7fa;padding:23px;display:flex;flex-direction:column;justify-content:center}.dag-explain h3{color:#10354d;margin-bottom:14px}.dag-explain p{margin:8px 0;font-size:14px;line-height:1.85;color:#36536b}.dag-result{font-weight:750;color:#0d7981!important}.dag-node{fill:#e7f2f8;stroke:#4c819e;stroke-width:2.2}.dag-node.treatment{fill:#e3f5f2;stroke:#0a9290}.dag-node.outcome{fill:#fff0e1;stroke:#c98b43}.dag-node.conditioned{stroke-width:4;stroke:#7866a5}.dag-arrow{fill:none;stroke:#57748d;stroke-width:3;marker-end:url(#dagArrow)}.dag-arrow.causal{stroke:#0b9290;marker-end:url(#dagArrowGreen)}.dag-arrow.problem{stroke:#d78b41;marker-end:url(#dagArrowOrange)}.dag-arrow.dim{opacity:.16}.dag-node-label{font-weight:750;font-size:18px;fill:#183c56;text-anchor:middle;dominant-baseline:middle}.dag-small{font-size:13px;fill:#56738d;text-anchor:middle}.dag-switch{display:flex;align-items:center;gap:12px;margin:20px 0 8px;padding:12px 16px;border:1px solid #dce8ee;border-radius:12px;background:#fbfdfe;font-size:14px;cursor:pointer}.dag-switch input{width:20px;height:20px;accent-color:#0c858d}.dag-eq{font-size:14px!important;background:white;padding:10px;border-radius:9px;border:1px solid #dce6ed}.dag-roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}.dag-roadmap>div{border:1px solid #dbe6ed;padding:13px 14px;border-radius:12px;background:#fff;font-size:13px;color:#415d74}.dag-roadmap strong{display:block;color:#096f79;font-size:14px;margin-bottom:4px}@media(max-width:900px){.dag-layout{grid-template-columns:1fr}.dag-roadmap{grid-template-columns:1fr}.dag-studio{padding:15px}.dag-modes{grid-template-columns:repeat(2,1fr)}}
+
+/* APSR integrated research anatomy */
+.research-grid{display:grid;grid-template-columns:1.15fr .95fr;gap:16px;margin:18px 0 24px}
+.research-card{border:1px solid var(--line);background:var(--panel);border-radius:5px;padding:18px}
+.research-card h3{margin:0 0 10px}
+.flow-svg,.dag-svg-mini{width:100%;display:block;background:#fbfbf8;border:1px solid var(--line);border-radius:4px}
+.assump-list{margin:0;padding-left:18px;color:#42524d}
+.assump-list li{margin:10px 0}
+.formula-box{background:#f7f7f2;border:1px solid var(--line);border-radius:4px;padding:12px 14px;margin:10px 0;font-family:Georgia,"Times New Roman",serif;color:#1e3530}
+.formula-box .math{font-size:18px;display:block;margin-bottom:6px}
+.formula-box .sub{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;color:#5f6f69;line-height:1.7}
+.formula-live{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.formula-live .metric{margin:0}
+.small-note{font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:900px){.research-grid{grid-template-columns:1fr}.formula-live{grid-template-columns:1fr}}
+</style><style>
+/* Editorial Research System v1.1 — content preserving revision */
+:root{--bg:#F6F4EF;--panel:#FFFEFB;--panel2:#F0F1EC;--line:#DDDCD4;--txt:#23312F;--muted:#65726D;--accent:#285B52;--blue:#285B52;--orange:#A87340;--red:#9C584E;--good:#285B52}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;line-height:1.85;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif;font-weight:500;letter-spacing:-.035em}
+h1{font-size:clamp(40px,5vw,68px);line-height:1.22}
+h2{font-size:clamp(29px,3.3vw,39px);line-height:1.35}
+h3{font-size:19px;line-height:1.5}
+.shell{grid-template-columns:236px minmax(0,1fr)}
+.sidebar{background:var(--panel);border-right:1px solid var(--line);padding:35px 20px 24px}
+.brand{font-family:Georgia,"Songti SC",serif;font-size:15px;font-weight:400;letter-spacing:.07em;color:var(--txt)}
+.brand strong{font-size:21px;letter-spacing:0;font-weight:600}
+.mini{font-size:11px;color:var(--muted);letter-spacing:.07em}
+.navtitle{font-size:10px;color:var(--muted);margin:43px 11px 17px}
+.sidebar a{color:var(--muted);padding:9px 10px;border-radius:0;border-left:2px solid transparent;font-size:12px;line-height:1.5}
+.sidebar a:hover,.sidebar a.active{color:var(--accent);background:#EDF0EA;border-left-color:var(--accent);font-weight:550}
+.main{max-width:1110px;padding:35px clamp(26px,5vw,75px) 110px}
+.hero{padding:57px 0 55px;border-bottom:1px solid var(--line)}
+.eyebrow,.sectionno{color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.16em}
+.lead{color:var(--muted);font-size:19px;max-width:680px}
+.pill,.tag-minimal{color:var(--muted);background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;padding:0 13px 0 0;margin-right:12px;font-size:12px;font-weight:400}
+.section{padding-top:81px;scroll-margin-top:26px}
+.section + .section{border-top:1px solid var(--line);margin-top:75px}
+.copy{max-width:790px;color:#3A4742}
+.panel,.panel.soft,.metric,.viz,.dag-studio{background:var(--panel);border:1px solid var(--line);border-radius:5px;box-shadow:none}
+.panel{padding:27px;margin:24px 0}
+.panel.soft{background:#F1F2ED}
+.metric{background:#F7F7F2;border-radius:4px}
+.callout,.callout.warning{background:#EFF2EC;border-radius:0;border-color:var(--accent);padding:17px 23px}
+.callout.warning{background:#F5EFE6;border-color:var(--orange)}
+.btn,.quiz-choice,.dag-mode{border-radius:4px!important;box-shadow:none!important}
+.btn{background:#285B52;color:#fff;border-color:#285B52}
+.btn.secondary{background:#fff;color:#285B52;border-color:#D1DAD3}
+.dag-studio{padding:26px}
+.dag-modes{gap:5px;margin:15px 0 23px}
+.dag-mode{background:transparent;border-color:var(--line);color:var(--muted);font-size:13px;font-weight:550}
+.dag-mode.on{background:#E6ECE5;color:var(--accent);border-color:#B7CBC0}
+.dag-layout{gap:12px}
+.dag-stage{background:#FBFBF8;border:1px solid var(--line);border-radius:4px}
+.dag-explain{background:#F1F2ED;border-radius:4px;padding:20px}
+.dag-explain h3{color:var(--txt)}
+.dag-explain p{color:#485850}
+.dag-result{color:var(--accent)!important}
+.dag-node{fill:#EDF1EB;stroke:#6D8F82}
+.dag-node.treatment{fill:#E3EDE7;stroke:#285B52}
+.dag-node.outcome{fill:#F4EFE3;stroke:#A87340}
+.dag-node.conditioned{stroke:#776B8E}
+.dag-arrow{stroke:#81948A}
+.dag-arrow.causal{stroke:#285B52}
+.dag-arrow.problem{stroke:#A87340}
+.dag-node-label{fill:#23312F}
+.dag-small{fill:#65726D}
+.dag-switch{background:#FBFBF8;border:1px solid var(--line);border-radius:4px}
+.dag-switch input{accent-color:#285B52}
+.dag-eq{background:#fff;border:1px solid var(--line);border-radius:4px}
+.dag-roadmap>div{background:var(--panel);color:var(--muted);border-color:var(--line);border-radius:4px}
+.dag-roadmap strong{color:var(--accent)}
+.value{font-family:Georgia,serif;font-weight:500}
+::selection{background:#DCE8DC;color:#23312F}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #285B52;outline-offset:3px}
+@media(max-width:900px){.main{padding:26px 25px 80px}.section{padding-top:58px}.section + .section{margin-top:54px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+</style><style>
+/* Atlas is a diagram with clear reading order, rather than unrelated cards. */
+.atlas{margin:30px 0 22px;max-width:900px}.atlas-question{text-align:center;background:#E9EEE7;border:1px solid #C7D3C8;padding:22px 24px;display:flex;align-items:center;flex-direction:column;gap:5px}.atlas-kicker{font-size:10px;letter-spacing:.15em;color:#285B52;font-weight:700}.atlas-question strong{font-family:Georgia,"Songti SC",serif;font-size:23px;font-weight:500}.atlas-question small{font-size:13px;color:#65726D}.atlas-stem{height:32px;width:1px;background:#A7B6AA;margin:auto}.atlas-head{text-align:center;font-size:12px;letter-spacing:.07em;color:#65726D;margin:0 auto 13px}.atlas-columns{display:grid;grid-template-columns:1fr 1.35fr;gap:14px;align-items:stretch}.atlas-branch{border-top:2px solid #AABAB0;background:#FFFEFB;padding:20px;border-left:1px solid #DDDCD4;border-right:1px solid #DDDCD4;border-bottom:1px solid #DDDCD4}.atlas-branch-title{font-weight:650;color:#285B52;margin-bottom:17px;font-size:14px}.atlas-branch article{padding:13px 0;border-top:1px solid #E2E3DC}.atlas-branch article strong,.atlas-techniques strong{display:block;font-size:15px;color:#23312F}.atlas-branch p{font-size:13px;line-height:1.7;color:#5D6A62;margin:7px 0 0}.atlas-feature{background:#F0F4EE;padding:17px!important;margin-top:16px;border:1px solid #BFCFC1!important}.atlas-chapter{display:block;font-size:11px;letter-spacing:.05em;color:#285B52;margin-bottom:7px}.atlas-sequence{font-size:12px;margin-top:12px;color:#285B52;border-top:1px solid #D3DFD2;padding-top:10px}.atlas-sequence span{padding:0 4px;color:#A87340}.atlas-head-next{margin:32px 0 15px;border-top:1px solid #DDDCD4;padding-top:20px}.atlas-techniques{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.atlas-techniques article{background:#FFFEFB;padding:19px;border:1px solid #DDDCD4}.atlas-techniques span{font-size:11px;letter-spacing:.04em;color:#285B52}.atlas-techniques strong{margin:7px 0}.atlas-techniques small{font-size:13px;line-height:1.7;color:#65726D;display:block}.atlas-advanced{grid-template-columns:repeat(3,minmax(0,1fr))}.atlas-note{max-width:900px;border-left:3px solid #285B52;background:#EEF1E9;padding:18px 22px;font-size:14px;line-height:1.8}.course-title{margin-top:52px}.course-index{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid #DDDCD4;border-left:1px solid #DDDCD4;margin-top:20px}.course-index>div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:16px;border-right:1px solid #DDDCD4;border-bottom:1px solid #DDDCD4;background:#FFFEFB}.course-index em{font:16px Georgia,serif;color:#A87340;font-style:normal}.course-index strong{font-weight:550;font-size:13px}.course-index small{display:block;font-size:11px;color:#65726D}.course-index .course-feature{background:#E7EEE6;border-bottom:2px solid #285B52}.course-index .course-feature small{color:#285B52}@media(max-width:720px){.atlas-columns,.atlas-techniques,.atlas-advanced{grid-template-columns:1fr}.course-index{grid-template-columns:repeat(2,minmax(0,1fr))}.atlas-question strong{font-size:20px}}@media(max-width:480px){.course-index{grid-template-columns:1fr}}
+</style><style>
+/* Case study tabs: editorial, deliberately restrained. */
+.case-shell{border:1px solid #D6DCD3;background:#FFFEFB;margin-top:26px;color:#23312F}
+.case-header{padding:28px 30px 26px;border-bottom:1px solid #D6DCD3}
+.case-meta,.case-kicker{font-size:10px;letter-spacing:.13em;color:#62776A;font-weight:700;margin:0 0 13px}
+.case-divider{color:#A5AEA3;padding:0 8px}
+.case-header h3{font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif;font-size:24px;line-height:1.43;max-width:795px;font-weight:500;margin-bottom:6px}
+.case-header>p{margin:0;color:#64746A;font-size:13px}
+.case-links{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px}
+.case-links a{font-size:12px;text-decoration:none;border-bottom:1px solid #BDCFC1}
+.case-tabs{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid #D6DCD3;background:#F6F6F1;scrollbar-width:thin}
+.case-tab{appearance:none;border:0;border-right:1px solid #E2E5DF;border-bottom:3px solid transparent;border-radius:0;background:transparent;color:#5C6E62;font:500 13px/1.5 inherit;padding:17px 18px;white-space:nowrap;cursor:pointer;transition:color .15s,background .15s;flex:1 0 auto}
+.case-tab span{font-size:10px;color:#87978B;margin-right:6px}
+.case-tab:hover{background:#ECF0E9;color:#285B52}
+.case-tab.is-current{color:#285B52;border-bottom-color:#285B52;background:#FFFEFB;font-weight:700}
+.case-tab:focus-visible,.case-bottom button:focus-visible,.case-toggle input:focus-visible{outline:2px solid #285B52;outline-offset:-3px}
+.case-contents{padding:28px 30px 22px}
+.case-page{animation:caseReveal .2s ease-out;min-height:390px}
+.case-page[hidden]{display:none!important}
+@keyframes caseReveal{from{opacity:.6;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.case-page-heading{max-width:785px;margin-bottom:24px}
+.case-page-heading h3{font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif;font-size:27px;font-weight:500;margin-bottom:9px}
+.case-page-heading>p:last-child{font-size:14px;line-height:1.9;color:#56685D;margin:0}
+.case-results{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #D6DCD3;border-bottom:1px solid #D6DCD3;margin:23px 0}
+.case-results article{padding:21px 16px 23px 0}
+.case-results article+article{border-left:1px solid #D6DCD3;padding-left:20px}
+.case-result-number{font:500 34px/1.1 Georgia,"Songti SC",serif;color:#285B52;margin-bottom:18px}
+.case-result-number small{font:12px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;color:#61736A}
+.case-results strong{display:block;font-size:14px}
+.case-results p{font-size:13px;line-height:1.75;color:#61736A;margin:9px 0 0}
+.case-takeaway{border-left:2px solid #285B52;padding:8px 0 8px 18px;margin:25px 0;color:#2D4439}
+.case-takeaway p{font-size:13px;line-height:1.75;color:#61736A;margin:8px 0 0}
+.case-source{font-size:12px;color:#6F7F74;line-height:1.8;margin:22px 0 0}
+.case-figure-scroller{width:100%;overflow-x:auto;border:1px solid #E1E6DD;background:#FAFAF6}
+.case-drawing{display:block;width:100%;min-width:620px;height:auto}
+.case-two-notes{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:18px}
+.case-two-notes p{margin:0;border-top:1px solid #D6DCD3;padding-top:14px;font-size:13px;line-height:1.85;color:#5B6E60}
+.case-toggle{display:flex;align-items:center;gap:11px;margin:19px 0 7px;font-size:13px;color:#344E40;cursor:pointer}
+.case-toggle input{width:18px;height:18px;accent-color:#285B52}
+.case-feedback{font-size:13px;line-height:1.8;background:#EEF2EC;padding:12px 15px;color:#365849}
+.case-feedback.is-violation{background:#FAEEE9;color:#95564D}
+.case-assump-row{display:grid;grid-template-columns:195px minmax(0,1fr);gap:17px;border-top:1px solid #D6DCD3;padding:16px 0}
+.case-assump-row>div{font-size:12px;color:#285B52}
+.case-assump-row strong{display:block;color:#2B4235;font-size:15px}
+.case-assump-row small{color:#819187;display:block;margin-top:2px}
+.case-assump-row p{font-size:13px;color:#52665A;line-height:1.85;margin:0}
+.case-eq-grid{display:grid;gap:10px}
+.case-eq{border:1px solid #DCE2D9;padding:15px 17px}
+.case-eq-name{margin:0 0 9px;color:#285B52;font-size:11px;letter-spacing:.04em;font-weight:700}
+.case-math{font:20px/1.5 Georgia,"Times New Roman",serif;color:#273F32;overflow-x:auto}
+.case-eq>p:last-child{margin:10px 0 0;color:#607168;font-size:13px;line-height:1.7}
+.case-frac{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.case-fraction{display:inline-flex;flex-direction:column;text-align:center;font-size:16px;line-height:1.65}
+.case-fraction>span:first-child{border-bottom:1px solid #526C5C;padding:0 7px}
+.case-fraction>span:last-child{padding:1px 7px}
+.case-live-eq{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;border:1px solid #DCE2D9}
+.case-live-eq>div{padding:14px 16px}
+.case-live-eq>div+div{border-left:1px solid #DCE2D9}
+.case-live-eq span{display:block;font-size:12px;color:#697A6E}
+.case-live-eq strong{display:block;font:500 26px/1.5 Georgia,serif;color:#285B52}
+.case-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 26px}
+.case-controls .control{gap:7px}
+.case-controls .control label{font-size:12px;color:#526257}
+.case-controls .control label strong{float:right;color:#285B52}
+.case-controls .control input{accent-color:#285B52}
+.case-quick-actions{display:flex;gap:9px;flex-wrap:wrap;margin:21px 0 20px}
+.case-quick-actions button{border-radius:3px;border:1px solid #C7D4C7;background:#F8FAF6;padding:7px 12px;font-size:12px;color:#285B52;cursor:pointer}
+.case-quick-actions button:hover{background:#EAF0E8}
+.case-sim-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid #D9E0D7}
+.case-sim-metrics>div{padding:16px}
+.case-sim-metrics>div+div{border-left:1px solid #D9E0D7}
+.case-sim-metrics small{display:block;font-size:11px;color:#68786D}
+.case-sim-metrics strong{font:500 30px/1.6 Georgia,serif;color:#285B52}
+.case-extra-metrics{display:flex;gap:19px;flex-wrap:wrap;margin:12px 0 0;font-size:12px;color:#637469}
+.case-extra-metrics b{color:#285B52}
+.case-sim-chart{display:block;width:100%;max-width:720px;margin:14px auto 0;border:1px solid #E6E8E1;background:#FBFBF7}
+.case-sim-explain{font-size:13px;line-height:1.8;color:#496052;background:#F0F4EE;padding:12px 16px}
+.case-bottom{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #D6DCD3;padding:12px 30px;color:#7A887B;font-size:11px}
+.case-bottom button{border:0;border-radius:0;background:none;font-size:13px;color:#285B52;cursor:pointer;padding:5px 0;font-weight:600}
+.case-bottom button span{margin-left:5px}
+.case-reflection{margin-top:23px;border-top:1px solid #D6DCD3;padding-top:13px;color:#32473A}
+.case-reflection strong{font-size:13px}
+.case-reflection p{font-size:13px;color:#64746A;line-height:1.85;margin:5px 0}
+@media(max-width:900px){.case-tabs{scroll-snap-type:x mandatory}.case-tab{flex:0 0 auto;scroll-snap-align:start}.case-results{grid-template-columns:1fr}.case-results article{padding:15px 0}.case-results article+article{border-left:0;border-top:1px solid #D6DCD3;padding-left:0}.case-contents,.case-header{padding:21px 16px}.case-bottom{padding:12px 16px}.case-two-notes,.case-controls{grid-template-columns:1fr}.case-assump-row{grid-template-columns:1fr;gap:5px}.case-live-eq strong{font-size:22px}}
+@media(max-width:520px){.case-sim-metrics small{min-height:35px}.case-sim-metrics strong{font-size:20px}.case-sim-metrics>div{padding:8px}.case-page-heading h3{font-size:23px}.case-header h3{font-size:20px}.case-live-eq>div{padding:8px}.case-live-eq strong{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.case-page{animation:none}.case-tab{transition:none}}
+.case-validity{font-size:12px;line-height:1.75;border-left:2px solid #285B52;background:#F0F4EE;color:#285B52;padding:9px 14px;margin:13px 0}
+.case-validity.is-violation{color:#95564D;background:#FAEEE9;border-color:#9C584E}
+.case-pan-hint{font-size:11px;color:#728477;margin:7px 0 0;display:none}
+@media(max-width:900px){.case-pan-hint{display:block}}
+</style><style>
+/* Course Presentation System v1.5.1: readable by construction */
+body.course-deck{background:#F6F4EF!important;color:#23312F!important}
+body.course-deck:not(.course-reading),body.course-deck:not(.course-reading) html{overflow:hidden}
+body.course-deck:not(.course-reading) .progress{display:none}
+body.course-deck:not(.course-reading) .shell,body.course-deck:not(.course-reading) .app-shell{display:block!important;height:100dvh;overflow:hidden}
+body.course-deck:not(.course-reading) .sidebar,body.course-deck:not(.course-reading) .side{display:none!important}
+body.course-deck:not(.course-reading) .main{display:flex!important;flex-direction:column!important;max-width:none!important;width:100%!important;margin:0!important;padding:0 clamp(24px,5vw,90px)!important;height:100dvh;overflow:hidden;min-height:0}
+body.course-deck:not(.course-reading) .course-unit{display:none!important;overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;scrollbar-gutter:stable;overscroll-behavior:contain;margin:0 auto!important;border:0!important;width:min(100%,1150px);padding:clamp(30px,4.8vh,48px) clamp(4px,1.3vw,18px) 20px!important}
+body.course-deck:not(.course-reading) .course-unit.course-active{display:block!important;animation:cdScene .26s ease-out both}
+body.course-deck:not(.course-reading) .course-unit h1{font-size:clamp(38px,4.5vw,58px);line-height:1.2;margin:10px 0 16px}
+body.course-deck:not(.course-reading) .course-unit h2{font-size:clamp(27px,2.8vw,37px);line-height:1.35;margin:3px 0 14px}
+body.course-deck:not(.course-reading) .course-unit h3{font-size:clamp(18px,1.65vw,23px);line-height:1.45}
+body.course-deck:not(.course-reading) .course-unit p:not(.mini):not(.micro):not(.note):not(.small-note):not(.subtle-foot):not(.source-footer):not(.fine-print):not(.case-hint),body.course-deck:not(.course-reading) .course-unit li{font-size:clamp(16px,1.42vw,18px);line-height:1.67}
+body.course-deck:not(.course-reading) .course-unit .note,body.course-deck:not(.course-reading) .course-unit .small-note,body.course-deck:not(.course-reading) .course-unit .subtle-foot{font-size:14px;line-height:1.55}
+body.course-deck:not(.course-reading) .course-unit .eyebrow,body.course-deck:not(.course-reading) .course-unit .section-label,body.course-deck:not(.course-reading) .course-unit .sectionno{margin:0 0 7px;font-size:11px}
+body.course-deck:not(.course-reading) .course-unit .panel{margin:12px 0;padding:clamp(14px,1.6vw,22px)}
+body.course-deck:not(.course-reading) .course-unit .callout,body.course-deck:not(.course-reading) .course-unit .note-line{margin:12px 0;padding:11px 15px;font-size:16px}
+body.course-deck:not(.course-reading) .course-unit .formula{margin:12px 0;padding:12px 16px;font-size:clamp(20px,2vw,25px)}
+body.course-deck:not(.course-reading) .course-unit [data-course-hidden="true"]{display:none!important}
+body.course-deck:not(.course-reading) .course-unit [data-course-subhidden="true"]{display:none!important}
+body.course-deck:not(.course-reading) .course-unit .case-page[hidden]{display:none!important}
+.course-chapter-meta{display:none;color:#718077;letter-spacing:.08em;font-size:12px;margin:10px 0 14px}
+body.course-deck:not(.course-reading) .course-chapter-meta{display:flex;align-items:center;gap:13px}
+.course-chapter-meta:before{content:"";display:block;width:26px;height:1px;background:#82978a}
+.course-controls{display:none}
+body.course-deck:not(.course-reading) .course-controls{display:grid;grid-template-columns:150px 1fr 150px;align-items:center;gap:18px;flex:0 0 auto;min-height:78px;width:min(100%,1150px);margin:auto;background:#F6F4EF;border-top:1px solid #DDDCD4;padding:11px 5px 13px;z-index:15}
+.course-controls button{cursor:pointer}
+.course-prev,.course-next{border:1px solid #B9C8BD;border-radius:4px;background:#FFFEFB;color:#285B52;font-size:15px;min-height:46px;padding:8px 14px}
+.course-next{background:#285B52;color:white;border-color:#285B52}
+.course-prev:disabled,.course-next:disabled{opacity:.3;cursor:default}
+.course-status{text-align:center;line-height:1.4;font-size:13px;color:#526459}
+.course-status strong{font-weight:650;color:#285B52}
+.course-ticks{display:flex;justify-content:center;gap:5px;margin-top:9px}
+.course-tick{height:5px;width:min(24px,4vw);background:#d7ded5;border:0;border-radius:4px;padding:0}
+.course-tick.active{background:#285B52}.course-tick.done{background:#98B2A4}
+.course-tools{position:fixed;right:clamp(23px,4.4vw,76px);top:12px;display:flex;align-items:center;gap:8px;z-index:25}
+.course-tools button{border:1px solid #D1D8CE;background:#FFFEFB;color:#285B52;font-size:12px;border-radius:4px;padding:5px 10px;cursor:pointer}
+body.course-reading .course-tools{position:fixed;top:12px;right:15px}
+body.course-deck:not(.course-reading) .course-unit .viz{max-height:clamp(170px,34vh,280px);width:100%;margin:12px 0}
+body.course-deck:not(.course-reading) .course-unit .grid{gap:12px}
+body.course-deck:not(.course-reading) .course-unit .method{padding:12px}
+body.course-deck:not(.course-reading) .course-unit .case-shell,body.course-deck:not(.course-reading) .course-unit .paper-case{margin-top:8px}
+body.course-deck:not(.course-reading) .course-unit .case-header,body.course-deck:not(.course-reading) .course-unit .paper-header{padding:15px 20px}
+body.course-deck:not(.course-reading) .course-unit .case-header h3,body.course-deck:not(.course-reading) .course-unit .paper-header h3{font-size:19px;margin:5px 0}
+body.course-deck:not(.course-reading) .course-unit .case-header p,body.course-deck:not(.course-reading) .course-unit .paper-header p{font-size:13px!important;line-height:1.45}
+body.course-deck:not(.course-reading) .course-unit .case-contents,body.course-deck:not(.course-reading) .course-unit .case-pages{min-height:0;padding:13px 18px}
+body.course-deck:not(.course-reading) .course-unit .case-page h3,body.course-deck:not(.course-reading) .course-unit .case-page h4{font-size:clamp(21px,2vw,27px);margin:7px 0 12px}
+body.course-deck:not(.course-reading) .course-unit .case-tab{padding:9px 11px;font-size:13px}
+body.course-deck:not(.course-reading) .course-unit .case-bottom,body.course-deck:not(.course-reading) .course-unit .case-next{padding:7px 17px}
+body.course-deck:not(.course-reading) .course-unit .case-reflection{margin:8px 0}
+body.course-deck:not(.course-reading) .course-unit .controls{gap:10px}
+body.course-deck:not(.course-reading) .course-unit .metric .value{font-size:clamp(24px,2.4vw,32px)}
+body.course-deck:not(.course-reading) .course-unit .metric{padding:9px 13px}
+body.course-deck:not(.course-reading) .course-unit .formula-box .math{font-size:20px}
+body.course-deck:not(.course-reading) .course-unit pre{font-size:15px;max-height:50vh;overflow:auto;line-height:1.6}
+body.course-deck:not(.course-reading) .course-unit .quiz-choice{font-size:16px}
+.course-big-chart{position:fixed;inset:0;background:rgba(25,37,31,.65);display:grid;place-items:center;z-index:150;padding:35px}
+.course-big-chart[hidden]{display:none}
+.course-big-chart-inner{position:relative;background:#fffefa;border-radius:5px;padding:45px 30px 26px;width:min(1120px,96vw);max-height:92vh;overflow:auto}
+.course-big-chart svg{display:block;width:100%;height:auto;max-height:76vh}
+.course-big-chart button{position:absolute;right:15px;top:10px;border:1px solid #D5DDD3;background:#F5F5EF;padding:7px 14px;cursor:pointer}
+.course-next-note{font-size:12px;color:#738076}
+body.course-deck:not(.course-reading) .course-unit#methods .atlas,body.course-deck:not(.course-reading) .course-unit#methods .atlas-question{margin:8px 0}
+body.course-deck:not(.course-reading) .course-unit#methods .atlas-columns{gap:14px}
+body.course-deck:not(.course-reading) .course-unit#methods .atlas-techniques{margin:9px 0}
+body.course-deck:not(.course-reading) .course-unit#methods .course-index{margin-top:10px}
+body.course-deck:not(.course-reading) .course-unit#studio .studio{margin-top:12px}
+body.course-deck:not(.course-reading) .course-unit#studio .studio-heading{padding:8px 18px}
+body.course-deck:not(.course-reading) .course-unit#studio .figure-area{padding:0 14px}
+body.course-deck:not(.course-reading) .course-unit#studio .figure-area svg{max-height:clamp(195px,37vh,310px)}
+body.course-deck:not(.course-reading) .course-unit#studio .path-layout>div{padding:9px 14px}
+body.course-deck:not(.course-reading) .course-unit#studio .studio-bar{min-height:40px}
+body.course-deck:not(.course-reading) .course-unit#studio .mode{padding:9px 12px}
+body.course-deck:not(.course-reading) .course-unit#studio .figure-legend{padding:5px 18px;font-size:12px}
+body.course-deck:not(.course-reading) .course-unit#studio .control-line{padding:7px 15px}
+body.course-deck:not(.course-reading) .course-unit#studio .source-footer{padding:8px 16px}
+body.course-deck:not(.course-reading) .course-unit#colliderlab .collider-demo{margin-top:10px}
+body.course-deck:not(.course-reading) .course-unit#colliderlab .scatter-wrap svg{max-height:clamp(200px,40vh,320px)}
+body.course-deck:not(.course-reading) .course-unit#frontier .frontier-lines article{padding:10px 13px}
+@keyframes cdScene{from{opacity:.3;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:850px){
+ body.course-deck:not(.course-reading) .main{padding:0 16px!important}
+ body.course-deck:not(.course-reading) .course-unit{padding:34px 2px 16px!important}
+ body.course-deck:not(.course-reading) .course-unit h1{font-size:34px}
+ body.course-deck:not(.course-reading) .course-unit h2{font-size:25px}
+ body.course-deck:not(.course-reading) .course-controls{grid-template-columns:105px 1fr 105px;gap:6px;min-height:70px;padding:8px 2px}
+ .course-prev,.course-next{font-size:12px;min-height:40px;padding:5px}
+ .course-status{font-size:11px}
+ .course-tick{width:11px}
+ .course-tools{right:13px;top:7px;gap:4px}.course-tools button{font-size:11px;padding:5px 8px}
+ body.course-deck:not(.course-reading) .course-unit p:not(.mini):not(.micro):not(.note):not(.small-note):not(.subtle-foot):not(.source-footer):not(.fine-print):not(.case-hint){font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){body.course-deck:not(.course-reading) .course-unit.course-active{animation:none}}
+@media print{body.course-deck{overflow:visible!important}body.course-deck .main,body.course-deck .shell,body.course-deck .app-shell{height:auto!important;overflow:visible!important}body.course-deck .course-controls,.course-tools{display:none!important}body.course-deck .course-unit{display:block!important;overflow:visible!important}body.course-deck [data-course-hidden],body.course-deck [data-course-subhidden]{display:block!important}}
+
+body.course-deck:not(.course-reading) #dag .dag-studio>h3{display:none}
+body.course-deck:not(.course-reading) #dag .dag-stage{min-height:225px}
+body.course-deck:not(.course-reading) #dag .dag-stage svg{height:205px}
+body.course-deck:not(.course-reading) #dag .dag-modes{margin:6px 0 9px}
+body.course-deck:not(.course-reading) #dag .dag-explain{padding:9px 13px}
+body.course-deck:not(.course-reading) #dag .dag-explain p{font-size:15px;line-height:1.5;margin:4px 0}
+body.course-deck:not(.course-reading) #practice .case-header,body.course-deck:not(.course-reading) #study .paper-header{display:none}
+body.course-deck:not(.course-reading) #practice .case-contents,body.course-deck:not(.course-reading) #study .case-pages{padding:10px 15px}
+body.course-deck:not(.course-reading) #practice .case-bottom,body.course-deck:not(.course-reading) #study .case-next{display:none}
+body.course-deck:not(.course-reading) #practice .case-assump-row{padding:11px 15px}
+body.course-deck:not(.course-reading) #practice .case-sim-chart{max-height:205px}
+body.course-deck:not(.course-reading) #study .paper-graph-wrapper svg,body.course-deck:not(.course-reading) #study .case-page svg{max-height:230px}
+body.course-deck:not(.course-reading) #study .sim-inputs{margin:8px 0}
+body.course-deck:not(.course-reading) #studio .figure-area svg{max-height:clamp(200px,36vh,290px)}
+body.course-deck:not(.course-reading) #studio .studio-bar{height:40px}
+body.course-deck:not(.course-reading) #studio .source-footer{padding:8px 12px}
+body.course-deck:not(.course-reading) #bias .panel .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+body.course-deck:not(.course-reading) #methods .atlas-branch{padding:8px 11px}
+body.course-deck:not(.course-reading) #methods .atlas-branch article{padding:8px 11px}
+body.course-deck:not(.course-reading) #methods .atlas-branch p{font-size:14px!important;line-height:1.5}
+body.course-deck:not(.course-reading) #methods .atlas-question{padding:10px 16px}
+body.course-deck:not(.course-reading) #workflow .code-frame{max-height:45vh;overflow:auto}
+body.course-deck:not(.course-reading) .course-unit{padding-top:22px!important;padding-bottom:10px!important}
+body.course-deck:not(.course-reading) .course-unit.course-continuation>h2{display:none}
+body.course-deck:not(.course-reading) .course-unit.course-continuation>h1{display:none}
+body.course-deck:not(.course-reading) .course-unit.course-continuation>.sectionno,body.course-deck:not(.course-reading) .course-unit.course-continuation>.section-label{display:none}
+body.course-deck:not(.course-reading) #methods .atlas-columns:has(>.atlas-branch[data-course-subhidden="true"]){display:block}
+body.course-deck:not(.course-reading) #methods .atlas-columns .atlas-branch{margin:0}
+body.course-deck:not(.course-reading) #practice .case-page-heading{margin-bottom:10px}
+body.course-deck:not(.course-reading) #practice .case-page-heading h3{font-size:22px;margin:2px 0 5px}
+body.course-deck:not(.course-reading) #practice .case-page-heading>p:last-child{font-size:15px;line-height:1.5}
+body.course-deck:not(.course-reading) #practice .case-figure-scroller svg{max-height:255px}
+body.course-deck:not(.course-reading) #random .panel{display:grid;grid-template-columns:minmax(240px,0.8fr) minmax(300px,1.2fr);gap:8px 22px}
+body.course-deck:not(.course-reading) #random .panel .buttonrow{grid-column:1;grid-row:1}
+body.course-deck:not(.course-reading) #random .panel .grid{grid-column:1;grid-row:2;grid-template-columns:1fr}
+body.course-deck:not(.course-reading) #random .panel .viz{grid-column:2;grid-row:1 / 4;max-height:320px;align-self:center}
+body.course-deck:not(.course-reading) #random .panel .note{grid-column:1;grid-row:3}
+body.course-deck:not(.course-reading) #studio .path-layout{grid-template-columns:1fr 1fr}
+body.course-deck:not(.course-reading) #studio .path-layout>div{padding:9px 14px}
+body.course-deck:not(.course-reading) #studio .figure-area svg{max-height:clamp(190px,33vh,260px)}
+body.course-deck:not(.course-reading) #studio .studio-heading{padding:5px 14px}
+body.course-deck:not(.course-reading) #studio .control-line{padding:5px 14px}
+body.course-deck:not(.course-reading) #study .case-page h4{font-size:23px}
+body.course-deck:not(.course-reading) #sources .course-list{margin:8px 0}
+
+</style><script>window.__courseReplaceStateSafe__=function(){try{return history.replaceState.apply(history,arguments)}catch(e){return null}};</script></head><body><div class="progress" id="progress"></div><div class="shell"><aside class="sidebar"><div class="brand">CAUSAL STUDIES<br/><strong>因果研究方法</strong></div><p class="mini">RESEARCH METHODS SERIES · 01 / 12</p><div class="navtitle">课程章节</div><nav id="nav"><a href="#intro">01　相关不等于因果</a><a href="#potential">02　潜在结果与反事实</a><a href="#estimands">03　ATE / ATT / CATE</a><a href="#bias">04　选择偏差实验室</a><a href="#identification">05　识别与估计</a><a href="#random">06　随机化模拟</a><a href="#dag">07　DAG 图解实验室</a><a href="#methods">08　方法地图</a><a href="#frontier">09　研究前沿</a><a href="#practice">10　实证设计练习</a><a href="#quiz">11　知识检测</a><a href="#refs">参考文献与后续课程</a></nav><p class="mini" style="margin-top:35px">主线：理论 → 识别假设 → 估计 → 检验 → 外推</p></aside>
+<main class="main"><header class="hero course-unit" id="intro"><div class="eyebrow" data-course-part="0">LECTURE 01 / 因果推断导论</div><h1 data-course-part="1">我们如何知道<br/><span class="accent">X 真的导致了 Y？</span></h1><div class="course-chapter-meta">01 / 12 · INTRO</div><p class="lead" data-course-part="2">一堂可以操作的因果推断导论：从一个政策评估问题出发，理解反事实、平均处理效应、选择偏差和可信的研究设计。</p><div data-course-part="3"><span class="tag-minimal pill">政治学 · 公共管理</span><span class="tag-minimal pill">潜在结果框架</span><span class="tag-minimal pill">交互式模拟</span><span class="tag-minimal pill">2024–2025 方法进展</span></div><div class="panel soft" data-course-part="4"><h3>从这个问题开始</h3><p>某地推出青年就业培训计划。数据显示，参加培训者的平均就业收入比未参加者高 <strong>1,000 元/月</strong>。那么，培训使他们的收入增加了 1,000 元吗？</p><div class="buttonrow"><button class="btn" onclick="document.getElementById('bias').scrollIntoView({behavior:'smooth'})">动手检验这个结论 →</button></div></div><p class="note" data-course-part="5">课程定位：书中第三章关于 DAG/混杂的内容是本讲的重要基础；后续具体章节将分别深入匹配、RDD与IV。拓展方法与研究前沿明确区分于教材。</p></header>
+<section class="section course-unit" id="potential"><div class="sectionno" data-course-part="0">CONCEPT 01</div><h2 data-course-part="1">因果推断的根本问题：反事实看不见</h2><div class="course-chapter-meta">01 / 12 · POTENTIAL</div><p class="copy" data-course-part="2">想知道培训是否有效，就要比较<strong>同一个人在同一时刻</strong>参加培训与不参加培训的收入。可是一个人不可能同时经历两种状态。</p><div class="formula" data-course-part="3">Yᵢ(1) = 接受处理的潜在结果　　Yᵢ(0) = 不接受处理的潜在结果</div><div class="formula" data-course-part="4">τᵢ = Yᵢ(1) − Yᵢ(0)</div><div class="panel" data-course-part="5"><h3>点击切换一个人的两种可能世界</h3><div class="buttonrow"><button class="btn" id="w1" onclick="setWorld(1)">世界 A：参加培训</button><button class="btn secondary" id="w0" onclick="setWorld(0)">世界 B：不参加培训</button></div><div class="grid" style="margin-top:20px"><div class="metric"><div class="key">观察到的状态</div><div class="value" id="worldState">接受培训</div></div><div class="metric"><div class="key">对应潜在月收入</div><div class="value blue" id="worldIncome">¥ 7,000</div></div></div><p class="note" id="worldDescription">现实中只能观察其中一个世界；另一个世界是反事实。本演示为教学设定，两个潜在结果均由模拟器预先设定。</p></div><div class="callout" data-course-part="6"><strong>因果推断的根本问题（Fundamental Problem of Causal Inference）：</strong>对于同一个研究单位，我们无法同时观察其接受处理与未接受处理时的结果。这不是简单地增加样本量就能解决的问题。</div></section>
+<section class="section course-unit" id="estimands"><div class="sectionno" data-course-part="0">CONCEPT 02</div><h2 data-course-part="1">我们到底想估计谁的因果效应？</h2><div class="course-chapter-meta">01 / 12 · ESTIMANDS</div><p class="copy" data-course-part="2">即使无法识别每个人的个体处理效应，在一定假设下仍可能识别群体层面的平均处理效应。研究开始前必须先确定目标参数（estimand）。</p><div class="grid" data-course-part="3"><div class="panel"><h3>ATE · 总体平均处理效应</h3><div class="formula">ATE = E[Y(1) − Y(0)]</div><p>如果让目标总体中的每个人都接受培训，平均收入将改变多少？</p></div><div class="panel"><h3>ATT · 处理组平均处理效应</h3><div class="formula">ATT = E[Y(1) − Y(0) | D = 1]</div><p>对实际参加培训的人而言，培训平均产生多少效应？</p></div><div class="panel"><h3>ATU · 未处理组平均处理效应</h3><div class="formula">ATU = E[Y(1) − Y(0) | D = 0]</div><p>对没有参加培训的人，如果他们参加，会产生多少效应？</p></div><div class="panel"><h3>CATE · 条件平均处理效应</h3><div class="formula">CATE(x) = E[Y(1) − Y(0) | X = x]</div><p>例如，对低学历青年与高学历青年，培训效应是否不同？</p></div></div><div class="callout warning" data-course-part="4">注意：ATE、ATT、ATU、CATE并非总是相等。处理效应存在异质性时，估计“谁的效应”会直接影响政策解释。</div></section>
+<section class="section course-unit" id="bias"><div class="sectionno" data-course-part="0">INTERACTIVE LAB 01</div><h2 data-course-part="1">选择偏差：为什么均值差不等于因果效应？</h2><div class="course-chapter-meta">01 / 12 · BIAS</div><p class="copy" data-course-part="2">用最简单的两类型总体模拟就业培训。高基础能力者更可能参与培训，并且不参加培训时收入也更高。拖动滑块，观察未经调整的处理组均值差与真实ATE如何偏离。</p><div class="panel" data-course-part="3"><div class="controls"><div class="control"><label for="effect">培训的真实平均效应 <strong id="effectV">800 元</strong></label><input id="effect" max="2500" min="-1000" step="100" type="range" value="800"/></div><div class="control"><label for="selection">选择偏差强度 <strong id="selectionV">65%</strong></label><input id="selection" max="95" min="0" step="5" type="range" value="65"/></div><div class="control"><label for="abilityGap">高低能力组基础收入差 <strong id="abilityGapV">3000 元</strong></label><input id="abilityGap" max="5000" min="0" step="250" type="range" value="3000"/></div><div class="control"><label for="hetero">高能力者额外培训收益 <strong id="heteroV">0 元</strong></label><input id="hetero" max="1500" min="-1000" step="100" type="range" value="0"/></div></div><div class="grid" style="margin-top:20px"><div class="metric"><div class="key">真实总体平均处理效应 ATE</div><div class="value accent" id="trueAte">¥800</div></div><div class="metric"><div class="key">天真比较：E[Y|D=1] − E[Y|D=0]</div><div class="value orange" id="naive">¥2,750</div></div><div class="metric"><div class="key">真实 ATT</div><div class="value blue" id="trueAtt">¥800</div></div><div class="metric"><div class="key">观测均值差 − ATT（选择偏差）</div><div class="value red" id="biasMetric">¥1,950</div></div></div><svg aria-label="观察到的均值差与真实因果效应比较" class="viz" id="biasChart" role="img" viewbox="0 0 700 225"></svg><div class="buttonrow"><button class="btn secondary" onclick="resetBias()">恢复默认参数</button><button class="btn secondary" onclick="setNoSelection()">消除选择偏差</button><button class="btn secondary" onclick="setNoEffect()">设置真实效应为零</button></div><p class="note">模型说明：总体由等比例高、低能力者组成。低能力者不处理收入为4000元，高能力者为4000+能力差；两类的培训收益分别为基础效应和基础效应+额外收益。处理概率分别是0.5−s/2和0.5+s/2（s为选择强度），因此总体处理率固定为50%。所有结果是精确期望值而非抽样估计；没有随机噪声。</p></div><div class="formula" data-course-part="4">E[Y|D=1] − E[Y|D=0] = ATT + { E[Y(0)|D=1] − E[Y(0)|D=0] }</div><p class="copy" data-course-part="5">右侧第二项就是选择偏差。只要参与培训者即使没有培训也更可能获得高收入，简单均值差就会高估实际接受培训者的因果收益。</p></section>
+<section class="section course-unit" id="identification"><div class="sectionno" data-course-part="0">CONCEPT 03</div><h2 data-course-part="1">识别 ≠ 估计 ≠ 统计显著</h2><div class="course-chapter-meta">01 / 12 · IDENTIFICATION</div><div class="steps" data-course-part="2"><div class="step"><div class="n">1</div><div><strong>目标参数（Estimand）</strong><br/><span class="copy">你想知道ATE、ATT、LATE还是特定地区/时间的人群效应？</span></div></div><div class="step"><div class="n">2</div><div><strong>识别（Identification）</strong><br/><span class="copy">在什么制度机制与假设下，目标参数能由观测数据表达？例如随机分配、条件独立、连续性或有效工具变量。</span></div></div><div class="step"><div class="n">3</div><div><strong>估计（Estimation）</strong><br/><span class="copy">用何种统计程序计算该参数？如组均值差、回归、加权、匹配、局部多项式、2SLS。</span></div></div><div class="step"><div class="n">4</div><div><strong>推断与检验（Inference &amp; Diagnostics）</strong><br/><span class="copy">标准误与置信区间有多大？识别假设的可检验含义是否合理？对模型与样本选择敏感吗？</span></div></div><div class="step"><div class="n">5</div><div><strong>外部效度与政策意义</strong><br/><span class="copy">效果属于谁，能否推广到其他地区、时期或目标群体？</span></div></div></div><div class="callout" data-course-part="3">高统计显著性并不能修复错误的研究设计。识别假设不可信，即使样本有100万，估计仍可能是系统性偏误的。</div></section>
+<section class="section course-unit" id="random"><div class="sectionno" data-course-part="0">INTERACTIVE LAB 02</div><h2 data-course-part="1">随机化究竟解决了什么问题？</h2><div class="course-chapter-meta">01 / 12 · RANDOM</div><p class="copy" data-course-part="2">下方创造一个包含400人的固定模拟总体，每人都有预先设定的两个潜在结果。点击两种分配方式，看看组均值差如何变化。重复随机实验仍会因有限样本出现抽样误差，但系统性的选择机制被打破。</p><div class="panel" data-course-part="3"><div class="buttonrow"><button class="btn" onclick="assignPeople(true)">随机分配培训（重新抽样）</button><button class="btn secondary" onclick="assignPeople(false)">按能力优先分配培训</button></div><div class="grid" style="margin-top:20px"><div class="metric"><div class="key">总体真实 ATE</div><div class="value accent" id="randTrue">¥800</div></div><div class="metric"><div class="key">当前组均值差</div><div class="value orange" id="randObserved">—</div></div></div><svg aria-label="实验处理组与控制组均值及真实ATE" class="viz" id="randomChart" role="img" viewbox="0 0 700 225"></svg><p class="note" id="randomStatus">点击上方按钮开始模拟。总体潜在结果固定；随机分配每次重排200人进入处理组，剩余200人进入控制组。能力优先分配选出基础收入最高的200人。</p></div></section>
+<section class="section course-unit" id="dag"><div class="sectionno" data-course-part="0">VISUAL CORE · DAG LAB</div><h2 data-course-part="1">最本质的一张图：谁影响谁？</h2><div class="course-chapter-meta">01 / 12 · DAG</div><p class="dag-intro" data-course-part="2"><strong>DAG（有向无环图）不是装饰性的流程图，而是一种把因果假设画出来的语言。</strong>先看箭头，再看路径，最后才决定是否控制变量。下面的四种结构，是读懂后续所有识别方法的重要起点。</p>
+<div class="dag-roadmap" data-course-part="3"><div><strong>① 节点 = 变量</strong>D 是处理，Y 是结果，X/M/C 是其他变量。</div><div><strong>② 箭头 = 假设的直接因果影响</strong>A → B 表示 A 直接影响 B，而不只是相关。</div><div><strong>③ 路径 = 变量之间的连接</strong>因果路径与非因果后门路径要区分。</div></div>
+<div class="dag-studio" data-course-part="4"><h3>点击图形结构，再决定“是否控制中间变量”</h3>
+<div aria-label="因果图结构" class="dag-modes" role="group"><button class="dag-mode on" data-dag="confounder">① 混杂：必须重视</button><button class="dag-mode" data-dag="mediator">② 中介：注意目标效应</button><button class="dag-mode" data-dag="collider">③ 对撞：不要乱控制</button><button class="dag-mode" data-dag="simple">④ 直接因果路径</button></div>
+<div class="dag-layout"><div class="dag-stage"><svg aria-label="可交互因果有向无环图" id="dagSvg" role="img" viewbox="0 0 530 290"><defs><marker id="dagArrow" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M 0 0 L 10 5 L 0 10 z" fill="#57748d"></path></marker><marker id="dagArrowGreen" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0b9290"></path></marker><marker id="dagArrowOrange" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d78b41"></path></marker></defs><g id="dagDrawing"></g></svg><div class="legend"><span><span class="dot" style="background:#0b9290"></span>因果效应路径</span><span><span class="dot" style="background:#d78b41"></span>潜在偏差路径</span><span><span class="dot" style="background:#7866a5"></span>正在控制的变量</span></div></div><div aria-live="polite" class="dag-explain"><h3 id="dagTitle">混杂：一条后门路径</h3><p id="dagStory"></p><p class="dag-eq" id="dagPath"></p><p class="dag-result" id="dagTakeaway"></p></div></div>
+<label class="dag-switch"><input id="dagCondition" type="checkbox"/><span>在分析中<strong>控制紫色标出的第三个变量</strong>（点击切换）</span></label>
+<p class="note" id="dagCaveat">本图只描述所展示的简单因果结构；现实中是否有其他开放后门路径，需要基于完整的DAG判断。</p>
+</div><div class="callout" data-course-part="5"><strong>记住一个判断顺序：</strong>先定义 D 对 Y 的目标因果效应 → 画出处理前、处理后的因果结构 → 寻找所有后门路径 → 决定合理的调整集。<strong>“多控制几个变量”不是因果识别策略。</strong></div>
+</section>
+<section class="section course-unit" id="methods"><div class="sectionno" data-course-part="0">THE BIG PICTURE / METHOD ATLAS</div>
+<h2 data-course-part="1">因果推断方法地图</h2><div class="course-chapter-meta">01 / 12 · METHODS</div>
+<p class="copy" data-course-part="2">这里不是把所有方法平铺罗列，而是区分三件事：<strong>有什么数据、因果变异从哪里来、依靠什么假设识别效应。</strong> 面板数据属于数据结构，固定效应和DID则是基于特定假设利用这种结构的分析策略。</p>
+<div aria-label="因果推断方法路线图" class="atlas" data-course-part="3">
+<div class="atlas-question"><span class="atlas-kicker">START HERE</span><strong>你想估计 D 对 Y 的因果效应</strong><small>先定义ATE、ATT或其他目标参数，再画DAG判断潜在混杂与选择机制。</small></div>
+<div aria-hidden="true" class="atlas-stem"></div>
+<div class="atlas-head">研究设计的两条主要起点</div>
+<div class="atlas-columns">
+<div class="atlas-branch"><div class="atlas-branch-title">A · 随机分配</div><article><strong>随机对照实验 RCT</strong><p>利用随机分配，使处理组与控制组在期望上可比；仍需关注不遵从、失访和外部效度。</p></article></div>
+<div class="atlas-branch"><div class="atlas-branch-title">B · 非随机分配 / 观察性研究</div><article><strong>DAG + 回归控制 / 匹配 / IPW</strong><p>明确可观测混杂、后门路径、共同支撑和条件独立性；不能自动消除未观测混杂。</p></article><article class="atlas-feature"><span class="atlas-chapter">第05讲</span><strong>面板数据 Panel Data → 固定效应 FE</strong><p>同一地区、个人或企业跨时间重复观测。个体固定效应可消除不随时间变化的未观测因素；时间固定效应控制共同冲击。<b>FE并不会自动建立因果识别。</b></p><div class="atlas-sequence">重复观测 <span>→</span> 个体内变化 <span>→</span> FE / TWFE <span>→</span> 检查时变混杂</div></article></div>
+</div>
+<div class="atlas-head atlas-head-next">当制度或处理机制提供可利用的变化时</div>
+<div class="atlas-techniques">
+<article><span>第06讲</span><strong>DID / 事件研究</strong><small>政策前后 × 处理/对照；关键是平行趋势，尤其警惕分期处理与效应异质性。</small></article>
+<article><span>第07讲</span><strong>RDD</strong><small>阈值附近比较；依赖断点潜在结果连续性，通常估计局部效应。</small></article>
+<article><span>第08讲</span><strong>IV / 2SLS</strong><small>外生工具带来的处理变化；相关性、排除限制、独立性与弱工具诊断。</small></article>
+<article><span>第09讲</span><strong>SCM / 合成控制</strong><small>加权未处理单位构造政策反事实；关注处理前拟合与供体有效性。</small></article>
+</div>
+<div class="atlas-head atlas-head-next">高级扩展：不是取代识别假设</div>
+<div class="atlas-techniques atlas-advanced"><article><span>第10讲</span><strong>现代面板因果推断</strong><small>异质性DID、分期实施、广义合成控制、矩阵补全。</small></article><article><span>第11讲</span><strong>因果机器学习</strong><small>DML、因果森林、异质性效应与政策学习。</small></article><article><span>第12讲</span><strong>设计、诊断与复现</strong><small>安慰剂检验、敏感性分析、Stata/R实证工作流。</small></article></div>
+</div>
+<div class="atlas-note" data-course-part="4"><strong>不要混淆：</strong>“面板数据”回答<strong>数据如何组织</strong>；“固定效应”回答<strong>如何利用个体内部变化</strong>；“DID”回答<strong>何时能把组间趋势差异解释为政策效应</strong>。三者相关，却并非同义词。</div>
+<h3 class="course-title" data-course-part="5">全套 12 讲 · 固定学习路线</h3>
+<div class="course-index" data-course-part="6">
+<div><em>01</em><strong>因果推断导论</strong><small>正在学习</small></div><div><em>02</em><strong>DAG 与因果结构</strong></div><div><em>03</em><strong>回归与因果识别</strong></div><div><em>04</em><strong>匹配与倾向得分</strong></div>
+<div class=""><em>05</em><strong>面板数据与固定效应</strong></div><div><em>06</em><strong>双重差分 DID</strong></div><div><em>07</em><strong>断点回归 RDD</strong></div><div><em>08</em><strong>工具变量 IV</strong></div>
+<div><em>09</em><strong>合成控制 SCM</strong></div><div><em>10</em><strong>现代面板因果推断</strong></div><div><em>11</em><strong>因果机器学习</strong></div><div><em>12</em><strong>研究设计与复现</strong></div>
+</div></section>
+<section class="section course-unit" id="frontier"><div class="sectionno" data-course-part="0">RECENT DEVELOPMENTS · EXTERNAL SOURCES</div><h2 data-course-part="1">走向前沿：2024–2025 年的几个方向</h2><div class="course-chapter-meta">01 / 12 · FRONTIER</div><p class="copy" data-course-part="2">以下是教材之外的延伸阅读，是近年来值得追踪的代表性方向，不是对截至2026年全部文献的穷尽综述。</p><div class="grid" data-course-part="3"><div class="panel"><h3>① 因果机器学习与双重稳健估计</h3><p class="copy">DML利用交叉拟合、正交化等技术减少高维辅助模型估计误差对目标因果参数的影响。TMLE与双重稳健估计也帮助在灵活模型下进行因果推断；前提仍是满足所需的识别假设。</p><p class="note">延伸：2024 年对经典实证研究重新应用因果机器学习的比较。</p></div><div class="panel"><h3>② 从平均效应到异质性效应</h3><p class="copy">Causal Forest、meta-learners等关注“政策对谁更有效”，特别适合政策靶向与资源配置，但异质性探索需要谨慎处理模型选择和推断。</p><p class="note">延伸：2025 年针对133篇因果森林实证论文的方法综述。</p></div><div class="panel"><h3>③ 从静态效应到动态政策决策</h3><p class="copy">动态治疗制度、政策学习与强化学习关注按个体状态调整连续决策，延伸了传统一次性处理框架。</p><p class="note">延伸：2025 年的因果机器学习与动态政策学习综述。</p></div><div class="panel"><h3>④ 更谨慎地处理分期实施政策</h3><p class="copy">现代DID文献尤其关注错位实施、处理效应异质性、平行趋势的可检验含义以及稳健推断，避免机械套用双向固定效应。</p><p class="note">延伸：2024 年关于错位处理的实践指南。</p></div></div><div class="callout" data-course-part="4">共同趋势：更灵活的模型、更明确的目标参数、更注重处理效应异质性与诊断。但<strong>预测性能提高不等于识别假设变得可信</strong>。</div></section>
+<section class="section course-unit" id="practice">
+<div class="sectionno" data-course-part="0">RESEARCH NOTE / 01 · AMERICAN POLITICAL SCIENCE REVIEW</div>
+<h2 data-course-part="1">一篇真实论文，六步理解因果识别</h2><div class="course-chapter-meta">01 / 12 · PRACTICE</div>
+<p class="copy" data-course-part="2">以 Gerber 与 Green（2000）的选民动员田野实验为线索，依次理解研究问题、随机分配、实际接触和因果效应。点击下面的标签，在同一区域切换不同内容。</p>
+<div class="case-shell" data-course-part="3" id="apsrCase">
+<header class="case-header">
+<div class="case-meta">APSR <span class="case-divider">/</span> VOL. 94 · NO. 3 <span class="case-divider">/</span> 2000</div>
+<h3>The Effects of Canvassing, Telephone Calls, and Direct Mail on Voter Turnout: A Field Experiment</h3>
+<p>Alan S. Gerber &amp; Donald P. Green</p>
+<div class="case-links"><a href="https://www.cambridge.org/core/journals/american-political-science-review/article/abs/effects-of-canvassing-telephone-calls-and-direct-mail-on-voter-turnout-a-field-experiment/E7C645533F3B750E599BAFE710B477BF" rel="noopener" target="_blank">期刊原文 ↗</a><a href="https://isps.yale.edu/resource/the-effects-of-canvassing-telephone-calls-and-direct-mail-on-voter-turnout-a-field" rel="noopener" target="_blank">耶鲁研究页面 ↗</a><a href="https://www.povertyactionlab.org/evaluation/effects-canvassing-phone-calls-and-direct-mail-voter-turnout-united-states" rel="noopener" target="_blank">J-PAL 研究摘要 ↗</a></div>
+</header>
+<div aria-label="APSR研究案例阅读章节" class="case-tabs" role="tablist">
+<button aria-controls="case-overview" aria-selected="true" class="case-tab is-current" data-case-tab="overview" id="tab-overview" role="tab" tabindex="0" type="button"><span>01</span> 论文发现</button>
+<button aria-controls="case-process" aria-selected="false" class="case-tab" data-case-tab="process" id="tab-process" role="tab" tabindex="-1" type="button"><span>02</span> 研究流程</button>
+<button aria-controls="case-dag" aria-selected="false" class="case-tab" data-case-tab="dag" id="tab-dag" role="tab" tabindex="-1" type="button"><span>03</span> 因果图 DAG</button>
+<button aria-controls="case-assumptions" aria-selected="false" class="case-tab" data-case-tab="assumptions" id="tab-assumptions" role="tab" tabindex="-1" type="button"><span>04</span> 识别假设</button>
+<button aria-controls="case-formula" aria-selected="false" class="case-tab" data-case-tab="formula" id="tab-formula" role="tab" tabindex="-1" type="button"><span>05</span> ITT 与 CACE</button>
+<button aria-controls="case-simulation" aria-selected="false" class="case-tab" data-case-tab="simulation" id="tab-simulation" role="tab" tabindex="-1" type="button"><span>06</span> 交互模拟</button>
+</div>
+<div class="case-contents">
+<section aria-labelledby="tab-overview" class="case-page" id="case-overview" role="tabpanel" tabindex="0">
+<div class="case-page-heading"><p class="case-kicker">ARTICLE / 原论文研究发现</p><h3>哪一种选民动员方式有效？</h3><p>研究于1998年美国康涅狄格州纽黑文市开展随机田野实验，研究单位为登记选民，比较非党派面对面拜访、电话提醒和直接邮寄宣传对实际投票行为的影响。</p></div>
+<div class="case-results">
+<article><div class="case-result-number">8.7 <small>个百分点</small></div><strong>面对面成功接触</strong><p>J-PAL 对原研究的总结：对能够成功接触到的选民，面对面动员的投票率提升约 8.7 个百分点。</p></article>
+<article><div class="case-result-number">0.5 <small>个百分点／封</small></div><strong>直接邮寄宣传</strong><p>邮寄的提升幅度较小：每增加一封动员邮件，投票率平均提高约 0.5 个百分点。</p></article>
+<article><div class="case-result-number">—</div><strong>电话动员</strong><p>论文未发现电话动员带来可辨识的投票率提升；并非断言所有情境下电话联系都没有效果。</p></article>
+</div>
+<div class="case-takeaway"><strong>本讲要追问的是“如何识别”，而不只是“提高了多少”。</strong><p>论文的关键在于随机分配动员方式；而“被分配接受动员”和“真正接触到动员者”并不相同。这恰好引出 ITT 与实际接触效应的区别。</p></div>
+<p class="case-source">来源：Gerber &amp; Green（2000），<em>American Political Science Review</em> 94(3): 653–663；研究结果数值参照 <a href="https://www.povertyactionlab.org/evaluation/effects-canvassing-phone-calls-and-direct-mail-voter-turnout-united-states" rel="noopener" target="_blank">J-PAL 的研究摘要</a>。本页面的交互模拟不使用原论文个体数据。</p>
+</section>
+<section aria-labelledby="tab-process" class="case-page" hidden="" id="case-process" role="tabpanel" tabindex="0">
+<div class="case-page-heading"><p class="case-kicker">DESIGN / 研究流程</p><h3>随机分配发生在实际接触之前</h3><p>以面对面拜访为例，先随机决定谁获得被拜访的机会，再记录实际是否联系成功，最后通过选民投票记录观察结果。</p></div>
+<div class="case-figure-scroller"><svg aria-label="选民动员随机实验流程图" class="case-drawing" viewbox="0 0 920 360">
+<defs><marker id="caseFlowArrow" markerheight="9" markerwidth="9" orient="auto" refx="8" refy="4.5"><path d="M0 0 L9 4.5 L0 9Z" fill="#54776B"></path></marker></defs>
+<rect fill="#F5F4EE" height="82" rx="5" stroke="#C8CEC6" width="174" x="24" y="122"></rect>
+<text fill="#273B33" font-size="19" font-weight="600" text-anchor="middle" x="111" y="155">登记选民</text><text fill="#6A776D" font-size="13" text-anchor="middle" x="111" y="180">研究总体</text>
+<path d="M198 163 L273 163" marker-end="url(#caseFlowArrow)" stroke="#54776B" stroke-width="2.5"></path>
+<rect fill="#E9F0E9" height="82" rx="5" stroke="#8DAA99" width="184" x="277" y="122"></rect>
+<text fill="#285B52" font-size="18" font-weight="600" text-anchor="middle" x="369" y="152">随机分配 Z</text><text fill="#48665B" font-size="13" text-anchor="middle" x="369" y="177">Z=1 或 Z=0</text>
+<path d="M461 146 C500 146 505 78 563 78" fill="none" marker-end="url(#caseFlowArrow)" stroke="#54776B" stroke-width="2.5"></path>
+<path d="M461 185 C500 185 505 262 563 262" fill="none" marker-end="url(#caseFlowArrow)" stroke="#54776B" stroke-width="2.5"></path>
+<rect fill="#EBF1F5" height="98" rx="5" stroke="#A1B6BE" width="174" x="568" y="30"></rect>
+<text fill="#35566D" font-size="16" font-weight="600" text-anchor="middle" x="655" y="58">获分配动员 Z=1</text>
+<text fill="#5B7180" font-size="13" text-anchor="middle" x="655" y="82">实际接触 D</text><text fill="#5B7180" font-size="13" text-anchor="middle" x="655" y="104">联系成功 / 未联系上</text>
+<rect fill="#F5F4EE" height="80" rx="5" stroke="#C8CEC6" width="174" x="568" y="224"></rect>
+<text fill="#3E4E47" font-size="16" font-weight="600" text-anchor="middle" x="655" y="254">对照组 Z=0</text><text fill="#637169" font-size="13" text-anchor="middle" x="655" y="277">模拟中无研究动员接触</text>
+<path d="M742 79 L780 79 L780 150" fill="none" marker-end="url(#caseFlowArrow)" stroke="#54776B" stroke-width="2.5"></path>
+<path d="M742 265 L780 265 L780 215" fill="none" marker-end="url(#caseFlowArrow)" stroke="#54776B" stroke-width="2.5"></path>
+<rect fill="#F3EEE5" height="84" rx="5" stroke="#BEA782" width="106" x="793" y="137"></rect>
+<text fill="#805C33" font-size="17" font-weight="600" text-anchor="middle" x="846" y="170">结果 Y</text><text fill="#805C33" font-size="13" text-anchor="middle" x="846" y="195">是否投票</text>
+<text fill="#7A8880" font-size="12" letter-spacing="1" text-anchor="middle" x="369" y="96">RANDOMIZATION</text>
+<text fill="#7A8880" font-size="12" letter-spacing="1" text-anchor="middle" x="655" y="15">ASSIGNMENT ≠ RECEIPT</text>
+<text fill="#7A8880" font-size="12" letter-spacing="1" text-anchor="middle" x="846" y="115">OUTCOME</text>
+</svg></div><p class="case-pan-hint">↔ 窄屏设备可左右滑动查看完整流程图</p>
+<div class="case-two-notes"><p><strong>ITT：</strong>按最初随机分配 Z 比较全部实验组与对照组，不因接触失败而删除样本。</p><p><strong>实际接触效应：</strong>仅对“联系上”与“没联系上”做比较会丢失随机化的可比性，需要额外识别假设。</p></div>
+</section>
+<section aria-labelledby="tab-dag" class="case-page" hidden="" id="case-dag" role="tabpanel" tabindex="0">
+<div class="case-page-heading"><p class="case-kicker">CAUSAL GRAPH / DAG</p><h3>为什么随机化能帮忙，但实际接触仍可能内生？</h3><p><strong>Z</strong> 是随机分配，<strong>D</strong> 是实际是否接触，<strong>Y</strong> 是是否投票，<strong>U</strong> 代表原有政治参与倾向等未观测特征。</p></div>
+<div class="case-figure-scroller"><svg aria-label="DAG，Z到D到Y，U同时影响D和Y，可选显示Z到Y直接路径" class="case-drawing" id="caseDagSvg" viewbox="0 0 840 330">
+<defs><marker id="caseDagCausal" markerheight="9" markerwidth="9" orient="auto" refx="8" refy="4.5"><path d="M0 0 L9 4.5 L0 9Z" fill="#285B52"></path></marker><marker id="caseDagConf" markerheight="9" markerwidth="9" orient="auto" refx="8" refy="4.5"><path d="M0 0 L9 4.5 L0 9Z" fill="#A87340"></path></marker><marker id="caseDagViolation" markerheight="9" markerwidth="9" orient="auto" refx="8" refy="4.5"><path d="M0 0 L9 4.5 L0 9Z" fill="#9C584E"></path></marker></defs>
+<path d="M205 202 L355 202" marker-end="url(#caseDagCausal)" stroke="#285B52" stroke-width="3.5"></path>
+<path d="M482 202 L635 202" marker-end="url(#caseDagCausal)" stroke="#285B52" stroke-width="3.5"></path>
+<path d="M420 99 L420 148" marker-end="url(#caseDagConf)" stroke="#A87340" stroke-width="3.5"></path>
+<path d="M470 90 Q592 100 659 158" fill="none" marker-end="url(#caseDagConf)" stroke="#A87340" stroke-width="3.5"></path>
+<path d="M160 163 Q418 -5 677 162" fill="none" id="caseDagForbidden" marker-end="url(#caseDagViolation)" opacity="0" stroke="#9C584E" stroke-dasharray="9 7" stroke-width="3"></path>
+<circle cx="151" cy="202" fill="#EBF2ED" r="54" stroke="#285B52" stroke-width="2.5"></circle><circle cx="420" cy="202" fill="#EBF2ED" r="54" stroke="#285B52" stroke-width="2.5"></circle><circle cx="689" cy="202" fill="#F5EFE5" r="54" stroke="#AD8A5A" stroke-width="2.5"></circle><circle cx="420" cy="68" fill="#F8F0E6" r="39" stroke="#A87340" stroke-width="2.5"></circle>
+<text fill="#285B52" font-size="27" font-weight="600" text-anchor="middle" x="151" y="198">Z</text><text fill="#46685C" font-size="13" text-anchor="middle" x="151" y="218">随机分配</text>
+<text fill="#285B52" font-size="27" font-weight="600" text-anchor="middle" x="420" y="198">D</text><text fill="#46685C" font-size="13" text-anchor="middle" x="420" y="218">实际接触</text>
+<text fill="#8B6437" font-size="27" font-weight="600" text-anchor="middle" x="689" y="198">Y</text><text fill="#8B6437" font-size="13" text-anchor="middle" x="689" y="218">是否投票</text>
+<text fill="#8F5A30" font-size="22" font-weight="600" text-anchor="middle" x="420" y="64">U</text><text fill="#8F5A30" font-size="11" text-anchor="middle" x="420" y="81">参与倾向</text>
+<text fill="#285B52" font-size="13" text-anchor="middle" x="281" y="184">随机化影响接触</text><text fill="#285B52" font-size="13" text-anchor="middle" x="553" y="184">接触影响投票</text>
+<text fill="#57685F" font-size="14" text-anchor="middle" x="420" y="296">关键：Z 与 U 独立；D 受 U 影响，因此直接比较 D=1 和 D=0 不等于随机比较。</text>
+</svg></div><p class="case-pan-hint">↔ 窄屏设备可左右滑动查看完整因果图</p>
+<label class="case-toggle"><input id="caseExclusionToggle" type="checkbox"/><span>假设不满足：显示 Z → Y 的直接路径</span></label>
+<p aria-live="polite" class="case-feedback" id="caseDagFeedback">在标准排除限制下，Z 对 Y 的影响完全通过 D 传递。Z 的随机性支持 ITT 识别，而 U 仍然会混杂 D 与 Y。</p>
+<p class="case-source">DAG 是为教学绘制的简化因果模型，并非论文原图；灰色假设条件不能只靠DAG本身验证。</p>
+</section>
+<section aria-labelledby="tab-assumptions" class="case-page" hidden="" id="case-assumptions" role="tabpanel" tabindex="0">
+<div class="case-page-heading"><p class="case-kicker">IDENTIFICATION / 识别条件</p><h3>识别 ITT 所需的假设，与识别接触效应所需的假设不同</h3><p>区分“由随机分配识别的分配效应”与“实际接受处理的局部因果效应”，可以避免把随机实验的优势过度延伸。</p></div>
+<div class="case-assump-row"><div>01 <strong>随机分配</strong><small>ITT 的关键</small></div><p>Z 的分配独立于潜在结果和潜在接触状态。于是按 Z 分组比较具备设计上的因果解释基础。</p></div>
+<div class="case-assump-row"><div>02 <strong>干扰与处理定义</strong><small>两种估计都要检查</small></div><p>选民之间没有足以破坏研究定义的溢出效应，处理含义稳定；现实中需要讨论家庭成员互相影响等可能性。</p></div>
+<div class="case-assump-row"><div>03 <strong>排除限制</strong><small>用于 Wald / CACE</small></div><p>随机分配 Z 只通过实际接触 D 影响投票 Y；例如“得知有人要来拜访”若本身影响投票，就会挑战该假设。</p></div>
+<div class="case-assump-row"><div>04 <strong>单调性</strong><small>用于 Wald / CACE</small></div><p>不存在因为被分配到动员组，反而失去原本会发生的接触的“反向服从者”；并需要非零的第一阶段。</p></div>
+<div class="case-assump-row"><div>05 <strong>一侧不遵从</strong><small>本页模拟的附加设定</small></div><p>本教学模拟规定对照组没有实验提供的面对面动员接触，因此第一阶段等于动员组成功接触率。这不是所有实验的通用假设。</p></div>
+<p class="case-source">重要区别：随机分配本身并不能验证排除限制、单调性或无干扰；这些条件需要结合实际研究过程作出论证。</p>
+</section>
+<section aria-labelledby="tab-formula" class="case-page" hidden="" id="case-formula" role="tabpanel" tabindex="0">
+<div class="case-page-heading"><p class="case-kicker">ESTIMANDS / 目标参数</p><h3>ITT、CACE/LATE 与 TOT 到底差在哪里？</h3><p>不要把随机分配效应、局部接触效应和所有已接受处理者的平均效应混为一谈。</p></div>
+<div class="case-eq-grid">
+<div class="case-eq"><p class="case-eq-name">01 · 分配效应 ITT<sub>Y</sub></p><div class="case-math">E[Y | Z=1] − E[Y | Z=0]</div><p>回答：<strong>被随机分配到动员组</strong>，平均改变了多少投票概率？由随机分配直接识别。</p></div>
+<div class="case-eq"><p class="case-eq-name">02 · 第一阶段 ITT<sub>D</sub></p><div class="case-math">E[D | Z=1] − E[D | Z=0]</div><p>回答：随机分配使<strong>实际接触率</strong>改变了多少？本模拟对照组无实验接触。</p></div>
+<div class="case-eq"><p class="case-eq-name">03 · Wald 比率 / CACE（LATE）</p><div class="case-math case-frac"><span>ITT<sub>Y</sub></span><span class="case-fraction"><span>E[Y|Z=1] − E[Y|Z=0]</span><span>E[D|Z=1] − E[D|Z=0]</span></span></div><p>在随机性、排除限制、单调性、非零第一阶段等条件下，识别<strong>服从者（compliers）</strong>的平均接触效应。</p></div>
+</div>
+<div class="case-live-eq"><div><span>当前 ITT</span><strong id="formulaITT">—</strong></div><div><span>当前第一阶段</span><strong id="formulaFS">—</strong></div><div><span>当前 Wald / CACE</span><strong id="formulaTOT">—</strong></div></div>
+<p class="case-validity" id="caseFormulaValidity">当前按标准排除限制解释：Wald 比率可在上述假设下解释为服从者平均接触效应。</p>
+<p class="case-takeaway"><strong>TOT 和 CACE 一定相同吗？</strong> 不一定。TOT 通常指实际接受处理者的平均处理效应；CACE/LATE 指因分配而改变接受处理状态的服从者的平均效应。<strong>本模拟采用一侧不遵从</strong>，因而二者对应同一人群；在一般不遵从设计中不能直接画等号。</p>
+<p class="case-source">这些公式是对随机化鼓励设计及 Wald/IV 识别逻辑的教学概括，不是对 Gerber &amp; Green（2000）全部原始估计模型的逐项复刻。</p>
+</section>
+<section aria-labelledby="tab-simulation" class="case-page" hidden="" id="case-simulation" role="tabpanel" tabindex="0">
+<div class="case-page-heading"><p class="case-kicker">INTERACTIVE / 教学模拟 · 非论文数据</p><h3>动手改变接触率与选择偏差</h3><p>下列数字均为人工设定。移动滑块，观察“按实际接触分组的朴素比较”如何偏离真实接触效应，以及 ITT 如何随着接触率变化。</p></div>
+<div class="case-controls">
+<div class="control"><label for="apsrBase">基线投票率 <strong id="apsrBaseV">—</strong></label><input id="apsrBase" max="75" min="25" step="1" type="range" value="42"/></div>
+<div class="control"><label for="apsrGap">两类选民的基线投票率差 <strong id="apsrGapV">—</strong></label><input id="apsrGap" max="30" min="0" step="1" type="range" value="18"/></div>
+<div class="control"><label for="apsrContact">平均成功接触率 <strong id="apsrContactV">—</strong></label><input id="apsrContact" max="95" min="10" step="1" type="range" value="55"/></div>
+<div class="control"><label for="apsrSort">高参与倾向者更易被联系的差距 <strong id="apsrSortV">—</strong></label><input id="apsrSort" max="50" min="0" step="1" type="range" value="24"/></div>
+<div class="control"><label for="apsrEffect">真实面对面接触效应 <strong id="apsrEffectV">—</strong></label><input id="apsrEffect" max="20" min="0" step="1" type="range" value="8"/></div>
+</div>
+<div class="case-quick-actions"><button id="casePresetDefault" type="button">默认设定</button><button id="casePresetNoBias" type="button">消除接触选择偏差</button><button id="casePresetNoEffect" type="button">假设动员无效</button></div>
+<div class="case-sim-metrics"><div><small>朴素比较 D=1 vs D=0</small><strong id="apsrNaive">—</strong></div><div><small>随机分配效应 ITT</small><strong id="apsrITT">—</strong></div><div><small>Wald / CACE</small><strong id="apsrTOT">—</strong></div></div>
+<div class="case-extra-metrics"><span>对照组：<b id="apsrCtrl">—</b></span><span>实验组：<b id="apsrTreat">—</b></span><span>实际接触率：<b id="apsrReach">—</b></span></div>
+<svg aria-label="对比真实接触效应、朴素比较、随机分配效应和Wald估计的教学模拟条形图" class="case-sim-chart" id="apsrChart" role="img" viewbox="0 0 720 230"></svg>
+<p aria-live="polite" class="case-sim-explain" id="apsrExplain"></p>
+<p class="case-source">这里采用平均层面的确定性模拟，未模拟抽样误差、标准误或置信区间；百分点不是百分比的相对变化。所有数字均不是原论文的回归结果。</p>
+</section>
+</div>
+<div class="case-bottom"><span id="casePagerText">01 / 06 · 论文发现</span><button id="caseNext" type="button">下一节 <span aria-hidden="true">→</span></button></div>
+</div>
+<div class="case-reflection" data-course-part="4"><strong>研究设计思考</strong><p>为什么“随机分配的组间差”有因果解释，而“实际接触者与未接触者的差”未必有？什么条件下 ITT 除以第一阶段才能解释为接触的局部因果效应？</p></div>
+</section>
+<section class="section course-unit" id="quiz"><div class="sectionno" data-course-part="0">KNOWLEDGE CHECK</div><h2 data-course-part="1">五个问题，检测是否真正理解</h2><div class="course-chapter-meta">01 / 12 · QUIZ</div><div data-course-part="2" id="quizRoot"></div><p class="callout" data-course-part="3" id="scoreResult" style="display:none"></p></section>
+<section class="section course-unit" id="refs"><div class="sectionno" data-course-part="0">READING NOTES</div><h2 data-course-part="1">资料来源与后续课程</h2><div class="course-chapter-meta">01 / 12 · REFS</div><p data-course-part="2"><strong>教材基底：</strong>用户上传《因果推断》第三章（因果图、后门路径、对撞因子偏差）以及第五至第七章扫描材料（子分类、匹配、倾向得分、RDD、IV）。本讲的潜在结果与研究设计总体框架还包含用于教学的外部补充，不应被理解为完全来自指定扫描章节。</p><h3 data-course-part="3" style="margin-top:30px">近期拓展阅读</h3><ol class="bib" data-course-part="4"><li><a href="https://academic.oup.com/ectj/article/27/2/213/7602388" rel="noopener" target="_blank">The Value Added of Machine Learning to Causal Inference: Evidence from Revisited Studies</a>（2024，<i>The Econometrics Journal</i>）</li><li><a href="https://onlinelibrary.wiley.com/doi/10.1111/insr.12610" rel="noopener" target="_blank">How Do Applied Researchers Use the Causal Forest? A Methodological Review</a>（2025，<i>International Statistical Review</i>）</li><li><a href="https://wires.onlinelibrary.wiley.com/doi/10.1002/wics.70050" rel="noopener" target="_blank">Recent Advances in Causal Machine Learning and Dynamic Policy Learning</a>（2025，<i>WIREs Computational Statistics</i>）</li><li><a href="https://www.annualreviews.org/content/journals/10.1146/annurev-publhealth-061022-050825" rel="noopener" target="_blank">Designing Difference-in-Difference Studies with Staggered Treatment Adoption</a>（2024，<i>Annual Review of Public Health</i>）</li></ol><h3 data-course-part="5" style="margin-top:35px">全套课程目录（12讲）</h3><div class="grid" data-course-part="6"><div class="method">01 · 因果推断导论</div><div class="method">02 · DAG 与因果结构</div><div class="method">03 · 回归与因果识别</div><div class="method">04 · 匹配与倾向得分</div><div class="method">05 · 面板数据与固定效应</div><div class="method">06 · 双重差分 DID</div><div class="method">07 · 断点回归 RDD</div><div class="method">08 · 工具变量 IV</div><div class="method">09 · 合成控制 SCM</div><div class="method">10 · 现代面板因果推断</div><div class="method">11 · 因果机器学习</div><div class="method">12 · 研究设计与复现</div></div><footer class="footer" data-course-part="7">CAUSAL LAB · Lesson 01　|　独立 HTML 文件，可离线使用交互模拟；文献链接需联网打开。<br/>所有模拟数字均为教学设定，不代表现实政策的估计结果。</footer></section></main></div>
+<script>
+const $=id=>document.getElementById(id);const money=x=>'¥'+Math.round(x).toLocaleString('zh-CN');
+function setWorld(w){$('worldState').textContent=w?'接受培训':'不接受培训';$('worldIncome').textContent=w?'¥ 7,000':'¥ 6,200';$('w1').className=w?'btn':'btn secondary';$('w0').className=w?'btn secondary':'btn';$('worldDescription').textContent=w?'此时只能观察到 Y(1)=7,000；Y(0)=6,200 是不可见的反事实。':'此时只能观察到 Y(0)=6,200；Y(1)=7,000 是不可见的反事实。';}
+const svg=(node,html)=>{node.innerHTML=html};function renderBar(svgId,vals,names,colors){const el=$(svgId),max=Math.max(100,...vals.map(Math.abs))*1.15;let out='<line x1="100" y1="190" x2="670" y2="190" stroke="#8a9fb6" stroke-width="1"/>';const base=100,scale=475/max;vals.forEach((v,i)=>{let y=25+i*63,width=Math.abs(v)*scale;out+=`<text x="14" y="${y+20}" fill="#52665B" font-size="13">${names[i]}</text><rect x="${base}" y="${y}" width="${Math.max(1,width)}" height="30" rx="5" fill="${colors[i]}" opacity="0.9"/><text x="${Math.min(base+width+10,598)}" y="${y+21}" font-size="14" font-weight="700" fill="#172b46">${money(v)}</text>`;});svg(el,out);}
+function updateBias(){let tau=+$('effect').value,s=+$('selection').value/100,g=+$('abilityGap').value,h=+$('hetero').value;['effect','selection','abilityGap','hetero'].forEach((k,i)=>$(k+'V').textContent=[$('effect').value+' 元',$('selection').value+'%',$('abilityGap').value+' 元',$('hetero').value+' 元'][i]);let pH=.5+s/2,pL=.5-s/2;let treated=(pH*(4000+g+tau+h)+pL*(4000+tau))/(pH+pL),ctrl=((1-pH)*(4000+g)+(1-pL)*4000)/(2-pH-pL),naive=treated-ctrl,ate=tau+h/2,att=tau+h*pH/(pH+pL),bias=naive-att; $('trueAte').textContent=money(ate);$('trueAtt').textContent=money(att);$('naive').textContent=money(naive);$('biasMetric').textContent=money(bias);renderBar('biasChart',[Math.abs(ate),Math.abs(naive),Math.abs(bias)],['真实ATE','均值差','|选择偏差|'],['#087f8c','#d68a3e','#d86b82']);}
+['effect','selection','abilityGap','hetero'].forEach(k=>$(k).addEventListener('input',updateBias));function resetBias(){$('effect').value=800;$('selection').value=65;$('abilityGap').value=3000;$('hetero').value=0;updateBias()}function setNoSelection(){$('selection').value=0;updateBias()}function setNoEffect(){$('effect').value=0;$('hetero').value=0;updateBias()}updateBias();
+
+// Interactive, deliberately minimal causal graphs.
+let dagMode='confounder';
+const dagInfo={
+confounder:{title:'混杂：一条后门路径',story:'X（例如家庭背景）同时影响是否参加培训 D 和收入 Y。即使培训毫无作用，D 与 Y 也可能相关。',path:'路径：D ← X → Y（后门路径）',off:'不控制 X：后门路径开放，可能出现混杂偏差。',on:'控制 X：这条后门路径被阻断；但仍需检查其他路径与识别假设。'},
+mediator:{title:'中介：效应通过它传递',story:'培训 D 改善技能 M，技能 M 进一步影响收入 Y。此时 M 是处理后的中介变量。',path:'路径：D → M → Y（间接因果效应）',off:'不控制 M：在其他条件成立时，可以保留经 M 传递的总效应。',on:'控制 M：阻断了这条间接因果路径；通常不再估计原来的总效应。'},
+collider:{title:'对撞：控制它可能制造偏差',story:'D 与 Y 都会影响是否入选样本 C。例如，培训经历和收入表现共同影响是否被某个平台收录。',path:'路径：D → C ← Y（对撞结构）',off:'不控制 C：该非因果路径默认关闭。',on:'控制 C 或只分析 C=1 者：对撞路径被打开，可能制造虚假相关。'},
+simple:{title:'直接因果路径：最简情况',story:'假设培训 D 直接影响收入 Y，没有图中未画出的共同原因、选择因素或中介。',path:'路径：D → Y（因果路径）',off:'仅观察到 D 与 Y 相关，并不能证明现实世界真的只有这条路径。',on:'此图没有需要控制的第三个变量；先判断整张因果图是否合理。'}};
+function dNode(id,x,y,name,caption,cls,checked){return `<circle class="dag-node ${cls||''} ${checked?'conditioned':''}" cx="${x}" cy="${y}" r="30"></circle><text class="dag-node-label" x="${x}" y="${y}">${name}</text><text class="dag-small" x="${x}" y="${y+53}">${caption}</text>`}
+function dArrow(x1,y1,x2,y2,kind){return `<line class="dag-arrow ${kind||''}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`}
+function drawDag(){let c=$('dagCondition').checked,m=dagMode,inf=dagInfo[m],a='';
+if(m==='confounder'){a+=dArrow(258,82,128,180,'problem')+dArrow(272,82,403,180,'problem')+dArrow(151,205,379,205,'causal');a+=dNode('X',265,56,'X','家庭背景','',c)+dNode('D',110,205,'D','培训','treatment')+dNode('Y',420,205,'Y','收入','outcome');}
+if(m==='mediator'){a+=dArrow(151,140,238,140,'causal')+dArrow(292,140,379,140,'causal')+`<path class="dag-arrow causal" d="M 135 113 Q 265 8 395 113"/>`;a+=dNode('D',110,140,'D','培训','treatment')+dNode('M',265,140,'M','技能','',c)+dNode('Y',420,140,'Y','收入','outcome');}
+if(m==='collider'){a+=dArrow(145,120,236,193,'problem')+dArrow(385,120,295,193,'problem');a+=dNode('D',110,96,'D','培训','treatment')+dNode('C',265,217,'C','入选样本','',c)+dNode('Y',420,96,'Y','收入','outcome');}
+if(m==='simple'){a+=dArrow(151,145,378,145,'causal');a+=dNode('D',110,145,'D','培训','treatment')+dNode('Y',420,145,'Y','收入','outcome');}
+$('dagDrawing').innerHTML=a;$('dagTitle').textContent=inf.title;$('dagStory').textContent=inf.story;$('dagPath').textContent=inf.path;$('dagTakeaway').textContent=c?inf.on:inf.off;$('dagCondition').disabled=m==='simple';$('dagCondition').parentElement.style.opacity=m==='simple'?.5:1;
+}
+document.querySelectorAll('[data-dag]').forEach(el=>el.addEventListener('click',()=>{dagMode=el.dataset.dag;$('dagCondition').checked=false;document.querySelectorAll('[data-dag]').forEach(b=>b.classList.toggle('on',b===el));drawDag()}));$('dagCondition').addEventListener('change',drawDag);drawDag();
+
+let population=Array.from({length:400},(_,i)=>{let high=i<200,noise= (Math.sin(i*17.71)+Math.cos(i*3.19))*240;let y0=4000+(high?3000:0)+noise;return {y0,y1:y0+800,high};});const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a};function assignPeople(random){let selected=new Set((random?shuffle(population.map((_,i)=>i)):population.map((_,i)=>i).sort((a,b)=>population[b].y0-population[a].y0)).slice(0,200));let t=0,c=0;population.forEach((p,i)=>{if(selected.has(i))t+=p.y1;else c+=p.y0});let diff=t/200-c/200;$('randObserved').textContent=money(diff);renderBar('randomChart',[800,Math.abs(diff)],['真实ATE','|均值差|'],['#087f8c','#d68a3e']);$('randomStatus').textContent=random?'随机分配200人到处理组；两组差值围绕真实ATE波动，随机化保证的是分配机制的独立性，而非每次抽样完全平衡。':'能力优先分配200人进入处理组；两组基础收入系统性不同，即使没有培训，也会观察到收入差异。';}assignPeople(false);
+function pct(x){return (Math.round(x*10)/10).toFixed(1)+'%'}
+function pp(x){return (Math.round(x*10)/10).toFixed(1)+' pp'}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+function renderPctBar(svgId,vals,names,colors){const el=$(svgId),max=Math.max(5,...vals.map(v=>Math.abs(v)))*1.15;let out='<line x1="140" y1="198" x2="690" y2="198" stroke="#b8c2cc" stroke-width="1"/>';const base=140,scale=500/max;vals.forEach((v,i)=>{let y=22+i*42,width=Math.abs(v)*scale;out+=`<text x="14" y="${y+18}" fill="#546679" font-size="13">${names[i]}</text><rect x="${base}" y="${y}" width="${Math.max(1,width)}" height="24" rx="4" fill="${colors[i]}" opacity="0.92"/><text x="${Math.min(base+width+10,654)}" y="${y+17}" font-size="13" font-weight="700" fill="#23312F">${pp(v)}</text>`;});svg(el,out);}
+function updateApsr(){
+  const base=+$('apsrBase').value,gap=+$('apsrGap').value,reach=+$('apsrContact').value,sort=+$('apsrSort').value,effect=+$('apsrEffect').value;
+  $('apsrBaseV').textContent=pct(base);$('apsrGapV').textContent=pp(gap);$('apsrContactV').textContent=pct(reach);$('apsrSortV').textContent=pp(sort);$('apsrEffectV').textContent=pp(effect);
+  const high0=clamp(base+gap/2,0,100), low0=clamp(base-gap/2,0,100);
+  const pHigh=clamp(reach+sort/2,0,100)/100, pLow=clamp(reach-sort/2,0,100)/100;
+  const actualReach=((pHigh+pLow)/2)*100;
+  const ctrl=base;
+  const treat=0.5*(high0+pHigh*effect + low0+pLow*effect);
+  const contacted=((pHigh*(high0+effect))+(pLow*(low0+effect)))/(pHigh+pLow || 1);
+  const uncontacted=(((1-pHigh)*high0)+((1-pLow)*low0))/((1-pHigh)+(1-pLow) || 1);
+  const naive=contacted-uncontacted;
+  const itt=treat-ctrl;
+  const tot=actualReach>0?itt/(actualReach/100):0;
+  $('apsrCtrl').textContent=pct(ctrl);$('apsrTreat').textContent=pct(treat);$('apsrNaive').textContent=pp(naive);$('apsrITT').textContent=pp(itt);$('apsrReach').textContent=pct(actualReach);$('apsrTOT').textContent=pp(tot);$('formulaITT').textContent=pp(itt);$('formulaFS').textContent=pct(actualReach);$('formulaTOT').textContent=pp(tot);
+  renderPctBar('apsrChart',[Math.abs(effect),Math.abs(naive),Math.abs(itt),Math.abs(tot)],['真实接触效应','朴素比较','ITT','按接触率换算后的效应'],['#285B52','#A87340','#82938B','#475F56']);
+  $('apsrExplain').innerHTML = `<strong>如何解读：</strong> 在当前设定下，随机分配带来的 <strong>ITT = ${pp(itt)}</strong>，它回答的是“被分配到面对面动员组，平均多提高多少投票率”。但如果直接比较“联系上”与“未联系上”，会得到 <strong>${pp(naive)}</strong>，其中混入了“更容易被联系到的人本来就更可能投票”的选择偏差。当前第一阶段为 <strong>${pct(actualReach)}</strong>，将 ITT 除以该接触率后，得到 <strong>${pp(tot)}</strong>，更接近“真正被联系到”的平均效应。`;
+}
+['apsrBase','apsrGap','apsrContact','apsrSort','apsrEffect'].forEach(id=>$(id).addEventListener('input',updateApsr));updateApsr();
+const questions=[{q:'1. 某政策参与者收入比非参与者高，能否直接推断政策有效？',a:['能，差额就是ATE','不能，可能有处理前的组间差异','只要样本很大就能'],correct:1,why:'均值差可分解为处理组的平均因果效应ATT与选择偏差。'},{q:'2. 同一个人两种潜在结果不能同时观察，意味着什么？',a:['个人因果效应通常无法直接观察','因果效应根本无法估计','增加样本量就能看到两个结果'],correct:0,why:'无法直接观察个体反事实，但在合适假设下可识别群体层面效应。'},{q:'3. 一个工具变量的第二阶段系数显著，足以证明因果关系吗？',a:['足以','只要第一阶段强就足以','不足，还需要工具变量有效性等假设'],correct:2,why:'相关性、排除限制与外生性等识别假设不能由显著性替代。'},{q:'4. 如果研究的是已参加培训者得到的平均收益，应优先明确什么参数？',a:['ATT','ATU','任何相关系数'],correct:0,why:'ATT针对现实中D=1的人群。'},{q:'5. 因果森林和DML能否自动解决未观测混杂？',a:['可以，模型足够复杂即可','不能，仍依赖合适的识别设计和假设','总能替代RCT'],correct:1,why:'机器学习主要提高柔性估计能力，并不能凭空产生外生性。'}];let answers={};$('quizRoot').innerHTML=questions.map((q,i)=>`<div class="panel"><h3>${q.q}</h3>${q.a.map((x,j)=>`<button class="quiz-choice" data-q="${i}" data-a="${j}">${String.fromCharCode(65+j)}. ${x}</button>`).join('')}<div class="feedback" id="feedback${i}"></div></div>`).join('');document.querySelectorAll('.quiz-choice').forEach(b=>b.onclick=()=>{let i=+b.dataset.q,j=+b.dataset.a;answers[i]=j;let q=questions[i];$('feedback'+i).innerHTML=(j===q.correct?'<span style="color:#138358">✓ 正确。</span>':'<span style="color:#be4765">✗ 再想想。</span>')+' '+q.why;document.querySelectorAll(`[data-q="${i}"]`).forEach(x=>x.style.borderColor=+x.dataset.a===j?(j===q.correct?'#138358':'#be4765'):'#cbd8e5');if(Object.keys(answers).length===questions.length){$('scoreResult').style.display='block';$('scoreResult').textContent=`已完成 ${questions.length} 题，答对 ${questions.filter((q,i)=>answers[i]===q.correct).length} 题。建议回看答错题所在的概念段落。`;}});
+window.addEventListener('scroll',()=>{$('progress').style.width=(100*scrollY/(document.documentElement.scrollHeight-innerHeight))+'%';let sections=[...document.querySelectorAll('section[id],header[id]')],current=sections.filter(s=>s.getBoundingClientRect().top<180).pop();document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',current&&a.getAttribute('href')==='#'+current.id));},{passive:true});
+
+// APSR case navigation: show only one teaching pane at a time; preserve simulation values.
+const caseTabButtons = [...document.querySelectorAll('[data-case-tab]')];
+const caseKeys = caseTabButtons.map(b => b.dataset.caseTab);
+let caseCurrent = 'overview';
+function selectCaseTab(key, moveFocus=false){
+  const idx=caseKeys.indexOf(key); if(idx<0)return;
+  caseCurrent=key;
+  caseTabButtons.forEach((b,i)=>{
+    const current=i===idx;
+    b.classList.toggle('is-current',current);
+    b.setAttribute('aria-selected',String(current));
+    b.setAttribute('tabindex',current?'0':'-1');
+    const panel=document.getElementById('case-'+b.dataset.caseTab);
+    if(panel) panel.hidden=!current;
+  });
+  const labels=['论文发现','研究流程','因果图 DAG','识别假设','ITT 与 CACE','交互模拟'];
+  const pager=document.getElementById('casePagerText');
+  if(pager)pager.textContent=`${String(idx+1).padStart(2,'0')} / 06 · ${labels[idx]}`;
+  const next=document.getElementById('caseNext');
+  if(next)next.innerHTML=idx===caseKeys.length-1?'返回第一节 <span aria-hidden="true">↺</span>':'下一节 <span aria-hidden="true">→</span>';
+  const selected=caseTabButtons[idx];
+  const scroller=selected.parentElement;
+  const offset=selected.getBoundingClientRect().left-scroller.getBoundingClientRect().left+scroller.scrollLeft;
+  scroller.scrollTo({left:offset-(scroller.clientWidth-selected.clientWidth)/2,behavior:'smooth'});
+  if(moveFocus)selected.focus();
+}
+caseTabButtons.forEach((b,i)=>{
+  b.addEventListener('click',()=>selectCaseTab(b.dataset.caseTab));
+  b.addEventListener('keydown',e=>{
+    const delta = e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+    let index = delta ? (i+delta+caseKeys.length)%caseKeys.length : e.key==='Home'?0:e.key==='End'?caseKeys.length-1:-1;
+    if(index!==-1){e.preventDefault();selectCaseTab(caseKeys[index],true);}
+  });
+});
+document.getElementById('caseNext').addEventListener('click',()=>selectCaseTab(caseKeys[(caseKeys.indexOf(caseCurrent)+1)%caseKeys.length]));
+const exclude=document.getElementById('caseExclusionToggle');
+exclude.addEventListener('change',()=>{
+  const violated=exclude.checked;
+  document.getElementById('caseDagForbidden').setAttribute('opacity',violated?'1':'0');
+  const msg=document.getElementById('caseDagFeedback');
+  msg.classList.toggle('is-violation',violated);
+  const valid=document.getElementById('caseFormulaValidity');
+  valid.classList.toggle('is-violation',violated);
+  valid.textContent=violated?'排除限制被设为不成立：数字上的 ITT / 第一阶段依然可以计算，但不再应被解释为 CACE/LATE。':'当前按标准排除限制解释：Wald 比率可在上述假设下解释为服从者平均接触效应。';
+  msg.textContent=violated ? '如果 Z 还可以不经过 D 而直接影响 Y（例如分配通知本身就鼓励选民投票），Wald 比率就不能按标准排除限制解释为接触的 CACE/LATE；但随机分配下的 ITT 仍识别分配效应。' : '在标准排除限制下，Z 对 Y 的影响完全通过 D 传递。Z 的随机性支持 ITT 识别，而 U 仍然会混杂 D 与 Y。';
+});
+const casePreset=(base,gap,contact,sort,effect)=>{
+  for (const [id,v] of Object.entries({apsrBase:base,apsrGap:gap,apsrContact:contact,apsrSort:sort,apsrEffect:effect}))document.getElementById(id).value=v;
+  updateApsr();
+};
+document.getElementById('casePresetDefault').addEventListener('click',()=>casePreset(42,18,55,24,8));
+document.getElementById('casePresetNoBias').addEventListener('click',()=>casePreset(42,18,55,0,8));
+document.getElementById('casePresetNoEffect').addEventListener('click',()=>casePreset(42,18,55,24,0));
+selectCaseTab('overview');
+</script><script>
+/* Presentation deck, content-preserving. Ordinary prose is not animated. */
+(function(){
+'use strict';
+const SPEC={"intro":[{"label":"为什么相关性不等于因果？","parts":[0,1,2,3,5]},{"label":"真实因果问题从哪里开始？","parts":[0,1,4]}],"potential":[{"label":"两个潜在结果与个体因果效应","parts":[0,1,2,3,4]},{"label":"切换反事实世界","parts":[0,1,5,6]}],"estimands":[{"label":"ATE 与 ATT：总体与处理组","parts":[0,1,2,3],"sub":{"selector":".grid > *","keep":[0,1]}},{"label":"ATU 与 CATE：未处理组与异质性","parts":[0,1,2,3,4],"sub":{"selector":".grid > *","keep":[2,3]}}],"bias":[{"label":"调节选择偏差，观察系数变化","parts":[0,1,2,3],"sub":{"selector":"#bias .panel > *","keep":[0,3]}},{"label":"选择偏差：图形与比较结果","parts":[0,1,3],"sub":{"selector":"#bias .panel > *","keep":[1,2,4]}},{"label":"均值差的因果分解","parts":[0,1,4,5]}],"identification":[{"label":"研究链条：定义与识别","parts":[0,1,2],"sub":{"selector":".steps > *","keep":[0,1,2]}},{"label":"研究链条：估计、检验与外推","parts":[0,1,2,3],"sub":{"selector":".steps > *","keep":[3,4]}}],"random":[{"label":"随机化为何能打破系统性选择？","parts":[0,1,2]},{"label":"随机分配与能力优先分配的动态比较","parts":[0,1,3]}],"dag":[{"label":"认识节点、箭头与路径","parts":[0,1,2,3]},{"label":"混杂路径：不控制 X","parts":[0,1,4],"action":{"dag":"confounder","condition":false}},{"label":"控制 X 以后怎样？","parts":[0,1,4],"action":{"dag":"confounder","condition":true}},{"label":"中介：控制 M 改变目标效应","parts":[0,1,4],"action":{"dag":"mediator","condition":true}},{"label":"对撞：控制 C 打开虚假路径","parts":[0,1,4],"action":{"dag":"collider","condition":true}},{"label":"DAG识别逻辑的总结","parts":[0,1,5]}],"methods":[{"label":"方法地图：随机与观察性研究","parts":[0,1,3],"sub":[{"selector":".atlas > *","keep":[0,1,2,3]},{"selector":".atlas-columns > *","keep":[0]}]},{"label":"观察性研究、面板数据和固定效应","parts":[0,1,3,4],"sub":[{"selector":".atlas > *","keep":[3]},{"selector":".atlas-columns > *","keep":[1]}]},{"label":"方法地图：DID、RDD、IV与SCM","parts":[0,1,3,4],"sub":{"selector":".atlas > *","keep":[4,5]}},{"label":"方法地图：现代面板、因果机器学习","parts":[0,1,3,4],"sub":{"selector":".atlas > *","keep":[6,7]}},{"label":"固定的12讲学习路线","parts":[0,1,5,6]}],"frontier":[{"label":"因果机器学习与异质性效应","parts":[0,1,2,3],"sub":{"selector":".grid > *","keep":[0,1]}},{"label":"动态政策学习与现代DID","parts":[0,1,3,4],"sub":{"selector":".grid > *","keep":[2,3]}}],"practice":[{"label":"真实论文：研究发现","parts":[0,1,3],"action":{"case":"overview"},"sub":{"selector":"#case-overview > *","keep":[0,1]}},{"label":"真实论文：解读与出处","parts":[0,1,3],"action":{"case":"overview"},"sub":{"selector":"#case-overview > *","keep":[2,3]}},{"label":"流程：随机分配→接触→投票","parts":[0,1,3],"action":{"case":"process"},"sub":{"selector":"#case-process > *","keep":[0,1,2]}},{"label":"流程：ITT与接触效应的区别","parts":[0,1,3],"action":{"case":"process"},"sub":{"selector":"#case-process > *","keep":[3]}},{"label":"简化DAG：识别随机分配","parts":[0,1,3],"action":{"case":"dag"},"sub":{"selector":"#case-dag > *","keep":[0,1,2]}},{"label":"简化DAG：排除限制失效","parts":[0,1,3],"action":{"case":"dag"},"sub":{"selector":"#case-dag > *","keep":[3,4,5]}},{"label":"假设：随机分配与SUTVA","parts":[0,1,3],"action":{"case":"assumptions"},"sub":{"selector":"#case-assumptions > *","keep":[0,1,2]}},{"label":"假设：排除、单调性与不遵从","parts":[0,1,3],"action":{"case":"assumptions"},"sub":{"selector":"#case-assumptions > *","keep":[3,4,5,6]}},{"label":"公式：ITT和第一阶段","parts":[0,1,3],"action":{"case":"formula"},"sub":[{"selector":"#case-formula > *","keep":[0,1]},{"selector":"#case-formula .case-eq-grid > *","keep":[0,1]}]},{"label":"公式：Wald与服从者平均效应","parts":[0,1,3],"action":{"case":"formula"},"sub":[{"selector":"#case-formula > *","keep":[0,1]},{"selector":"#case-formula .case-eq-grid > *","keep":[2]}]},{"label":"公式：动态数值、TOT与LATE区别","parts":[0,1,3],"action":{"case":"formula"},"sub":{"selector":"#case-formula > *","keep":[2,3,4,5]}},{"label":"模拟：调节参数","parts":[0,1,3],"action":{"case":"simulation"},"sub":{"selector":"#case-simulation > *","keep":[1,2,3]}},{"label":"模拟：比较估计数值与图形","parts":[0,1,3],"action":{"case":"simulation"},"sub":{"selector":"#case-simulation > *","keep":[4,5,6,7]}},{"label":"本篇论文的三个研究问题","parts":[0,1,4]}],"quiz":[{"label":"第 1 题","parts":[0,1,2],"action":{"quiz":0}},{"label":"第 2 题","parts":[0,1,2],"action":{"quiz":1}},{"label":"第 3 题","parts":[0,1,2],"action":{"quiz":2}},{"label":"第 4 题","parts":[0,1,2],"action":{"quiz":3}},{"label":"第 5 题","parts":[0,1,2],"action":{"quiz":4}},{"label":"测验结果","parts":[0,1,3],"action":{"quiz":5}}],"refs":[{"label":"教材来源与研究前沿参考文献","parts":[0,1,2,3,4]},{"label":"完整12讲目录","parts":[0,1,5,6],"sub":{"selector":"#refs .grid > *","keep":[0,1,2,3,4,5]}},{"label":"12讲目录：下半部分与资料说明","parts":[0,1,5,6,7],"sub":{"selector":"#refs .grid > *","keep":[6,7,8,9,10,11]}}]};
+const root=document.querySelector('main.main');const ids=Object.keys(SPEC);
+const units=ids.map(id=>document.getElementById(id));
+let pg=0,st=0;
+const tools=document.createElement('div');tools.className='course-tools';tools.innerHTML='<button id="courseZoom" type="button">放大图表 ↗</button><button id="courseMode" type="button">阅读模式 ↗</button>';
+const bar=document.createElement('nav');bar.className='course-controls';bar.setAttribute('aria-label','课程翻页控制');
+bar.innerHTML='<button type="button" id="coursePrev" class="course-prev">← 上一步</button><div class="course-status"><strong id="courseCounter"></strong><div id="courseSubtitle"></div><div class="course-ticks" id="courseTicks"></div></div><button type="button" id="courseNext" class="course-next">下一步 →</button>';
+root.prepend(tools);root.append(bar);
+const zoom=document.createElement('div');zoom.className='course-big-chart';zoom.hidden=true;zoom.innerHTML='<div class="course-big-chart-inner"><button type="button" id="courseCloseZoom">关闭 ×</button><div id="courseBig"></div></div>';document.body.append(zoom);
+const $$=s=>[...document.querySelectorAll(s)];const id=s=>document.getElementById(s);
+function setParts(unit,scene){
+  [...unit.children].filter(n=>n.hasAttribute('data-course-part')).forEach(n=>{const nidx=+n.getAttribute('data-course-part');n.setAttribute('data-course-hidden',String(!scene.parts.includes(nidx)))});
+  $$('[data-course-subhidden]').forEach(n=>n.removeAttribute('data-course-subhidden'));
+  if(scene.sub){for(const sub of (Array.isArray(scene.sub)?scene.sub:[scene.sub])){const children=[...unit.querySelectorAll(sub.selector)];children.forEach((n,i)=>n.setAttribute('data-course-subhidden',String(!sub.keep.includes(i))))}}
+}
+function action(a,unit){if(!a)return;
+ if(a.dag){const btn=unit.querySelector('[data-dag="'+a.dag+'"]');btn?.click();const sw=id('dagCondition');if(sw&&sw.checked!==a.condition){sw.checked=a.condition;sw.dispatchEvent(new Event('change',{bubbles:true}))}}
+ if(a.graph){unit.querySelector('[data-graph="'+a.graph+'"]')?.click();if(a.adjust){unit.querySelector('#showOptimal')?.click()}}
+ if(a.case){if(1===1){unit.querySelector('[data-case-tab="'+a.case+'"]')?.click()}else{const keys=['result','design','model','assume','est','sim'];const i=keys.indexOf(a.case);[...unit.querySelectorAll('.case-tab')][i]?.click()}}
+ if(a.collider)id(a.collider==='all'?'colliderAll':'colliderSelected')?.click();
+ if(a.code){const candidates=[...unit.querySelectorAll('.code-tabs button,[data-code],.code-tab')];const target=candidates.find(n=>n.textContent.toLowerCase().includes(a.code));target?.click()}
+ if(a.quiz!==undefined){const host=unit.querySelector('#quizRoot,#quizContainer');if(host){const cards=[...host.children].filter(n=>n.nodeType===1);cards.forEach((n,i)=>n.setAttribute('data-course-subhidden',String(a.quiz>=cards.length||i!==a.quiz)))}}
+}
+function show(p,s){pg=Math.max(0,Math.min(ids.length-1,p));st=Math.max(0,Math.min(SPEC[ids[pg]].length-1,s));const scene=SPEC[ids[pg]][st];units.forEach((u,i)=>u.classList.toggle('course-active',i===pg));
+ const unit=units[pg];unit.classList.toggle('course-continuation',st>0);setParts(unit,scene);action(scene.action,unit);unit.scrollTop=0;
+ id('courseCounter').textContent='第 '+String(pg+1).padStart(2,'0')+' / '+String(ids.length).padStart(2,'0')+' 单元';id('courseSubtitle').textContent='步骤 '+(st+1)+' / '+SPEC[ids[pg]].length+' · '+scene.label;
+ id('courseTicks').innerHTML=SPEC[ids[pg]].map((_,i)=>'<button aria-label="切换到本节步骤 '+(i+1)+'" data-tick="'+i+'" class="course-tick '+(i===st?'active':i<st?'done':'')+'" type="button"></button>').join('');
+ id('courseTicks').querySelectorAll('[data-tick]').forEach(b=>b.onclick=()=>show(pg,+b.dataset.tick));
+ id('coursePrev').disabled=pg===0&&st===0;id('courseNext').disabled=pg===ids.length-1&&st===SPEC[ids[pg]].length-1;
+ const fig=[...unit.querySelectorAll('svg')].find(n=>{const r=n.getBoundingClientRect();return r.width>80&&r.height>50&&!n.closest('[hidden],[data-course-hidden="true"],[data-course-subhidden="true"]')});
+ id('courseZoom').hidden=!fig;window.__courseReplaceStateSafe__(null,'','#'+ids[pg]);
+}
+function next(){if(st+1<SPEC[ids[pg]].length)show(pg,st+1);else if(pg+1<ids.length)show(pg+1,0)}
+function prev(){if(st>0)show(pg,st-1);else if(pg>0)show(pg-1,SPEC[ids[pg-1]].length-1)}
+id('courseNext').onclick=next;id('coursePrev').onclick=prev;
+id('courseMode').onclick=()=>{const reading=document.body.classList.toggle('course-reading');id('courseMode').textContent=reading?'开始演示 ⛶':'阅读模式 ↗';if(reading){ $$('[data-course-hidden],[data-course-subhidden]').forEach(n=>{n.removeAttribute('data-course-hidden');n.removeAttribute('data-course-subhidden')});units[pg].scrollIntoView({block:'start'})}else show(pg,st)};
+id('courseZoom').onclick=()=>{const u=units[pg],fig=[...u.querySelectorAll('svg')].find(n=>{const r=n.getBoundingClientRect();return r.width>80&&r.height>50&&!n.closest('[hidden],[data-course-hidden="true"],[data-course-subhidden="true"]')});if(!fig)return;id('courseBig').replaceChildren(fig.cloneNode(true));zoom.hidden=false;};
+id('courseCloseZoom').onclick=()=>zoom.hidden=true;zoom.addEventListener('click',e=>{if(e.target===zoom)zoom.hidden=true});
+document.addEventListener('keydown',e=>{if(document.body.classList.contains('course-reading')||!zoom.hidden)return;const t=e.target;if(t&&(t.closest('input,textarea,select,button,[contenteditable="true"]')))return;if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next()}else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}});
+let start=null;root.addEventListener('touchstart',e=>{if(e.target.closest('input,button,.case-tabs,.studio-bar,svg,.figure-area'))return;start={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});root.addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;start=null;if(Math.abs(dx)>80&&Math.abs(dx)>1.7*Math.abs(dy))dx<0?next():prev()},{passive:true});
+document.body.classList.add('course-deck');const selected=ids.indexOf(location.hash.slice(1));show(selected>=0?selected:0,0);
+
+/* Embedded course-portal navigation bridge: original teaching logic unchanged. */
+(function(){
+  const PORTAL_LESSON='01';
+  function sendState(){
+    const active=document.querySelector('.course-active');
+    const all=Array.from(document.querySelectorAll('.course-unit, .course-intro'));
+    let selected=active?all.indexOf(active):0;
+    if(selected<0)selected=0;
+    const heading=active&&active.querySelector('h1,h2');
+    if(window.parent!==window)window.parent.postMessage({kind:'causal-course-state',lesson:PORTAL_LESSON,index:selected,title:heading?heading.textContent.trim():''},'*');
+  }
+  window.addEventListener('message',e=>{
+    if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-jump'||e.data.lesson!==PORTAL_LESSON)return;
+    let index=Number(e.data.index||0),step=Number(e.data.step||0);
+    if(!Number.isFinite(index)||!Number.isFinite(step))return;
+    try {show(Math.max(0,Math.floor(index)),Math.max(0,Math.floor(step)));}catch(err){console.error('Lesson jump error',err)}
+    setTimeout(sendState,30);
+  });
+  let pending=0;
+  const observer=new MutationObserver(()=>{if(pending)return;pending=requestAnimationFrame(()=>{pending=0;sendState()})});
+  const host=document.querySelector('.course-stage')||document.body;
+  observer.observe(host,{subtree:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('load',()=>setTimeout(sendState,90));
+  setTimeout(sendState,140);
+})();
+
+})();
+</script>
+<style>
+@media(max-width:600px){
+ header.top{padding:0 9px!important;gap:6px!important}
+ header.top .logo{font-size:11px!important;letter-spacing:0!important;white-space:nowrap!important}
+ header.top .topright{display:flex!important;gap:4px!important;flex-shrink:0}
+ header.top .topright .small{display:none!important}
+ header.top .topright .mode{white-space:nowrap!important;font-size:11px!important;padding:5px 6px!important}
+}
+</style>
+<!-- INTEGRATED PORTAL CONTROLS: connect embedded player and course shell -->
+<script>
+(function(){
+ if(window.parent===window) return;
+ const lessonId='01';
+ function send(action){ try{window.parent.postMessage({kind:'causal-course-action',lesson:lessonId,action:action},'*')}catch(e){} }
+ // Child fullscreen used to hide the parent home control. Delegate instead.
+ window.toggleFullscreen=function(){send('fullscreen')};
+ window.addEventListener('message',function(e){
+  if(e.source!==window.parent||!e.data||e.data.kind!=='causal-course-display'||e.data.lesson!==lessonId)return;
+  document.querySelectorAll('button[onclick="toggleFullscreen()"],button[onclick="toggleFullscreen();"]').forEach(function(b){
+   b.textContent=e.data.expanded?'退出全屏':'全屏';
+   b.setAttribute('aria-pressed',e.data.expanded?'true':'false');
+  });
+ });
+ window.addEventListener('keydown',function(e){if(e.key==='Escape')send('escape')});
+})();
+</script>
+
+</body></html>
