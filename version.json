@@ -1,0 +1,15 @@
+{
+  "project": "causal-inference-course",
+  "version": "2.0.1",
+  "release_date": "2026-10-24",
+  "language": "zh-CN",
+  "documentation_languages": [
+    "zh-CN",
+    "en"
+  ],
+  "core_lessons": 12,
+  "experimental_topics": 2,
+  "total_modules": 14,
+  "published_slides": 695,
+  "source": "14-module navigation-fixed course portal"
+}
